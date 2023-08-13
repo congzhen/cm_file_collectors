@@ -1,0 +1,40 @@
+<html>
+  <style type="text/css">
+    * {
+      margin: 0px;
+      padding: 0px;
+      border: 0px;
+    }
+    body {
+      width: 200px;
+      height: 200px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+    body img {
+      width: 128px;
+      height: 128px;
+    }
+    @keyframes scaleAnimation {
+      0% {
+        transform: scale(1);
+      }
+      50% {
+        transform: scale(1.5);
+      }
+      100% {
+        transform: scale(1);
+      }
+    }
+    .image-container img {
+      animation: scaleAnimation 30s infinite;
+    }
+  </style>
+  <head></head>
+  <body>
+    <div class="image-container">
+      <img src="../icon/icon256.png" />
+    </div>
+  </body>
+</html>
