@@ -148,6 +148,7 @@ class coreDBS {
         this.updateTimeObj = null;
 
         this.noWhereStatus = false;
+
     }
     setCoreDb(_coreDb: coreSqlite) {
         this.CoreDb = _coreDb;
@@ -237,10 +238,11 @@ class coreDBS {
     }
     //成功返回ID，失败返回null
     async create(_infoObj: IConditions): Promise<sqlResult | undefined> {
-        if (this.createGuidObj != null) {
+
+        if (this.createGuidObj != null && _infoObj[this.createGuidObj.field] == undefined) {
             _infoObj[this.createGuidObj.field] = this.getGuid(this.createGuidObj.type)
         }
-        if (this.createTimeObj != null) {
+        if (this.createTimeObj != null && _infoObj[this.createTimeObj.field] == undefined) {
             _infoObj[this.createTimeObj.field] = this.getTime(this.createTimeObj.type)
         }
         const rd = this.CoreDb.insert(this.getTable(), _infoObj);
@@ -253,7 +255,7 @@ class coreDBS {
         const whereObj: sqlParams = {}
         whereObj[this.sqlLinker + _primary] = _id;
 
-        if (this.updateTimeObj != null) {
+        if (this.updateTimeObj != null && _updateObj[this.updateTimeObj.field] == undefined) {
             _updateObj[this.updateTimeObj.field] = this.getTime(this.updateTimeObj.type);
         }
 
@@ -265,7 +267,7 @@ class coreDBS {
     async updeteWhere(_updateObj: IConditions): Promise<sqlResult | undefined> {
         const whereStr = this.getWhere();
         const whereObj = this.whereObj;
-        if (this.updateTimeObj != null) {
+        if (this.updateTimeObj != null && _updateObj[this.updateTimeObj.field] == undefined) {
             _updateObj[this.updateTimeObj.field] = this.getTime(this.updateTimeObj.type);
         }
         const rd = await this.CoreDb.update(this.getTable(), _updateObj, whereStr, whereObj);
