@@ -6,10 +6,6 @@
             <span>{{ softwareInformation.version }}</span>
         </div>
         <div class="menuTool">
-            <div class="mItem friendlyRewards">
-                <el-link type="primary" :underline="false" @click.stop="cl_friendlyRewards">{{ $t('menu.friendlyRewards')
-                }}</el-link>
-            </div>
             <div class="mItem">
                 <el-button-group size="small">
                     <el-button icon="Minus" @click.stop="changeWindowSize('min')" />
@@ -20,26 +16,16 @@
             </div>
         </div>
     </div>
-    <el-dialog v-model="dialogVisibleFriendlyRewards" :title="$t('menu.friendlyRewards')" width="400px" append-to-body>
-        <div class="friendlyRewardsImage">
-            <img src="~@/assets/weixin.jpg">
-        </div>
-    </el-dialog>
 </template>
 <script setup lang="ts">
 import { ipcRendererSend } from "@/electronCommon"
 import softwareInformation from "@/setup/softwareInformation"
-import { ref } from 'vue'
-const dialogVisibleFriendlyRewards = ref(false);
 
 const changeWindowSize = (type = 'min') => {
     ipcRendererSend.changeWindowSize(type);
 }
 const execWindowClose = () => {
     ipcRendererSend.execWindowClose();
-}
-const cl_friendlyRewards = () => {
-    dialogVisibleFriendlyRewards.value = true
 }
 
 </script>
@@ -51,10 +37,12 @@ const cl_friendlyRewards = () => {
     background-color: #ECF5FF;
     display: flex;
     justify-content: space-between;
+    -webkit-user-select: none;
+    user-select: none;
 }
 
 .indexMenu .title {
-    width: calc(100% - 200px);
+    width: calc(100% - 122px);
     display: flex;
     padding: 4px 0px 0px 5px;
     /**该属性可以拖动app，需要在创建窗口是，设置movable: true */
@@ -90,15 +78,5 @@ const cl_friendlyRewards = () => {
 
 .indexMenu .menuTool .mItem {
     padding: 2px 5px 0px 5px;
-}
-
-.indexMenu .menuTool .friendlyRewards {
-    line-height: 24px;
-    overflow: hidden;
-}
-
-.friendlyRewardsImage {
-    display: flex;
-    justify-content: center;
 }
 </style>
