@@ -7,15 +7,15 @@
         </div>
         <div class="menuTool">
             <div class="mItem friendlyRewards">
-                <el-link type="primary" :underline="false" @click="cl_friendlyRewards">{{ $t('menu.friendlyRewards')
+                <el-link type="primary" :underline="false" @click.stop="cl_friendlyRewards">{{ $t('menu.friendlyRewards')
                 }}</el-link>
             </div>
             <div class="mItem">
                 <el-button-group size="small">
-                    <el-button icon="Minus" @click="changeWindowSize('min')" />
+                    <el-button icon="Minus" @click.stop="changeWindowSize('min')" />
                     <!--CopyDocument-->
-                    <el-button icon="FullScreen" @click="changeWindowSize('max')" />
-                    <el-button icon="CloseBold" @click="execWindowClose" />
+                    <el-button icon="FullScreen" @click.stop="changeWindowSize('max')" />
+                    <el-button icon="CloseBold" @click.stop="execWindowClose" />
                 </el-button-group>
             </div>
         </div>
@@ -31,6 +31,7 @@ import { ipcRendererSend } from "@/electronCommon"
 import softwareInformation from "@/setup/softwareInformation"
 import { ref } from 'vue'
 const dialogVisibleFriendlyRewards = ref(false);
+
 const changeWindowSize = (type = 'min') => {
     ipcRendererSend.changeWindowSize(type);
 }
@@ -53,9 +54,11 @@ const cl_friendlyRewards = () => {
 }
 
 .indexMenu .title {
+    width: calc(100% - 200px);
     display: flex;
     padding: 4px 0px 0px 5px;
-
+    /**该属性可以拖动app，需要在创建窗口是，设置movable: true */
+    -webkit-app-region: drag;
 }
 
 .indexMenu .title img {

@@ -40,7 +40,6 @@ function createIpcMain(win: BrowserWindow) {
         app.quit();
         event.returnValue = true;
     });
-
 }
 
 const ipcRendererSend = {

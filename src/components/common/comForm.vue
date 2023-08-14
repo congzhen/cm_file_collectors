@@ -72,7 +72,7 @@ const props = defineProps({
     },
     labelPosition: {
         type: String,
-        default: '',
+        default: 'right',
     },
     size: {
         type: String,

@@ -9,8 +9,7 @@
                             :width="(scope.row.coverPosterWidth + 26) + 'px'">
                             <el-image
                                 :style="{ width: scope.row.coverPosterWidth + 'px', height: scope.row.coverPosterHeight + 'px' }"
-                                :src="setupConfig.resCoverPosterPath + scope.row.filesBases_id + '/' + scope.row.coverPoster"
-                                fit="fit" />
+                                :src="setupConfig.resCoverPosterPath + scope.row.filesBases_id + '/' + scope.row.coverPoster" />
                             <template #reference>
                                 <el-icon>
                                     <VideoPlay />

@@ -9,10 +9,6 @@ import ElementPlus from "element-plus";
 import "element-plus/dist/index.css";
 import * as ElementPlusIconsVue from "@element-plus/icons-vue";
 
-import { createWebServer } from './webServer/index.webServer';
-createWebServer();
-
-
 import zhCn from 'element-plus/dist/locale/zh-cn.mjs'
 
 import { VueMasonryPlugin } from 'vue-masonry';

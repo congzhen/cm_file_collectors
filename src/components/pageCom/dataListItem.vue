@@ -4,8 +4,7 @@
             {{ $t('definition.' + props.dataInfo.definition) }}
         </div>
         <el-image
-            :src="props.dataInfo.coverPoster != '' ? (setupConfig.resCoverPosterPath + props.dataInfo.filesBases_id + '/' + props.dataInfo.coverPoster) : ''"
-            fit="fit">
+            :src="props.dataInfo.coverPoster != '' ? (setupConfig.resCoverPosterPath + props.dataInfo.filesBases_id + '/' + props.dataInfo.coverPoster) : ''">
             <template #error>
                 <el-empty description=" " :image-size="100" />
             </template>

@@ -20,7 +20,8 @@ async function createWindow() {
     width: 1280,
     height: 800,
     show: false,
-    frame: false,
+    frame: false,//去掉标题栏
+    movable: true,//设置可以通过css  -webkit-app-region: drag;  拖动软件
     webPreferences: {
       webSecurity: false,
       // Use pluginOptions.nodeIntegration, leave this alone

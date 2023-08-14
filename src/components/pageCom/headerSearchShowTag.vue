@@ -30,12 +30,12 @@
             @close="closeTag(store.searchStore.searchCondition.cup.value, key)" closable>
             {{ item + '-' + store.filesBasesSettingStore.getPlugInUnit_Cup_Text }}
         </el-tag>
-        <diyTag v-for="tagClass, tagClassKey in store.searchStore.searchCondition.diyTag" :key="tagClassKey">
+        <div v-for="tagClass, tagClassKey in store.searchStore.searchCondition.diyTag" :key="tagClassKey">
             <el-tag v-for="item, key in tagClass.value" :key="key" :type="tagType(tagClass.logic)" size="large"
                 @close="closeTag(tagClass.value, key)" closable>
                 {{ store.tagStore.getTagById(item)?.name }}
             </el-tag>
-        </diyTag>
+        </div>
     </div>
 </template>
 <script setup lang="ts">

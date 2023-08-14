@@ -1,17 +1,17 @@
 <template>
     <div class="tagSectionAdd">
         <el-button icon="CirclePlus" v-if="!editStatus" @click="showAddTagEditor"></el-button>
-        <el-input v-model="inputVal" v-else>
+        <el-input ref="tagTextInputRef" v-model="inputVal" v-else>
             <template #append><el-button icon="Edit" @click="addTagSection" /></template>
         </el-input>
     </div>
 </template>
 <script setup lang="ts">
 import loading from '@/assets/loading'
-import { ElMessage } from 'element-plus'
+import { ElMessage, ElInput } from 'element-plus'
 import { tagServerData } from "@/serverData/tag.serverData"
 import { tagStore } from '@/store/tag.store';
-import { ref } from 'vue'
+import { ref, nextTick } from 'vue'
 import { useI18n } from 'vue-i18n';
 const { t } = useI18n()
 // eslint-disable-next-line no-undef
@@ -25,9 +25,15 @@ const store = {
     tagStore: tagStore(),
 }
 const inputVal = ref('');
+const tagTextInputRef = ref<InstanceType<typeof ElInput>>();
 const editStatus = ref(false);
 const showAddTagEditor = () => {
     editStatus.value = true;
+    if (editStatus.value) {
+        nextTick(() => {
+            tagTextInputRef.value?.focus();
+        })
+    }
 }
 const addTagSection = async () => {
     if (inputVal.value == '') {
