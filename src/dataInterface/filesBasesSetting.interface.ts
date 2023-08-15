@@ -1,6 +1,7 @@
 interface IfilesBasesSetting {
     filesBases_id: string;
     config_json_data: string;
+    nfo_json_data: string;
 }
 
 interface IcoverPosterData {
@@ -42,4 +43,19 @@ interface IfilesBasesConfig {
     playComicMode: string;
 }
 
-export { IfilesBasesSetting, IfilesBasesConfig };
+interface IfilesBasesNofConfig {
+    suffix: string,
+    root: string,
+    title: string,
+    issueNumber: string,
+    year: string,
+    cover: string,
+    coverUrl: string,
+    tag: string,
+    abstract: string,
+    performer: string,
+    performerName: string,
+    performerThumb: string,
+}
+
+export { IfilesBasesSetting, IfilesBasesConfig, IfilesBasesNofConfig };

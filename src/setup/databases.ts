@@ -6,11 +6,18 @@ import { coreCreateGuid } from "@/core/coreGuid"
 interface ItableData {
     [key: string]: Array<string>
 }
+interface ItableInfo {
+    cid: number,
+    name: string,
+    type: string,
+}
+
 
 async function dbInit() {
     createFolder(config.dbFolderPath);
     await CoreDbConnection(config.dbPath)
     await checkDataTables();
+    await checkTableField();
 }
 
 async function CoreDbConnection(_dbPath: string) {
@@ -28,8 +35,24 @@ async function checkDataTables() {
     }
 }
 
+async function checkTableField() {
+    for (const fd of initFieldData) {
+        const tableInfo = await CoreDbC.ExecArray('PRAGMA table_info(' + fd.table + ')') as Array<ItableInfo>;
+        const fieldArr = tableInfo.map(info => {
+            return info.name
+        })
+        if (!fieldArr.includes(fd.field)) {
+            await CoreDbC.ExecRun(fd.sql);
+        }
+    }
+}
+
 const filesBasesDefaultId = coreCreateGuid();
 const performerBasesDefaultId = coreCreateGuid();
+
+const initFieldData = [
+    { table: 'filesBasesSetting', field: 'nfo_json_data', sql: 'ALTER TABLE filesBasesSetting ADD nfo_json_data TEXT;' },
+]
 
 const initTableData: ItableData = {
     filesBases: [

@@ -4,6 +4,7 @@ export default {
         add: '添加',
         tag: '标签',
         performer: '演员',
+        import: '导入',
         setUp: '设置',
     },
     menu: {
@@ -187,6 +188,19 @@ export default {
             importSuccess: '导入数据成功，演员 {performerCount} 条，头像 {performerFaceCount} 张, 重启软件后生效.',
             importError: '导入数据失败',
         }
+    },
+    import: {
+        title: '批量导入(.nfo)',
+        importPath: '导入地址',
+        importIllustrate: '导入时，会读取文件夹下所有.nfo文件，根据其中的内容生成数据。',
+        importPathPlaceholder: '请选择所需导入的文件夹地址',
+        nfoConfigTitle: 'nfo文件配置',
+        submit: '导入',
+        cancel: '取消',
+        restoreDefaultValues: '恢复默认值',
+        select: '选择',
+        pleaseSelectFolder: '请先选择文件夹',
+        titleShowRes: '检索到的可导入资源',
     },
     settings: {
         title: '设置',

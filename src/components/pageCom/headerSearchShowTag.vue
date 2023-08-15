@@ -101,9 +101,11 @@ const closeTag = (a: string[], index: number) => {
 .tagList {
     display: flex;
     padding-left: 10px;
+    height: 32px;
+    overflow: hidden;
 }
 
 .tagList .el-tag {
-    margin-left: 5px;
+    margin: 0px 0px 5px 5px;
 }
 </style>
