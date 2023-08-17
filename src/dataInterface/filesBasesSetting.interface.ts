@@ -53,6 +53,8 @@ interface IfilesBasesNofConfig {
     coverUrl: string,
     tag: string,
     abstract: string,
+    country: string,
+    star: string,
     performer: string,
     performerName: string,
     performerThumb: string,

@@ -1,26 +1,23 @@
 <template>
-    <el-dialog class="mainDialog" v-model="dialogVisible" :title="$t('import.titleShowRes')" width="800px"
-        :close-on-click-modal="false" append-to-body>
-        <div class="settingMainDiv">
-            <el-scrollbar height="600px">
-                <div class="videoInfo" v-for="item, key in dataList" :key="key">
-                    <div class="imgDiv">
-                        <el-image :src="getImageSrc(item)" fit="cover" />
-                    </div>
-                    <div class="infoDiv">
-                        <div>{{ item.title }}</div>
-                        <div>{{ item.issueNumber }}</div>
-                        <div>{{ item.abstract }}</div>
-                        <div>{{ item.year }}</div>
-                        <div>{{ item.tag }}</div>
-                        <div>
-                            <el-tag v-for="per, pkey in item.performer" :key="pkey">{{ per.name }}</el-tag>
-                        </div>
-                        <div>{{ item.videoPath }}</div>
-                    </div>
-
+    <el-dialog class="mainDialog" v-model="dialogVisible" :title="$t('import.titleShowRes', { num: metadata.length })"
+        width="800px" :close-on-click-modal="false" append-to-body>
+        <div class="settingMainDiv" style="overflow-y: scroll; height: 600px;" @scroll="handleScroll">
+            <div class="videoInfo" v-for="item, key in dataList" :key="key">
+                <div class="imgDiv">
+                    <el-image :src="getImageSrc(item)" fit="cover" />
                 </div>
-            </el-scrollbar>
+                <div class="infoDiv">
+                    <div>{{ item.title }}</div>
+                    <div>{{ item.issueNumber }}</div>
+                    <div>{{ item.abstract }}</div>
+                    <div>{{ item.year }}</div>
+                    <div>{{ item.tag }}</div>
+                    <div>
+                        <el-tag v-for="per, pkey in item.performer" :key="pkey">{{ per.name }}</el-tag>
+                    </div>
+                    <div>{{ item.videoPath }}</div>
+                </div>
+            </div>
         </div>
         <template #footer>
             <div class="buttonGroup">
@@ -32,15 +29,49 @@
             </div>
         </template>
     </el-dialog>
+    <importResult ref="importResultRef"></importResult>
 </template>
 <script setup lang="ts">
+import importResult from "./importResult.vue"
+import loading from '@/assets/loading'
+import { ElMessage } from 'element-plus'
 import { InofData } from '@/abilities/importNfo';
+import { dataCopyDatabase } from '@/abilities/importNfoInsertDatabase';
 import { existsFile } from '@/assets/file';
-import { ref } from 'vue';
-
-const dataList = ref<Array<InofData>>([]);
-
+import { ref, nextTick } from 'vue';
+const importResultRef = ref<InstanceType<typeof importResult>>();
 const dialogVisible = ref(false);
+const dataList = ref<Array<InofData>>([]);
+let page = 1;
+const limit = 30;
+let metadata: Array<InofData> = [];
+const setDataList = () => {
+    const start = (page - 1) * limit;
+    const end = start + limit;
+    if (start > metadata.length) {
+        return;
+    }
+    for (let i = 0; i < metadata.length; i++) {
+        if (i >= start && i < end) {
+            dataList.value.push(metadata[i]);
+        }
+    }
+    page++;
+}
+
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+const handleScroll = (event: any) => {
+    const scrollElement = event.target;
+    const scrollPosition = scrollElement.scrollTop;
+    const scrollHeight = scrollElement.scrollHeight;
+    const clientHeight = scrollElement.clientHeight;
+    const distanceFromBottom = scrollHeight - scrollPosition - clientHeight;
+    if (distanceFromBottom < 100) {
+        setDataList();
+    }
+};
+
+
 
 const getImageSrc = (info: InofData) => {
     const src = info.folder + '\\' + info.cover;
@@ -51,14 +82,29 @@ const getImageSrc = (info: InofData) => {
     }
 }
 
-const handleAdd = () => {
-    console.log(111111);
+const handleAdd = async () => {
+    loading.open();
+    nextTick(async () => {
+        try {
+            const resultImportData = await dataCopyDatabase(metadata);
+            if (resultImportData) {
+                importResultRef.value?.open(resultImportData);
+            }
+        } catch (error: unknown) {
+            ElMessage({ message: error as string, type: 'error' })
+            console.log(error);
+        }
+        await loading.closeSync();
+    })
+
 }
 
 const open = (_data: Array<InofData>) => {
-    dataList.value = _data;
+    metadata = _data;
+    //metadata = Array(100).fill([]).flatMap(() => _data.slice());
+
+    setDataList();
     dialogVisible.value = true;
-    console.log('haha', dataList);
 }
 
 // eslint-disable-next-line no-undef

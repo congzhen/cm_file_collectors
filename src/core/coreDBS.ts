@@ -148,7 +148,7 @@ class coreDBS {
         this.updateTimeObj = null;
 
         this.noWhereStatus = false;
-
+        this.CoreDb.debugStatus = false;
     }
     setCoreDb(_coreDb: coreSqlite) {
         this.CoreDb = _coreDb;

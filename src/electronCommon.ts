@@ -40,6 +40,11 @@ function createIpcMain(win: BrowserWindow) {
         app.quit();
         event.returnValue = true;
     });
+    ipcMain.on('ipcAppRestart', (event: Electron.IpcMainEvent) => {
+        app.relaunch();
+        app.quit();
+        event.returnValue = true;
+    });
 }
 
 const ipcRendererSend = {
@@ -74,6 +79,9 @@ const ipcRendererSend = {
     },
     execWindowClose: function () {
         ipcRenderer.sendSync('ipcWindowClose');
+    },
+    execAppRestart: function () {
+        ipcRenderer.sendSync('ipcAppRestart');
     },
     mainStartup: function () {
         ipcRenderer.sendSync('MainStartup');

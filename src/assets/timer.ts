@@ -38,6 +38,9 @@ const timer = {
                 return y + "-" + m + "-" + d;
         }
     },
+    getTodayFormat: function (t = 'Y-m-d H:i:s') {
+        return this.dateFormat(this.getTimeStamp(), t);
+    },
     //获取今天日期
     getToday: function () {
         const now = new Date();

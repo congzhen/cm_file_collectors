@@ -23,6 +23,35 @@ function execPromise(arg: string): Promise<string> {
     });
 }
 
+export interface IvideoAttributeInfo {
+    codec_type: string,
+    codec_name: string,
+    width: string,
+    height: string,
+    duration: string,
+    bit_rate: string,
+    size: string,
+}
+
+export const ffprobeTool = {
+    getVideoInfo: async function (videoFile: string) {
+        //const execStr = `${ffprobePath} -v error -show_format -show_streams ${pathSpaceConversion(videoFile)}`;
+        const execStr = `${ffprobePath} -v error -select_streams v:0 -show_entries stream=codec_type,codec_name,width,height,duration,bit_rate -show_entries format=size -of csv=p=0 ${pathSpaceConversion(videoFile)}`;
+        const cmdReadKeyframeExec = await execPromise(execStr);
+        const infoArr = cmdReadKeyframeExec.split(',');
+        const otherArr = infoArr[5].split("\r\n");
+        return {
+            codec_type: infoArr[0],
+            codec_name: infoArr[1],
+            width: infoArr[2],
+            height: infoArr[3],
+            duration: infoArr[4],
+            bit_rate: otherArr[0],
+            size: otherArr[1],
+        } as IvideoAttributeInfo
+    },
+}
+
 export const mp4 = {
     createVideoMP4Stream: function (res: Response, src: string, range: string | undefined,) {
         if (range) {

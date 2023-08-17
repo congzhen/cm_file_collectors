@@ -7,7 +7,7 @@ export default {
         Africa: ['Egypt', 'SouthAfrica', 'Ethiopia', 'Congo', 'Zimbabwe', 'Madagascar'],
         OtherCountry: ['OtherCountry'],
     },
-    definition: ['8K', '4K', '2K', '1080P', 'HighDefinition', 'StandardDefinition'],
+    definition: ['8K', '4K', '2K', '1080P', '720P', 'HighDefinition', 'StandardDefinition'],
     leftDisplay: ['country', 'definition', 'year', 'starRating', 'performer', 'diyTag'],
     tagMode: ['fixed', 'auto'],
     sortMode: ['asc', 'desc'],

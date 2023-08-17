@@ -200,7 +200,8 @@ export default {
         restoreDefaultValues: '恢复默认值',
         select: '选择',
         pleaseSelectFolder: '请先选择文件夹',
-        titleShowRes: '检索到的可导入资源',
+        titleShowRes: '检索到的可导入资源 ({num}条)',
+        importCompletedConfirmBtn: '导入完成，重启程序',
     },
     settings: {
         title: '设置',

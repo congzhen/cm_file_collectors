@@ -67,6 +67,14 @@
                     <div class="rowValue"><el-input v-model="nofConfig.abstract"></el-input></div>
                 </div>
                 <div class="rowTwo">
+                    <div class="rowTitle">country</div>
+                    <div class="rowValue"><el-input v-model="nofConfig.country"></el-input></div>
+                </div>
+                <div class="rowTwo">
+                    <div class="rowTitle">star</div>
+                    <div class="rowValue"><el-input v-model="nofConfig.star"></el-input></div>
+                </div>
+                <div class="rowTwo">
                     <div class="rowTitle">performer</div>
                     <div class="rowValue"><el-input v-model="nofConfig.performer"></el-input></div>
                 </div>
@@ -92,7 +100,7 @@ import { IfilesBasesNofConfig } from '@/dataInterface/filesBasesSetting.interfac
 import { ipcRendererSend } from "@/electronCommon"
 import { filesBasesSettingServerData } from '@/serverData/filesBasesSetting.serverData';
 import { filesBasesStore } from '@/store/filesBases.store';
-import { ref, reactive } from 'vue'
+import { ref, reactive, nextTick } from 'vue'
 import { useI18n } from 'vue-i18n';
 const { t } = useI18n();
 const store = {
@@ -111,6 +119,8 @@ const defaultNofConfig: IfilesBasesNofConfig = {
     coverUrl: 'cover',
     tag: 'tag|genre',
     abstract: 'outline|plot',
+    country: 'country',
+    star: 'star',
     performer: 'actor',
     performerName: 'name',
     performerThumb: 'thumb',
@@ -141,9 +151,11 @@ const setNofConfig = (config: IfilesBasesNofConfig) => {
 
 const getNofConfig = async () => {
     loading.open();
-    const config = await filesBasesSettingServerData.getNfoConfigByfilesBasesId(store.filesBasesStore.currentFilesBases.id);
-    setNofConfig(config);
-    await loading.closeSync();
+    nextTick(async () => {
+        const config = await filesBasesSettingServerData.getNfoConfigByfilesBasesId(store.filesBasesStore.currentFilesBases.id);
+        setNofConfig(config);
+        await loading.closeSync();
+    })
 }
 
 const submit = async () => {

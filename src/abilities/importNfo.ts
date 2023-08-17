@@ -1,34 +1,23 @@
 import { IfilesBasesNofConfig } from '@/dataInterface/filesBasesSetting.interface';
+import { IvideoAttributeInfo, ffprobeTool } from '@/webServer/m3u8FFmpeg';
 import fs from 'fs';
 import path from 'path';
-import { parseString } from 'xml2js';
+import { parseStringPromise } from 'xml2js';
 
-function parseXml(xml: Buffer) {
-    return new Promise((resolve, reject) => {
-        parseString(xml, (err: unknown, result: unknown) => {
-            if (err) {
-                reject(err);
-            } else {
-                resolve(result);
-            }
-        });
-    });
-}
 
-function getAllNfoFiles(directory: string) {
-    const files = fs.readdirSync(directory);
-    let nfoFiles: string[] = [];
+async function getAllNfoFiles(directory: string) {
+    const files = await fs.promises.readdir(directory, { withFileTypes: true });
+    const nfoFiles: string[] = [];
 
-    files.forEach((file) => {
-        const filePath = path.join(directory, file);
-        const fileStat = fs.statSync(filePath);
+    for (const file of files) {
+        const filePath = path.join(directory, file.name);
 
-        if (fileStat.isDirectory()) {
-            nfoFiles = nfoFiles.concat(getAllNfoFiles(filePath));
-        } else if (path.extname(file) === '.nfo') {
+        if (file.isDirectory()) {
+            nfoFiles.push(...await getAllNfoFiles(filePath));
+        } else if (path.extname(file.name) === '.nfo') {
             nfoFiles.push(filePath);
         }
-    });
+    }
 
     return nfoFiles;
 }
@@ -40,34 +29,36 @@ async function toResData(nfoFilesPath: string[], config: IfilesBasesNofConfig) {
         const data = await getNfoInfo(pathSrc);
         const videoPath = getVideoPath(pathSrc, config.suffix);
         if (videoPath) {
-            p.push(execToRes(videoPath, data, config));
+            const nofData: InofData = {
+                videoPath: videoPath,
+                folder: path.dirname(videoPath),
+                videoAttributeInfo: await ffprobeTool.getVideoInfo(videoPath),
+                ...execToRes(data, config)
+            }
+            p.push(nofData);
         }
     }
     return p;
 }
 
 async function getNfoInfo(_path: string) {
-    const data = await parseXml(fs.readFileSync(_path));
+    const data = await parseStringPromise(fs.readFileSync(_path));
     return data;
 }
 
 function getVideoPath(nfoPath: string, suffix: string) {
     const filePathNameNoSuffix = nfoPath.slice(0, -4);
     const arr = suffix.split("|");
-    for (const suffixName of arr) {
-        const p = filePathNameNoSuffix + suffixName.trim();
-        if (fs.existsSync(p)) {
-            return p;
-        }
-    }
+    const possiblePaths = arr.map(suffixName => filePathNameNoSuffix + suffixName.trim());
+    return possiblePaths.find(p => fs.existsSync(p));
 }
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
-function execToRes(videoPath: string, data: any, config: IfilesBasesNofConfig) {
-    const root = data[config.root];
+function execToRes(data: any, config: IfilesBasesNofConfig) {
+    const root = config.root == '' ? data : data[config.root];
     function getBaseData(field: string, isArr = false) {
         const baseArr = field.split("|");
-        let baseData = undefined;
+        let baseData = '';
         for (const fieldName of baseArr) {
             const _tm_fieldName = fieldName.trim();
             if (root[_tm_fieldName]) {
@@ -85,20 +76,15 @@ function execToRes(videoPath: string, data: any, config: IfilesBasesNofConfig) {
         if (_data == undefined) {
             return [];
         }
-        const __arr: Array<{ name: string, photoUrl: string }> = [];
-        _data.forEach((item) => {
-            __arr.push({
-                name: Array.isArray(item[config.performerName]) ? item[config.performerName][0] : item[config.performerName],
-                photoUrl: Array.isArray(item[config.performerThumb]) ? item[config.performerThumb][0] : item[config.performerThumb],
-            })
-        })
-        return __arr;
-
+        return _data.map(item => ({
+            name: Array.isArray(item[config.performerName]) ? item[config.performerName][0].trim() : item[config.performerName].trim(),
+            photoUrl: Array.isArray(item[config.performerThumb]) ? item[config.performerThumb][0].trim() : item[config.performerThumb].trim(),
+        }));
     }
 
-    const p: InofData = {
-        videoPath,
-        folder: path.dirname(videoPath),
+
+
+    const p: InofBaseData = {
         title: getBaseData(config.title),
         issueNumber: getBaseData(config.issueNumber),
         year: getBaseData(config.year),
@@ -106,15 +92,14 @@ function execToRes(videoPath: string, data: any, config: IfilesBasesNofConfig) {
         coverUrl: getBaseData(config.coverUrl),
         tag: getBaseData(config.tag, true),
         abstract: getBaseData(config.abstract),
+        country: getBaseData(config.country),
+        star: getBaseData(config.star),
         performer: cto_performer(getBaseData(config.performer, true)),
     }
     return p;
 }
 
-
-export interface InofData {
-    videoPath: string,
-    folder: string,
+export interface InofBaseData {
     title: string,
     issueNumber: string,
     year: string,
@@ -122,12 +107,22 @@ export interface InofData {
     coverUrl: string,
     tag: Array<string>,
     abstract: string,
+    country: string,
+    star: string,
     performer: Array<{ name: string, photoUrl: string }>,
 }
 
 
+export interface InofData extends InofBaseData {
+    videoPath: string,
+    folder: string,
+    videoAttributeInfo: IvideoAttributeInfo,
+
+}
+
+
 export const nfoToRes = async (path: string, config: IfilesBasesNofConfig) => {
-    const nfoFilesPathData = getAllNfoFiles(path);
+    const nfoFilesPathData = await getAllNfoFiles(path);
     return await toResData(nfoFilesPathData, config);
 }
 
