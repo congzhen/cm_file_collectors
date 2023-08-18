@@ -276,6 +276,7 @@ async function getPerformerInfo(performerBases_id: string, name: string) {
 
 async function createTagData(nofData: InofData, filesBases_id: string, resources_id: string, tagClass_id: string) {
     const tagList: Array<IresTags> = [];
+    console.log(nofData.tag);
     const tagNameArr = nofData.tag.map(item => item.trim());
     for (const tagName of tagNameArr) {
         const tagInfo = await getTagInfo(tagName);

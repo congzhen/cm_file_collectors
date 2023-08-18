@@ -3,6 +3,7 @@ import { IvideoAttributeInfo, ffprobeTool } from '@/webServer/m3u8FFmpeg';
 import fs from 'fs';
 import path from 'path';
 import { parseStringPromise } from 'xml2js';
+import { readDir } from '@/assets/file'
 
 
 async function getAllNfoFiles(directory: string) {
@@ -39,6 +40,7 @@ async function toResData(nfoFilesPath: string[], config: IfilesBasesNofConfig) {
         }
     }
     return p;
+
 }
 
 async function getNfoInfo(_path: string) {
@@ -47,10 +49,24 @@ async function getNfoInfo(_path: string) {
 }
 
 function getVideoPath(nfoPath: string, suffix: string) {
-    const filePathNameNoSuffix = nfoPath.slice(0, -4);
-    const arr = suffix.split("|");
-    const possiblePaths = arr.map(suffixName => filePathNameNoSuffix + suffixName.trim());
-    return possiblePaths.find(p => fs.existsSync(p));
+    const folderName = path.dirname(nfoPath);
+    const nfoFileName = path.basename(nfoPath, path.extname(nfoPath));
+    const filePathNameNoSuffix = path.join(folderName, '/', nfoFileName);
+    const suffixArr = suffix.split("|");
+    const possiblePaths = suffixArr.map(suffixName => filePathNameNoSuffix + suffixName.trim());
+    const result = possiblePaths.find(p => fs.existsSync(p));
+    if (result) {
+        return result;
+    }
+    //无法找到nfo同名的视频文件，进行模糊搜索
+    const fuzzyData = readDir(folderName, suffixArr);
+    const regex = new RegExp(nfoFileName, "i");
+    for (const fd of fuzzyData) {
+        if (regex.test(fd)) {
+            return path.join(folderName, '/', fd);
+        }
+    }
+    return fuzzyData?.length > 0 ? path.join(folderName, '/', fuzzyData[0]) : undefined;
 }
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -73,15 +89,25 @@ function execToRes(data: any, config: IfilesBasesNofConfig) {
     }
 
     function cto_performer(_data: undefined | Array<any>) {
-        if (_data == undefined) {
+        if (_data == undefined || !Array.isArray(_data)) {
             return [];
         }
-        return _data.map(item => ({
-            name: Array.isArray(item[config.performerName]) ? item[config.performerName][0].trim() : item[config.performerName].trim(),
-            photoUrl: Array.isArray(item[config.performerThumb]) ? item[config.performerThumb][0].trim() : item[config.performerThumb].trim(),
-        }));
+        const p = _data.map((item) => {
+            const _name = item[config.performerName];
+            const _photoUrl = item[config.performerThumb];
+            return {
+                name: !_name ? '' : Array.isArray(_name) ? _name[0].trim() : _name,
+                photoUrl: !_photoUrl ? '' : Array.isArray(_photoUrl) ? _photoUrl[0].trim() : _photoUrl,
+            }
+        })
+        return p;
     }
-
+    function cto_tag(_data: undefined | Array<any>) {
+        if (_data == undefined || !Array.isArray(_data)) {
+            return [];
+        }
+        return _data;
+    }
 
 
     const p: InofBaseData = {
@@ -90,7 +116,7 @@ function execToRes(data: any, config: IfilesBasesNofConfig) {
         year: getBaseData(config.year),
         cover: getBaseData(config.cover),
         coverUrl: getBaseData(config.coverUrl),
-        tag: getBaseData(config.tag, true),
+        tag: cto_tag(getBaseData(config.tag, true)),
         abstract: getBaseData(config.abstract),
         country: getBaseData(config.country),
         star: getBaseData(config.star),
