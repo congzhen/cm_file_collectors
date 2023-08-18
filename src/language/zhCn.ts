@@ -227,8 +227,10 @@ export default {
             pageLimit: '分页显示数量',
             sortMode: '排序方式',
             sortModeData: {
-                asc: '正序',
-                desc: '倒序',
+                asc: '添加时间正序',
+                desc: '添加时间倒序',
+                issuingDateAsc: '发行时间正序',
+                issuingDateDesc: '发现时间倒叙',
             },
             resourcesShowMode: '显示模式',
             resourcesShowModeData: {
@@ -259,6 +261,13 @@ export default {
             playAtlasModeData: {
                 waterfall: '瀑布流',
                 flex: '固定',
+            }
+        },
+        details: {
+            showModeTitle: '详情显示模式',
+            showMode: {
+                right: '右侧',
+                popup: '弹窗',
             }
         },
         plugin: {

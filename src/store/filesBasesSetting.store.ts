@@ -23,6 +23,7 @@ const defaultConfig = {
     youLikeNumber: 10,
     youLikeWordNumber: 3,
     youLikeTagClass: [],
+    resourceDetailsShowMode: 'right',
     plugInUnit_Cup: false,
     plugInUnit_Cup_Text: 'Cup',
     coverPosterData: [

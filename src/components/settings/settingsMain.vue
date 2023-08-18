@@ -144,6 +144,15 @@
                                 :label="$t('settings.play.playAtlasModeData.' + item)" :value="item" />
                         </el-select>
                     </div>
+
+                    <div class="settingMainItem">
+                        <h5>{{ $t('settings.details.showModeTitle') }}</h5>
+                        <el-select v-model="resourceDetailsShowModeData">
+                            <el-option v-for="item in dataset.resourceDetailsShowMode" :key="item"
+                                :label="$t('settings.details.showMode.' + item)" :value="item" />
+                        </el-select>
+                    </div>
+
                 </div>
 
 
@@ -342,6 +351,18 @@ const youLikeTagClassData = computed({
         getYouLikeNowWord();
     },
 })
+
+const resourceDetailsShowModeData = computed({
+    get: () => store.filesBasesSettingStore.config.resourceDetailsShowMode,
+    set: (value) => {
+        store.filesBasesSettingStore.config.resourceDetailsShowMode = value
+        getYouLikeNowWord();
+    },
+})
+
+
+
+
 const plugInUnit_CupData = computed({
     get: () => store.filesBasesSettingStore.config.plugInUnit_Cup,
     set: (value) => store.filesBasesSettingStore.config.plugInUnit_Cup = value,

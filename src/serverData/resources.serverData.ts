@@ -29,12 +29,16 @@ const resourcesServerData = {
         return info;
     },
     getDataListPagingByFilesBases_id: async function (filesBases_id: string, whereObj: IresWhereObj) {
-        const dataList = await resourcesSearchCondition.getDataListPagingByFilesBases_id_Sql(filesBases_id).limit(whereObj.page, whereObj.limit).order('addTime', whereObj.sortMode != 'desc' ? 'asc' : 'desc').getList() as Array<IresourcesBase>;
+        let dbsC = resourcesSearchCondition.getDataListPagingByFilesBases_id_Sql(filesBases_id);
+        dbsC = resourcesSearchCondition.setOrder(dbsC, whereObj.sortMode);
+        const dataList = await dbsC.limit(whereObj.page, whereObj.limit).getList() as Array<IresourcesBase>;
         const dataCount = await resourcesSearchCondition.getDataListPagingByFilesBases_id_Sql(filesBases_id).getCount();
         return { dataList, dataCount, whereObj };
     },
-    getDataListPagingBySearchCondition: async function (filesBases_id: string, searchCondition: IsearchCondition, page = 1, limit = 30) {
-        const dataList = await resourcesSearchCondition.getDataListPagingByFilesBases_id_Sql(filesBases_id, searchCondition).limit(page, limit).order('addTime', 'desc').getList() as Array<IresourcesBase>;
+    getDataListPagingBySearchCondition: async function (filesBases_id: string, searchCondition: IsearchCondition, page = 1, limit = 30, sortMode = 'desc') {
+        let dbsC = resourcesSearchCondition.getDataListPagingByFilesBases_id_Sql(filesBases_id, searchCondition);
+        dbsC = resourcesSearchCondition.setOrder(dbsC, sortMode);
+        const dataList = await dbsC.limit(page, limit).order('addTime', 'desc').getList() as Array<IresourcesBase>;
         const dataCount = await resourcesSearchCondition.getDataListPagingByFilesBases_id_Sql(filesBases_id, searchCondition).getCount();
         return { dataList, dataCount };
     },
@@ -369,6 +373,22 @@ const resourcesSearchCondition = {
                 perObj[boxName] = item;
             });
             _CDB.whereSql(sqlArr.join(' and '), perObj);
+        }
+        return _CDB;
+    },
+    setOrder: function (_CDB: coreDBS, sortMode: string) {
+        switch (sortMode) {
+            case 'asc':
+                _CDB.order('addTime', 'asc');
+                break;
+            case 'issuingDateAsc':
+                _CDB.order('issuingDate', 'asc');
+                break;
+            case 'issuingDateDesc':
+                _CDB.order('issuingDate', 'desc');
+                break;
+            default:
+                _CDB.order('addTime', 'desc');
         }
         return _CDB;
     }

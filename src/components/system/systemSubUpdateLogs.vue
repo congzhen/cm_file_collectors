@@ -7,6 +7,13 @@
             <el-timeline>
                 <el-scrollbar height="500px">
                     <el-timeline-item timestamp="2023/8/14" placement="top">
+                        <h4>{{ $t('system.updateLogs.version') }}：v 2.0.3</h4>
+                        <div class="rawContent">
+                            <h5>新特性</h5>
+                            <p class="logContent">增加批量.nfo文件导入数据</p>
+                        </div>
+                    </el-timeline-item>
+                    <el-timeline-item timestamp="2023/8/14" placement="top">
                         <h4>{{ $t('system.updateLogs.version') }}：v 2.0.2</h4>
                         <div class="rawContent">
                             <h5>新特性</h5>

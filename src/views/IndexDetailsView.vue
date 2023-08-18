@@ -1,9 +1,9 @@
 <template>
-    <div class="indexDetails" v-if="resDataInfo != undefined">
-        <div ref="detailsTop">
+    <div :class="[props.mode == 'right' ? 'indexDetails' : 'indexDetailsPopup']" v-if="resDataInfo != undefined">
+        <div ref="detailsTop" class="detailsTop">
             <div class="poster">
                 <el-image :src="setupConfig.resCoverPosterPath + resDataInfo.filesBases_id + '/' + resDataInfo.coverPoster"
-                    @load="loadImage" @error="errorImage">
+                    @load="loadImage" @error="errorImage" fit="contain">
                     <template #error>
                         <div class="image-slot">
                             <el-empty :description="$t('details.noPoster')" />
@@ -102,6 +102,14 @@ import { ElMessage } from 'element-plus'
 import { ref, inject } from 'vue'
 import { useI18n } from 'vue-i18n';
 const { t } = useI18n()
+
+// eslint-disable-next-line no-undef
+const props = defineProps({
+    mode: {
+        type: String,
+        default: 'right',
+    }
+})
 
 const indexUpdateResourcesDataInject = inject<(_up: Array<EresUpdate>) => void>('indexUpdateResourcesData');
 const store = {
@@ -280,5 +288,39 @@ defineExpose({ show, updateData });
     text-indent: 2em;
     padding: 10px;
     color: #606266;
+}
+
+
+.indexDetailsPopup {
+    display: flex;
+    justify-content: space-between;
+}
+
+.indexDetailsPopup .detailsTop {
+    width: 49%;
+}
+
+.indexDetailsPopup .detailsBody {
+    width: 49%;
+}
+
+.indexDetailsPopup .poster .el-image {
+    width: 100%;
+    height: 555px;
+    overflow: hidden;
+}
+
+.indexDetailsPopup .poster .el-image :deep(img) {
+    object-position: top;
+}
+
+.indexDetailsPopup .functionGroupBtn {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.indexDetailsPopup .functionGroupBtn .el-button-group {
+    width: 240px;
 }
 </style>

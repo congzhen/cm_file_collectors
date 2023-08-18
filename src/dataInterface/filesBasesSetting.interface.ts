@@ -32,6 +32,7 @@ interface IfilesBasesConfig {
     youLikeNumber: number;
     youLikeWordNumber: number;
     youLikeTagClass: Array<string>;
+    resourceDetailsShowMode: string;
     plugInUnit_Cup: boolean;
     plugInUnit_Cup_Text: string;
     coverPosterData: Array<IcoverPosterData>;

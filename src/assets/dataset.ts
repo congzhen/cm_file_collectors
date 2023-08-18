@@ -10,11 +10,12 @@ export default {
     definition: ['8K', '4K', '2K', '1080P', '720P', 'HighDefinition', 'StandardDefinition'],
     leftDisplay: ['country', 'definition', 'year', 'starRating', 'performer', 'diyTag'],
     tagMode: ['fixed', 'auto'],
-    sortMode: ['asc', 'desc'],
+    sortMode: ['asc', 'desc', 'issuingDateAsc', 'issuingDateDesc'],
     cup: ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'Max'],
     resMode: ['movies', 'comic', 'atlas', 'files'],
     resourcesShowMode: ['coverPoster', 'table'],
     detailsDramaSeriesMode: ['fileName', 'digit'],
     playAtlasMode: ['waterfall', 'flex'],
     playComicMode: ['scaleToOriginal', 'fullScreen'],
+    resourceDetailsShowMode: ['right', 'popup'],
 }

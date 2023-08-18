@@ -12,6 +12,7 @@ const registerApiResrouces = (app: Express) => {
         const page = parseInt(req.params.page);
         const limit = parseInt(req.params.limit);
         const searchCondition = JSON.parse(req.body.condition) as IsearchCondition;
+
         console.log(filesBases_id, page, limit, searchCondition);
         const data = await resourcesServerData.getDataListPagingBySearchCondition(filesBases_id, searchCondition, page, limit);
         res.json(data);

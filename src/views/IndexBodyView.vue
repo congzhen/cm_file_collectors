@@ -5,14 +5,15 @@
         </div>
         <div class="indexBodyMain">
             <div class="content">
-                <div class="dataList">
+                <div :class="[gerResDataListClass()]">
                     <IndexDataListTableModeView v-if="store.filesBasesSettingStore.config.resourcesShowMode == 'table'"
                         :dataList="resDataList" @clickHandle="clickDataHandle"></IndexDataListTableModeView>
                     <IndexDataListView v-else :dataList="resDataList" @clickHandle="clickDataHandle"></IndexDataListView>
                 </div>
-                <div class="details">
+                <div class="details" v-if="store.filesBasesSettingStore.config.resourceDetailsShowMode == 'right'">
                     <IndexDetailsView ref="IndexDetailsViewRef"></IndexDetailsView>
                 </div>
+                <IndexDetailsPopupView ref="IndexDetailsPopupViewRef" v-else></IndexDetailsPopupView>
             </div>
             <div class="footer">
                 <IndexFooterView :dataCount="resDataCount" :dataLimit="resWhereObj.limit" @currentChange="currentChange">
@@ -26,6 +27,7 @@ import IndexTagView from './IndexTagView.vue';
 import IndexDataListView from "./IndexDataListView.vue";
 import IndexDataListTableModeView from './IndexDataListTableModeView.vue';
 import IndexDetailsView from "./IndexDetailsView.vue";
+import IndexDetailsPopupView from './IndexDetailsPopupView.vue';
 import IndexFooterView from './IndexFooterView.vue';
 import { EresDetatilsType } from "@/dataInterface/common.enum"
 import { IresWhereObj, IresourcesBase } from "@/dataInterface/resources.interface";
@@ -39,6 +41,7 @@ const store = {
     filesBasesSettingStore: filesBasesSettingStore(),
 }
 const IndexDetailsViewRef = ref<InstanceType<typeof IndexDetailsView>>();
+const IndexDetailsPopupViewRef = ref<InstanceType<typeof IndexDetailsPopupView>>();
 const resDataList = ref<Array<IresourcesBase>>([]);
 const resDataCount = ref(0);
 const resWhereObj = reactive<IresWhereObj>({
@@ -78,7 +81,19 @@ const currentChange = async (currentPage: number) => {
 }
 
 const clickDataHandle = (type: EresDetatilsType, dataInfo: IresourcesBase) => {
-    IndexDetailsViewRef.value?.show(type, dataInfo);
+    if (store.filesBasesSettingStore.config.resourceDetailsShowMode == 'right') {
+        IndexDetailsViewRef.value?.show(type, dataInfo);
+    } else {
+        IndexDetailsPopupViewRef.value?.show(type, dataInfo);
+    }
+}
+
+const gerResDataListClass = () => {
+    if (store.filesBasesSettingStore.config.resourceDetailsShowMode == 'right') {
+        return 'dataList';
+    } else {
+        return 'dataListDetailsPopup';
+    }
 }
 
 onMounted(async () => {
@@ -116,8 +131,13 @@ defineExpose({ updateData, updataDetailsView });
     display: flex;
 }
 
-.indexBodyMain .dataList {
+.dataList {
     width: calc(100% - 285px);
+    height: 100%;
+}
+
+.dataListDetailsPopup {
+    width: 100%;
     height: 100%;
 }
 
