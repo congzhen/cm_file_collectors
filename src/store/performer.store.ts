@@ -114,6 +114,16 @@ export const performerStore = defineStore('performer', {
             }
             return obj;
         },
+        performerExist: function (state) {
+            return (id: string) => {
+                for (let i = 0; i < state.performerList.length; i++) {
+                    if (state.performerList[i].status && state.performerList[i].id == id) {
+                        return true;
+                    }
+                }
+                return false;
+            }
+        }
     },
     actions: {
         init: async function () {

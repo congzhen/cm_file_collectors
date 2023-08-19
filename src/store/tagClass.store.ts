@@ -12,8 +12,17 @@ export const tagClassStore = defineStore('tagClass', {
             return state.tagClassList.filter(item => item.filesBases_id == filesBases_id && item.status);
         },
         getTagClassListByfilesBasesId: function (state) {
-            return (filesBases_id: string): Array<ItagClass> => {
-                return state.tagClassList.filter(item => item.filesBases_id == filesBases_id && item.status);
+            return (filesBases_id: string, statusMode: 'ALL' | 1 = 1): Array<ItagClass> => {
+                return state.tagClassList.filter(item => {
+                    if (item.filesBases_id == filesBases_id) {
+                        if (statusMode == 'ALL') {
+                            return true;
+                        } else {
+                            return item.status;
+                        }
+                    }
+                    return false;
+                });
             }
         },
         getTagClassById: function (state) {
@@ -26,6 +35,17 @@ export const tagClassStore = defineStore('tagClass', {
                 return undefined;
             }
         },
+        tagClassExist: function (state) {
+            return (id: string) => {
+                for (let i = 0; i < state.tagClassList.length; i++) {
+                    if (state.tagClassList[i].status && state.tagClassList[i].id == id) {
+                        return true;
+                    }
+                }
+                return false;
+            }
+        }
+
     },
     actions: {
         init: async function () {

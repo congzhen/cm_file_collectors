@@ -243,8 +243,8 @@ const init = async (id: string | undefined = undefined, resInfo: Iresources | un
         formData.issueNumber = '';
         formData.coverPoster = '';
         formData.coverPosterMode = store.filesBasesSettingStore.config.coverPosterDataDefaultSelect < store.filesBasesSettingStore.config.coverPosterData.length ? store.filesBasesSettingStore.config.coverPosterDataDefaultSelect : 0;
-        formData.coverPosterWidth = store.filesBasesSettingStore.config.coverPosterData[0].width;
-        formData.coverPosterHeight = store.filesBasesSettingStore.config.coverPosterData[0].height;
+        formData.coverPosterWidth = store.filesBasesSettingStore.config.coverPosterData[formData.coverPosterMode].width;
+        formData.coverPosterHeight = store.filesBasesSettingStore.config.coverPosterData[formData.coverPosterMode].height;
         formData.issuingDate = '';
         formData.country = '';
         formData.definition = '';
@@ -299,10 +299,9 @@ const init = async (id: string | undefined = undefined, resInfo: Iresources | un
 
         coverPosterSrc.value = setupConfig.resCoverPosterPath + resInfo.filesBases_id + '/' + resInfo.coverPoster;
         coverPosterData.value = '';
-
-
     }
-    changeCoverPosterMode();
+    console.log('formData', formData);
+    //changeCoverPosterMode();
 }
 const createTagsFormData = () => {
     const tags: { [key: string]: Array<string> } = {};
@@ -312,6 +311,7 @@ const createTagsFormData = () => {
     return tags;
 }
 
+//该函数用于从新设置CoverPoster宽高，可能已经没用了
 const changeCoverPosterMode = () => {
     const _coverPosterData = store.filesBasesSettingStore.config.coverPosterData[formData.coverPosterMode];
     formData.coverPosterWidth = _coverPosterData.width;

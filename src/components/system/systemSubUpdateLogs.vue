@@ -11,6 +11,14 @@
                         <div class="rawContent">
                             <h5>新特性</h5>
                             <p class="logContent">增加批量.nfo文件导入数据</p>
+                            <p class="logContent">增加弹窗式详情页</p>
+                            <p class="logContent">增加发行时间排序</p>
+                            <p class="logContent">增加标签分类与标签删除后恢复功能</p>
+                            <p class="logContent">增加演员删除后恢复功能</p>
+                        </div>
+                        <div class="rawContent">
+                            <h5>BUG修复</h5>
+                            <p class="logContent">修复标签和演员删除后，导致编辑时，无法正显示标签名。删除后的标签，如果资源上还存在，则会显示Delete Item</p>
                         </div>
                     </el-timeline-item>
                     <el-timeline-item timestamp="2023/8/14" placement="top">

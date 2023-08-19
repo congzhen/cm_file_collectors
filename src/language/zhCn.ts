@@ -145,6 +145,7 @@ export default {
             add: '新增',
             edit: '修改',
             delete: '删除',
+            restore: '恢复',
         },
         form: {
             add: '添加演员/导演',
@@ -162,6 +163,8 @@ export default {
             }
         },
         yearsOld: '{age}岁',
+        recycle: '演员回收站',
+
     },
     performerDatabases: {
         title: '演员数据集',
@@ -423,9 +426,9 @@ export default {
             deleteWarning: '删除"{0}"?',
             deleteSuccess: '删除"{0}"成功！',
             deleteFail: '删除"{0}"失败！',
-            restoreWarning: '将 ["{0}"] 移出回收站?',
-            restoreSuccess: '已将 ["{0}"] 移出回收站',
-            restoreFail: '将 ["{0}"] 移出回收站失败！',
+            restoreWarning: '将 ["{0}"] 恢复使用?',
+            restoreSuccess: '已将 ["{0}"] 恢复使用',
+            restoreFail: '将 ["{0}"] 恢复使用失败！',
             activateWarning: '启用"{0}"?',
             activateSuccess: '启用"{0}"成功！',
             activateFail: '启用"{0}"失败！',

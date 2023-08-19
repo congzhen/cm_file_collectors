@@ -2,7 +2,7 @@
     <div class="tagAdminMain">
         <el-scrollbar height="100%">
             <tagAdminClass
-                v-for="item, key in store.tagClassStore.getTagClassListByfilesBasesId(store.filesBasesStore.currentFilesBases.id)"
+                v-for="item, key in store.tagClassStore.getTagClassListByfilesBasesId(store.filesBasesStore.currentFilesBases.id, 'ALL')"
                 :key="key" :tagClassData="item" :arrowUp="arrowUpStatus(key)" :arrowDown="arrowDownStatus(key)">
             </tagAdminClass>
         </el-scrollbar>
@@ -25,7 +25,7 @@ const arrowUpStatus = (index: number) => {
 }
 
 const arrowDownStatus = (index: number) => {
-    if (index == store.tagClassStore.getTagClassListByfilesBasesId(store.filesBasesStore.currentFilesBases.id).length - 1) {
+    if (index == store.tagClassStore.getTagClassListByfilesBasesId(store.filesBasesStore.currentFilesBases.id, 'ALL').length - 1) {
         return false;
     }
     return true;

@@ -47,8 +47,9 @@
                 <div class="detailsItem" v-if="resDataInfo.directors.length > 0">
                     <el-alert class="tagAlert" :title="$t('performer.careerMode.director')" :closable="false" />
                     <div class="performerList">
-                        <performerCom mode="popover" v-for="item, key in resDataInfo.directors" :key="key"
-                            :performerInfo="store.performerStore.getPerformerInfoById(item.performer_id)">
+                        <performerCom mode="popover"
+                            v-for="item, key in resDataInfo.directors.filter(item => store.performerStore.performerExist(item.performer_id))"
+                            :key="key" :performerInfo="store.performerStore.getPerformerInfoById(item.performer_id)">
                         </performerCom>
                     </div>
                 </div>
@@ -56,15 +57,18 @@
                     <el-alert class="tagAlert" :title="$t('performer.careerMode.performer')" type="success"
                         :closable="false" />
                     <div class="performerList">
-                        <performerCom mode="popover" v-for="item, key in resDataInfo.performers" :key="key"
-                            :performerInfo="store.performerStore.getPerformerInfoById(item.performer_id)">
+                        <performerCom mode="popover"
+                            v-for="item, key in resDataInfo.performers.filter(item => store.performerStore.performerExist(item.performer_id))"
+                            :key="key" :performerInfo="store.performerStore.getPerformerInfoById(item.performer_id)">
                         </performerCom>
                     </div>
                 </div>
                 <div class="detailsItem">
                     <el-alert class="tagAlert" :title="$t('details.tag')" type="warning" :closable="false" />
                     <div class="tagList">
-                        <el-tag type="info" effect="plain" size="large" v-for="item, key in resDataInfo.tags" :key="key">
+                        <el-tag type="info" effect="plain" size="large"
+                            v-for="item, key in resDataInfo.tags.filter(item => store.tagStore.tagExist(item.tag_id))"
+                            :key="key">
                             {{ store.tagStore.getTagById(item.tag_id)?.name }}
                         </el-tag>
                     </div>

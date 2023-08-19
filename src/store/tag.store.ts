@@ -1,14 +1,25 @@
 import { defineStore } from "pinia";
 import { Itag } from "@/dataInterface/tag.interface"
 import { tagServerData } from "@/serverData/tag.serverData"
+import { tagClassStore } from "./tagClass.store";
+
 export const tagStore = defineStore('tag', {
     state: () => ({
         tagList: [] as Array<Itag>,
     }),
     getters: {
         getTagListByTagClassId: function (state) {
-            return (tagClass_id: string): Array<Itag> => {
-                return state.tagList.filter(item => item.tagClass_id == tagClass_id && item.status);
+            return (tagClass_id: string, statusMode: 'ALL' | 1 = 1): Array<Itag> => {
+                return state.tagList.filter(item => {
+                    if (item.tagClass_id == tagClass_id) {
+                        if (statusMode == 'ALL') {
+                            return true;
+                        } else {
+                            return item.status;
+                        }
+                    }
+                    return false;
+                });
             }
         },
         getTagById: function (state) {
@@ -21,6 +32,16 @@ export const tagStore = defineStore('tag', {
                 return undefined;
             }
         },
+        tagExist: function (state) {
+            return (id: string) => {
+                for (let i = 0; i < state.tagList.length; i++) {
+                    if (state.tagList[i].status && state.tagList[i].id == id) {
+                        return tagClassStore().tagClassExist(state.tagList[i].tagClass_id);
+                    }
+                }
+                return false;
+            }
+        }
     },
     actions: {
         init: async function () {

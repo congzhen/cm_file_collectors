@@ -18,6 +18,13 @@
                         </template>
                     </el-input>
                 </div>
+                <div class="row">
+                    <label>封面海报类型：</label>
+                    <el-select v-model="coverPosterMode">
+                        <el-option v-for="item, index in store.filesBasesSettingStore.config.coverPosterData" :key="index"
+                            :label="item.name" :value="index" />
+                    </el-select>
+                </div>
             </div>
         </div>
         <div class="block">
@@ -100,15 +107,17 @@ import { IfilesBasesNofConfig } from '@/dataInterface/filesBasesSetting.interfac
 import { ipcRendererSend } from "@/electronCommon"
 import { filesBasesSettingServerData } from '@/serverData/filesBasesSetting.serverData';
 import { filesBasesStore } from '@/store/filesBases.store';
+import { filesBasesSettingStore } from '@/store/filesBasesSetting.store';
 import { ref, reactive, nextTick } from 'vue'
 import { useI18n } from 'vue-i18n';
 const { t } = useI18n();
 const store = {
     filesBasesStore: filesBasesStore(),
+    filesBasesSettingStore: filesBasesSettingStore(),
 }
 const importShowListRef = ref<InstanceType<typeof importShowList>>();
 const retrieveFolderPath = ref('');
-
+const coverPosterMode = ref(0);
 const defaultNofConfig: IfilesBasesNofConfig = {
     suffix: '.mp4|.avi|.rmvb|.wmv|.mov|.mkv|.flv|.ts|.webm|.iso|.mpg|.m4v',
     root: 'movie',
@@ -167,7 +176,7 @@ const submit = async () => {
     await filesBasesSettingServerData.saveNfoConfigByfilesBasesId(store.filesBasesStore.currentFilesBases.id, nofConfig);
     try {
         const dataList = await nfoToRes(retrieveFolderPath.value, nofConfig);
-        importShowListRef.value?.open(dataList);
+        importShowListRef.value?.open(dataList, coverPosterMode.value);
     } catch (error: unknown) {
         ElMessage({ message: error as string, type: 'error' })
     }

@@ -33,10 +33,16 @@
                             <Coin />
                         </el-icon>
                     </div>
+                    <div class="btnI" @click="openPerformerRecycle">
+                        <el-icon :size="23">
+                            <Delete />
+                        </el-icon>
+                    </div>
                 </div>
             </div>
         </div>
         <performerDatabasesAdminDialog ref="performerDatabasesAdminDialogRef"></performerDatabasesAdminDialog>
+        <performerAdminRecycle ref="performerAdminRecycleRef"></performerAdminRecycle>
     </div>
 </template>
 <script setup lang="ts">
@@ -46,6 +52,7 @@ import performerAdminIndex from './performerAdminIndex.vue';
 import performerAdminSearch from './performerAdminSearch.vue'
 import performerAdminDataList from './performerAdminDataList.vue';
 import performerDatabasesAdminDialog from '@/components/performerDatabasesAdmin/performerDatabasesAdminDialog.vue'
+import performerAdminRecycle from './performerAdminRecycle.vue';
 import { filesBasesStore } from "@/store/filesBases.store"
 import { performerBasesStore } from "@/store/performerBases.store"
 import { filesRelatedPerformerBasesStore } from "@/store/filesRelatedPerformerBases.store"
@@ -61,6 +68,7 @@ const store = {
     performerStore: performerStore(),
 }
 const performerDatabasesAdminDialogRef = ref<InstanceType<typeof performerDatabasesAdminDialog>>();
+const performerAdminRecycleRef = ref<InstanceType<typeof performerAdminRecycle>>();
 const performerAdminInfoRef = ref<InstanceType<typeof performerAdminInfo>>();
 const performerAdminIndexRef = ref<InstanceType<typeof performerAdminIndex>>();
 const performerAdminSearchRef = ref<InstanceType<typeof performerAdminSearch>>();
@@ -97,7 +105,11 @@ const init = () => {
 const openPerformerDatabasesAdminDrawer = () => {
     performerDatabasesAdminDialogRef.value?.open();
 }
-
+const openPerformerRecycle = () => {
+    if (nowPerformerBasesId.value) {
+        performerAdminRecycleRef.value?.open(nowPerformerBasesId.value);
+    }
+}
 const currentChange = () => {
     updateData();
 }
@@ -212,6 +224,7 @@ provide('updatePerformerAdminMainData', updateData);
 
 .settingsPerformer .btnI {
     cursor: pointer;
+    margin: 0 5px;
 }
 
 .settingsPerformer .btnI:hover {

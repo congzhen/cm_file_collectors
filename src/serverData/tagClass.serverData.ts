@@ -62,7 +62,7 @@ const tagClassServerData = {
             if (exchangeSort < 1 || exchangeSort > count) {
                 return false;
             }
-            exchangeData = await CoreDb().table('tagClass').find({ sort: exchangeSort, status: 1 }) as ItagClassInfo;
+            exchangeData = await CoreDb().table('tagClass').find({ sort: exchangeSort }) as ItagClassInfo;
             if (exchangeData) {
                 exchangeDataId = exchangeData.id;
                 status = true;

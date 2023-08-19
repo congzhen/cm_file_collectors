@@ -33,7 +33,7 @@ export interface IimportNfoInsertDatabase {
 }
 
 
-export const dataCopyDatabase = async function (dataList: Array<InofData>) {
+export const dataCopyDatabase = async function (dataList: Array<InofData>, coverPosterMode = 0) {
     const resultData: IimportNfoInsertDatabase = {
         count: {
             already: 0,
@@ -64,7 +64,7 @@ export const dataCopyDatabase = async function (dataList: Array<InofData>) {
         }
         try {
             //资源
-            const resourcesObj = await createResourceData(nofData, filesBases_id);
+            const resourcesObj = await createResourceData(nofData, filesBases_id, coverPosterMode);
             await dbs.table('resources').createTime().create(resourcesObj as unknown as IConditions);
             //演员
             const performerObj = await craetePerformerData(nofData, performerBases_id, resourcesObj.id);
@@ -109,6 +109,7 @@ async function getDefaultTagClassId(filesBases_id: string) {
         id: coreCreateGuid(),
         filesBases_id,
         name: 'default',
+        sort: 1,
     }
     const addResult = await dbs.table('tagClass').createTime().create(tagClassObj);
     if (addResult == undefined || addResult.status == false) {
@@ -124,7 +125,7 @@ async function checkResExist(filesBases_id: string, title: string, issueNumber: 
     }).getCount() as number;
 }
 
-async function createResourceData(nofData: InofData, filesBases_id: string) {
+async function createResourceData(nofData: InofData, filesBases_id: string, coverPosterMode = 0) {
 
     const coverPosterInfo = await createCoverPoster(nofData, filesBases_id);
     const data: IresourcesBase = {
@@ -134,7 +135,7 @@ async function createResourceData(nofData: InofData, filesBases_id: string) {
         issueNumber: nofData.issueNumber,
         mode: EresDramaSeriesType.movies,
         coverPoster: coverPosterInfo ? coverPosterInfo.name : '',
-        coverPosterMode: 1,
+        coverPosterMode: coverPosterMode,
         coverPosterWidth: coverPosterInfo && coverPosterInfo.width ? coverPosterInfo.width : 300,
         coverPosterHeight: coverPosterInfo && coverPosterInfo.height ? coverPosterInfo.height : 420,
         issuingDate: nofData.year,

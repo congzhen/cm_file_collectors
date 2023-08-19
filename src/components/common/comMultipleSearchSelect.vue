@@ -42,7 +42,7 @@
 </template>
 <script setup lang="ts">
 import stringSearch from "@/assets/stringSearch"
-import { ref, computed, onMounted, nextTick } from 'vue'
+import { ref, computed, onMounted, nextTick, onUpdated } from 'vue'
 
 // eslint-disable-next-line no-undef
 const props = defineProps({
@@ -79,6 +79,22 @@ const searchText = ref('');
 const width = ref('150px');
 const multipleSelectRef = ref<HTMLDivElement>();
 
+/*
+onUpdated(() => {
+    checkValueInDataList();
+})
+
+const checkValueInDataList = () => {
+    const p = props.dataList.map(obj => obj[props.valueField]);
+    const r = props.modelValue.every(value => p.includes(value));
+    if (!r) {
+        updateVal(props.modelValue.filter(value => p.includes(value)));
+    }
+}
+*/
+
+
+
 const updateVal = (dataArr: Array<string>) => {
     emits('update:modelValue', dataArr);
 }
@@ -92,13 +108,16 @@ const cl_select_item = (obj: { [key: string]: unknown }) => {
     }
     updateVal(dataArr);
 }
+
+
+
 const showText = (v: string) => {
     for (let i in props.dataList) {
         if (props.dataList[i][props.valueField] == v) {
             return showSelectText(props.dataList[i]);
         }
     }
-    return '';
+    return '<label class="deleteItem">Delete Item</label>';
 }
 const showSelectText = (item: { [key: string]: unknown }) => {
     let s = '<label class="perMainName">' + item[props.showSelectField[0]] + '</label>';
@@ -195,13 +214,16 @@ onMounted(() => {
     overflow: hidden;
 }
 
+.multipleSelectTagText :deep(.deleteItem) {
+    color: #F56C6C;
+}
 
-.multipleSelectTag>>>.perMainName {
+.multipleSelectTag :deep(.perMainName) {
     display: block;
     flex: 0 0 auto;
 }
 
-.multipleSelectTag>>>.otherField {
+.multipleSelectTag :deep(.otherField) {
     display: block;
     padding-left: 10px;
     font-size: 10px;

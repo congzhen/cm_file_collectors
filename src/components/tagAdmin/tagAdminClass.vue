@@ -1,5 +1,5 @@
 <template>
-    <div class="tagAdminClass">
+    <div :class="[props.tagClassData.status ? 'tagAdminClassEnable' : 'tagAdminClassDisable', 'tagAdminClass']">
         <div class="header">
             <div class="header-title">{{ props.tagClassData.name }}</div>
             <div class="header-btn-group">
@@ -15,7 +15,8 @@
                 <div class="btnItem">
                     <el-button-group size="small">
                         <el-button type="primary" icon="Edit" @click="editHandle" />
-                        <el-button type="primary" icon="Delete" @click="deleteHandle" />
+                        <el-button type="primary" icon="Delete" @click="deleteHandle" v-if="props.tagClassData.status" />
+                        <el-button type="primary" icon="RefreshLeft" @click="restoreHandle" v-else />
                     </el-button-group>
                 </div>
             </div>
@@ -37,6 +38,7 @@ import tagAdminClassAdd from "./tagAdminClassAdd.vue";
 import tagAdminSection from "./tagAdminSection.vue"
 import tagAdminSectionAdd from "./tagAdminSectionAdd.vue"
 import deleteConfirm from "@/components/common/funDeleteConfirm"
+import restoreConfirm from "@/components/common/funRestoreConfirm"
 import draggable from 'vuedraggable';
 import { tagServerData } from "@/serverData/tag.serverData"
 import { Itag, ItagClass } from "@/dataInterface/tag.interface";
@@ -75,7 +77,7 @@ const leftShow = computed({
 })
 
 const tagListByTagClassIdArr = computed({
-    get: () => store.tagStore.getTagListByTagClassId(props.tagClassData.id),
+    get: () => store.tagStore.getTagListByTagClassId(props.tagClassData.id, 'ALL'),
     set: (value) => console.log(value),
 })
 
@@ -119,8 +121,27 @@ const deleteHandle = () => {
     });
 }
 
+const restoreHandle = () => {
+    restoreConfirm.exec(props.tagClassData.name, async () => {
+        loading.open();
+        await tagClassServerData.setStatus(props.tagClassData.id, true);
+        store.tagClassStore.setStatus(props.tagClassData.id, true);
+        await loading.closeSync();
+    });
+}
+
 </script>
 <style scoped>
+.tagAdminClassDisable {
+    opacity: 0.5;
+    background-color: dimgray;
+    border-radius: 5px;
+}
+
+.tagAdminClassDisable .header-title {
+    color: aliceblue;
+}
+
 .tagAdminClass .header {
     height: 37px;
     padding: 2px 5px;

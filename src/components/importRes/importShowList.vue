@@ -44,6 +44,7 @@ const dialogVisible = ref(false);
 const dataList = ref<Array<InofData>>([]);
 let page = 1;
 const limit = 30;
+let coverPosterMode = 0;
 let metadata: Array<InofData> = [];
 const setDataList = () => {
     const start = (page - 1) * limit;
@@ -86,7 +87,7 @@ const handleAdd = async () => {
     loading.open();
     nextTick(async () => {
         try {
-            const resultImportData = await dataCopyDatabase(metadata);
+            const resultImportData = await dataCopyDatabase(metadata, coverPosterMode);
             if (resultImportData) {
                 importResultRef.value?.open(resultImportData);
             }
@@ -99,7 +100,8 @@ const handleAdd = async () => {
 
 }
 
-const open = (_data: Array<InofData>) => {
+const open = (_data: Array<InofData>, _coverPosterMode: number) => {
+    coverPosterMode = _coverPosterMode;
     metadata = _data;
     //metadata = Array(100).fill([]).flatMap(() => _data.slice());
 
