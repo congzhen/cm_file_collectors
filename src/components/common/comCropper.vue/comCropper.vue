@@ -170,18 +170,28 @@ const auto_crop_match_img_size = () => {
     }
 }
 const cl_autoLeftSize = () => {
-    auto_crop_match_img_size();
-    const imgAxis = cropperRef.value.getImgAxis();
-    cropperRef.value.cropOffsertX = imgAxis.x1;
-    cropperRef.value.cropOffsertY = imgAxis.y1;
+    try {
+        auto_crop_match_img_size();
+        const imgAxis = cropperRef.value.getImgAxis();
+        cropperRef.value.cropOffsertX = imgAxis.x1;
+        cropperRef.value.cropOffsertY = imgAxis.y1;
+    } catch (err) {
+        console.log(err);
+    }
+
 }
 
 const cl_autoRightSize = () => {
-    auto_crop_match_img_size();
-    const imgAxis = cropperRef.value.getImgAxis();
-    const cropAxis = cropperRef.value.getCropAxis();
-    cropperRef.value.cropOffsertX = imgAxis.x2 - (cropAxis.x2 - cropAxis.x1);
-    cropperRef.value.cropOffsertY = imgAxis.y1;
+    try {
+        auto_crop_match_img_size();
+        const imgAxis = cropperRef.value.getImgAxis();
+        const cropAxis = cropperRef.value.getCropAxis();
+        cropperRef.value.cropOffsertX = imgAxis.x2 - (cropAxis.x2 - cropAxis.x1);
+        cropperRef.value.cropOffsertY = imgAxis.y1;
+    } catch (err) {
+        console.log(err);
+    }
+
 }
 const cl_upload = () => {
     if (returnType.value == 'data') {

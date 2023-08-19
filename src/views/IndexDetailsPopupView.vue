@@ -17,7 +17,9 @@ import { ref } from 'vue'
 const IndexDetailsViewRef = ref<InstanceType<typeof IndexDetailsView>>();
 const dialogVisible = ref(true);
 const dialogStatus = ref(false);
-
+const updateData = async () => {
+    await IndexDetailsViewRef.value?.updateData();
+}
 const show = async (type: EresDetatilsType, dataInfo: IresourcesBase) => {
     if (type == EresDetatilsType.show) {
         if (!dialogStatus.value) {
@@ -29,7 +31,7 @@ const show = async (type: EresDetatilsType, dataInfo: IresourcesBase) => {
 }
 
 // eslint-disable-next-line no-undef
-defineExpose({ show });
+defineExpose({ show, updateData });
 
 </script>
 <style scoped>

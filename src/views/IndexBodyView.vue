@@ -66,7 +66,11 @@ const updateData = async () => {
     await getDataList(store.filesBasesStore.currentFilesBases.id, resWhereObj);
 }
 const updataDetailsView = async () => {
-    await IndexDetailsViewRef.value?.updateData();
+    if (store.filesBasesSettingStore.config.resourceDetailsShowMode == 'right') {
+        await IndexDetailsViewRef.value?.updateData();
+    } else {
+        await IndexDetailsPopupViewRef.value?.updateData();
+    }
 }
 
 const getDataList = async (filesBases_id: string, _resWhereObj: IresWhereObj) => {

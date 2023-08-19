@@ -35,9 +35,9 @@ const dialogVisible = ref(false)
 const cropWidth = ref(270);
 const cropHeight = ref(320);
 
-const open = (raw: File | undefined = undefined, mode = '100%', _cropWidth: number | undefined = undefined, _cropHeight: number | undefined = undefined) => {
-    if (_cropWidth) cropWidth.value = _cropWidth;
-    if (_cropHeight) cropHeight.value = _cropHeight;
+const open = (raw: File | undefined = undefined, mode = '100%', _cropWidth: number | undefined = undefined, _cropHeight: number | undefined = undefined, maxCropWidth = 900, maxCropHeight = 580) => {
+    if (_cropWidth) cropWidth.value = _cropWidth > maxCropWidth ? maxCropWidth : _cropWidth;
+    if (_cropHeight) cropHeight.value = _cropHeight > maxCropHeight ? maxCropHeight : _cropHeight;
     if (dialogVisible.value == false) {
         dialogVisible.value = true;
     }

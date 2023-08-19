@@ -300,7 +300,6 @@ const init = async (id: string | undefined = undefined, resInfo: Iresources | un
         coverPosterSrc.value = setupConfig.resCoverPosterPath + resInfo.filesBases_id + '/' + resInfo.coverPoster;
         coverPosterData.value = '';
     }
-    console.log('formData', formData);
     //changeCoverPosterMode();
 }
 const createTagsFormData = () => {
