@@ -193,7 +193,15 @@ export default {
         }
     },
     import: {
-        title: '批量导入(.nfo)',
+        mode: {
+            nfo: 'nfo导入',
+            simple: '简单导入',
+        },
+        title: {
+            nfo: '批量导入(.nfo)',
+            simple: '批量导入(文件夹)',
+        },
+        coverPosterType: '封面海报类型',
         importPath: '导入地址',
         importIllustrate: '导入时，会读取文件夹下所有.nfo文件，根据其中的内容生成数据。',
         importPathPlaceholder: '请选择所需导入的文件夹地址',

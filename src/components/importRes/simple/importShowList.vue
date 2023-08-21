@@ -7,15 +7,13 @@
                     <el-image :src="getImageSrc(item)" fit="cover" />
                 </div>
                 <div class="infoDiv">
-                    <div>{{ item.title }}</div>
-                    <div>{{ item.issueNumber }}</div>
-                    <div>{{ item.abstract }}</div>
-                    <div>{{ item.year }}</div>
-                    <div>{{ item.tag }}</div>
-                    <div>
-                        <el-tag v-for="per, pkey in item.performer" :key="pkey">{{ per.name }}</el-tag>
+                    <div class="block">
+                        <span class="title">Title: </span>
+                        <p class="content">{{ item.title }}</p>
                     </div>
-                    <div>{{ item.videoPath }}</div>
+                    <div class="block"><span class="title">File Path: </span>
+                        <p class="content">{{ item.file }}</p>
+                    </div>
                 </div>
             </div>
         </div>
@@ -35,17 +33,22 @@
 import importResult from "./importResult.vue"
 import loading from '@/assets/loading'
 import { ElMessage } from 'element-plus'
-import { InofData } from '@/abilities/importNfo';
-import { dataCopyDatabase } from '@/abilities/importNfoInsertDatabase';
-import { existsFile } from '@/assets/file';
+import { ISimpleData } from '@/abilities/importSimple';
+import { dataCopyDatabase } from '@/abilities/importSimpleInsertDatabase';
 import { ref, nextTick } from 'vue';
 const importResultRef = ref<InstanceType<typeof importResult>>();
 const dialogVisible = ref(false);
-const dataList = ref<Array<InofData>>([]);
+const dataList = ref<Array<ISimpleData>>([]);
 let page = 1;
 const limit = 30;
 let coverPosterMode = 0;
-let metadata: Array<InofData> = [];
+let metadata: Array<ISimpleData> = [];
+
+const init = () => {
+    dataList.value = [];
+    page = 1;
+}
+
 const setDataList = () => {
     const start = (page - 1) * limit;
     const end = start + limit;
@@ -74,13 +77,8 @@ const handleScroll = (event: any) => {
 
 
 
-const getImageSrc = (info: InofData) => {
-    const src = info.folder + '\\' + info.cover;
-    if (existsFile(src)) {
-        return src;
-    } else {
-        return info.cover;
-    }
+const getImageSrc = (info: ISimpleData) => {
+    return info.cover;
 }
 
 const handleAdd = async () => {
@@ -91,6 +89,7 @@ const handleAdd = async () => {
             if (resultImportData) {
                 importResultRef.value?.open(resultImportData);
             }
+
         } catch (error: unknown) {
             ElMessage({ message: error as string, type: 'error' })
             console.log(error);
@@ -100,7 +99,8 @@ const handleAdd = async () => {
 
 }
 
-const open = (_data: Array<InofData>, _coverPosterMode: number) => {
+const open = (_data: Array<ISimpleData>, _coverPosterMode: number) => {
+    init();
     coverPosterMode = _coverPosterMode;
     metadata = _data;
     //metadata = Array(100).fill([]).flatMap(() => _data.slice());
@@ -116,11 +116,10 @@ defineExpose({ open });
 </script>
 <style scoped>
 .videoInfo {
-    min-height: 150px;
     display: flex;
     justify-content: space-between;
     overflow: hidden;
-    margin-bottom: 20px;
+    margin-bottom: 10px;
 }
 
 .videoInfo .imgDiv {
@@ -131,6 +130,24 @@ defineExpose({ open });
 .videoInfo .infoDiv {
     width: calc(100% - 110px);
     font-size: 12px;
+
+}
+
+.videoInfo .infoDiv .block {
+    display: flex;
+    padding: 0px;
+}
+
+.videoInfo .infoDiv .title {
+    width: 100px;
+    padding-right: 20PX;
+    display: block;
+    font-weight: bold;
+    text-align: right;
+}
+
+.videoInfo .infoDiv .content {
+    width: calc(100% - 120PX);
 }
 
 .videoInfo .infoDiv .el-tag {

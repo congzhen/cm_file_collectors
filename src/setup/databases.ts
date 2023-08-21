@@ -52,6 +52,7 @@ const performerBasesDefaultId = coreCreateGuid();
 
 const initFieldData = [
     { table: 'filesBasesSetting', field: 'nfo_json_data', sql: 'ALTER TABLE filesBasesSetting ADD nfo_json_data TEXT;' },
+    { table: 'filesBasesSetting', field: 'simple_json_data', sql: 'ALTER TABLE filesBasesSetting ADD simple_json_data TEXT;' },
 ]
 
 const initTableData: ItableData = {

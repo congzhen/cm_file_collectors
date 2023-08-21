@@ -3,44 +3,44 @@ import { IvideoAttributeInfo, ffprobeTool } from '@/webServer/m3u8FFmpeg';
 import fs from 'fs';
 import path from 'path';
 import { parseStringPromise } from 'xml2js';
-import { readDir } from '@/assets/file'
+import { readDir, readDirDeep } from '@/assets/file'
 
 
 async function getAllNfoFiles(directory: string) {
-    const files = await fs.promises.readdir(directory, { withFileTypes: true });
-    const nfoFiles: string[] = [];
-
-    for (const file of files) {
-        const filePath = path.join(directory, file.name);
-
-        if (file.isDirectory()) {
-            nfoFiles.push(...await getAllNfoFiles(filePath));
-        } else if (path.extname(file.name) === '.nfo') {
-            nfoFiles.push(filePath);
-        }
-    }
-
-    return nfoFiles;
+    return await readDirDeep(directory, ['.nfo']);
 }
 
+
+interface InfoBaseData {
+    folderName: string,
+    nfoFileName: string,
+}
+
+function getNfoBaseInfo(nfoPath: string) {
+    const folderName = path.dirname(nfoPath);
+    const nfoFileName = path.basename(nfoPath, path.extname(nfoPath));
+    const data: InfoBaseData = { folderName, nfoFileName }
+    return data;
+}
 
 async function toResData(nfoFilesPath: string[], config: IfilesBasesNofConfig) {
     const p = [];
     for (const pathSrc of nfoFilesPath) {
         const data = await getNfoInfo(pathSrc);
-        const videoPath = getVideoPath(pathSrc, config.suffix);
+        const nfoBaseInfo = getNfoBaseInfo(pathSrc);
+        const videoPath = getVideoPath(nfoBaseInfo, config.suffix);
         if (videoPath) {
+            const folder = path.dirname(videoPath);
             const nofData: InofData = {
                 videoPath: videoPath,
-                folder: path.dirname(videoPath),
+                folder,
                 videoAttributeInfo: await ffprobeTool.getVideoInfo(videoPath),
-                ...execToRes(data, config)
+                ...execToRes(data, config, nfoBaseInfo)
             }
             p.push(nofData);
         }
     }
     return p;
-
 }
 
 async function getNfoInfo(_path: string) {
@@ -48,10 +48,8 @@ async function getNfoInfo(_path: string) {
     return data;
 }
 
-function getVideoPath(nfoPath: string, suffix: string) {
-    const folderName = path.dirname(nfoPath);
-    const nfoFileName = path.basename(nfoPath, path.extname(nfoPath));
-    const filePathNameNoSuffix = path.join(folderName, '/', nfoFileName);
+function getVideoPath(_nfoBaseInfo: InfoBaseData, suffix: string) {
+    const filePathNameNoSuffix = path.join(_nfoBaseInfo.folderName, '/', _nfoBaseInfo.nfoFileName);
     const suffixArr = suffix.split("|");
     const possiblePaths = suffixArr.map(suffixName => filePathNameNoSuffix + suffixName.trim());
     const result = possiblePaths.find(p => fs.existsSync(p));
@@ -59,18 +57,20 @@ function getVideoPath(nfoPath: string, suffix: string) {
         return result;
     }
     //无法找到nfo同名的视频文件，进行模糊搜索
-    const fuzzyData = readDir(folderName, suffixArr);
-    const regex = new RegExp(nfoFileName, "i");
+    const fuzzyData = readDir(_nfoBaseInfo.folderName, suffixArr);
+    const regex = new RegExp(_nfoBaseInfo.nfoFileName, "i");
     for (const fd of fuzzyData) {
         if (regex.test(fd)) {
-            return path.join(folderName, '/', fd);
+            return path.join(_nfoBaseInfo.folderName, '/', fd);
         }
     }
-    return fuzzyData?.length > 0 ? path.join(folderName, '/', fuzzyData[0]) : undefined;
+    return fuzzyData?.length > 0 ? path.join(_nfoBaseInfo.folderName, '/', fuzzyData[0]) : undefined;
 }
 
+
+
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
-function execToRes(data: any, config: IfilesBasesNofConfig) {
+function execToRes(data: any, config: IfilesBasesNofConfig, _nfoBaseInfo: InfoBaseData) {
     const root = config.root == '' ? data : data[config.root];
     function getBaseData(field: string, isArr = false) {
         const baseArr = field.split("|");
@@ -108,13 +108,32 @@ function execToRes(data: any, config: IfilesBasesNofConfig) {
         }
         return _data;
     }
+    function cto_cover(coverName: string) {
+
+        if (coverName != '') {
+            return coverName;
+        }
+        if (config.coverSuffix == '') {
+            return '';
+        }
+        const coverArr = config.cover.split("|");
+        const coverSuffixArr = config.coverSuffix.split("|");
+        const regex = new RegExp(".*" + _nfoBaseInfo.nfoFileName + ".*(" + coverArr.join('|') + ").*(" + coverSuffixArr.join('|') + ")", "i");
+        const fuzzyData = readDir(_nfoBaseInfo.folderName, coverSuffixArr);
+        for (const fd of fuzzyData) {
+            if (regex.test(fd)) {
+                return fd;
+            }
+        }
+        return fuzzyData?.length > 0 ? fuzzyData[0] : '';
+    }
 
 
     const p: InofBaseData = {
         title: getBaseData(config.title),
         issueNumber: getBaseData(config.issueNumber),
         year: getBaseData(config.year),
-        cover: getBaseData(config.cover),
+        cover: cto_cover(getBaseData(config.cover)),
         coverUrl: getBaseData(config.coverUrl),
         tag: cto_tag(getBaseData(config.tag, true)),
         abstract: getBaseData(config.abstract),

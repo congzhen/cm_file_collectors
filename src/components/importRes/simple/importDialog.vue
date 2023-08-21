@@ -1,5 +1,5 @@
 <template>
-    <el-dialog class="mainDialog" v-model="dialogVisible" :title="$t('import.title')" width="800px"
+    <el-dialog class="mainDialog" v-model="dialogVisible" :title="$t('import.title.simple')" width="800px"
         :close-on-click-modal="false" append-to-body>
         <div class="settingMainDiv">
             <el-scrollbar height="600px">

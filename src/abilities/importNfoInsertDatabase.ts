@@ -120,9 +120,15 @@ async function getDefaultTagClassId(filesBases_id: string) {
 
 
 async function checkResExist(filesBases_id: string, title: string, issueNumber: string) {
-    return await dbs.table('resources').where('filesBases_id', '=', filesBases_id).whereSql('title = @title or issueNumber = @issueNumber', {
-        title, issueNumber
-    }).getCount() as number;
+    const _dbs = dbs.table('resources').where('filesBases_id', '=', filesBases_id);
+    if (issueNumber != '') {
+        _dbs.whereSql('title = @title or issueNumber = @issueNumber ', {
+            title, issueNumber
+        })
+    } else {
+        _dbs.where('title', '=', title);
+    }
+    return await _dbs.getCount() as number;
 }
 
 async function createResourceData(nofData: InofData, filesBases_id: string, coverPosterMode = 0) {
@@ -188,6 +194,9 @@ function countryConvert(country: string) {
 }
 
 function definitionConvert(videoHeight: string) {
+    if (videoHeight == "") {
+        return '';
+    }
     const h = parseInt(videoHeight);
     if (h < 480) {
         return 'StandardDefinition';

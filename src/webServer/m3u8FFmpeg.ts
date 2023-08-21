@@ -35,20 +35,34 @@ export interface IvideoAttributeInfo {
 
 export const ffprobeTool = {
     getVideoInfo: async function (videoFile: string) {
-        //const execStr = `${ffprobePath} -v error -show_format -show_streams ${pathSpaceConversion(videoFile)}`;
-        const execStr = `${ffprobePath} -v error -select_streams v:0 -show_entries stream=codec_type,codec_name,width,height,duration,bit_rate -show_entries format=size -of csv=p=0 ${pathSpaceConversion(videoFile)}`;
-        const cmdReadKeyframeExec = await execPromise(execStr);
-        const infoArr = cmdReadKeyframeExec.split(',');
-        const otherArr = infoArr[5].split("\r\n");
-        return {
-            codec_type: infoArr[0],
-            codec_name: infoArr[1],
-            width: infoArr[2],
-            height: infoArr[3],
-            duration: infoArr[4],
-            bit_rate: otherArr[0],
-            size: otherArr[1],
-        } as IvideoAttributeInfo
+        try {
+            //const execStr = `${ffprobePath} -v error -show_format -show_streams ${pathSpaceConversion(videoFile)}`;
+            const execStr = `${ffprobePath} -v error -select_streams v:0 -show_entries stream=codec_type,codec_name,width,height,duration,bit_rate -show_entries format=size -of csv=p=0 ${pathSpaceConversion(videoFile)}`;
+            const cmdReadKeyframeExec = await execPromise(execStr);
+            const infoArr = cmdReadKeyframeExec.split(',');
+            const otherArr = infoArr[5].split("\r\n");
+            return {
+                codec_type: infoArr[0],
+                codec_name: infoArr[1],
+                width: infoArr[2],
+                height: infoArr[3],
+                duration: infoArr[4],
+                bit_rate: otherArr[0],
+                size: otherArr[1],
+            } as IvideoAttributeInfo
+        } catch (err) {
+            console.log(err);
+            return {
+                codec_type: "",
+                codec_name: "",
+                width: "",
+                height: "",
+                duration: "",
+                bit_rate: "",
+                size: "",
+            } as IvideoAttributeInfo
+        }
+
     },
 }
 

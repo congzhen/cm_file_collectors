@@ -4,6 +4,20 @@ import sharp from 'sharp'
 import { coreCreateGuid } from '@/core/coreGuid';
 
 
+const suffixNameArrayConversion = (arr: Array<string>) => {
+    return arr.map(ext => {
+        if (ext[0] != '.') {
+            return '.' + ext.toLocaleLowerCase();
+        }
+        return ext.toLocaleLowerCase();
+    })
+}
+
+const checkSuffixName = (suffixName: string, suffixArr: Array<string>) => {
+    return suffixArr.includes(suffixName.toLocaleLowerCase())
+}
+
+
 const filePath = function (path: string, name: string) {
     checkFolderAndMkdir(path);
     return path + name;
@@ -64,6 +78,12 @@ const deleteFile = function (path: string, name: string) {
     return status;
 }
 
+/**
+ * 读取文件夹中的文件
+ * @param folderPath 
+ * @param _fileExtension 
+ * @returns 
+ */
 const readDir = function (folderPath: string, _fileExtension: Array<string> = []) {
     if (!fs.existsSync(folderPath)) {
         return [];
@@ -72,18 +92,34 @@ const readDir = function (folderPath: string, _fileExtension: Array<string> = []
     if (_fileExtension.length == 0) {
         return files;
     }
-    const fileExtension = _fileExtension.map(ext => {
-        if (ext[0] != '.') {
-            return '.' + ext;
-        }
-        return ext;
-    })
+    const fileExtension = suffixNameArrayConversion(_fileExtension);
     return files.filter(file => {
         const theFileExtension = path.extname(file);
-        if (fileExtension.includes(theFileExtension.toLocaleLowerCase())) {
+        if (checkSuffixName(theFileExtension, fileExtension)) {
             return file;
         }
     });
+}
+/**
+ * 深层读取文件夹中的文件，包括了子文件夹
+ * @param folderPath 
+ * @param _fileExtension 
+ * @returns 
+ */
+const readDirDeep = async function (directory: string, _fileExtension: Array<string> = []) {
+    const fileExtension = suffixNameArrayConversion(_fileExtension);
+    const files = await fs.promises.readdir(directory, { withFileTypes: true });
+    const nfoFiles: string[] = [];
+    for (const file of files) {
+        const filePath = path.join(directory, file.name);
+        if (file.isDirectory()) {
+            nfoFiles.push(...await readDirDeep(filePath, _fileExtension));
+        } else if (_fileExtension.length === 0 || checkSuffixName(path.extname(file.name), fileExtension)) {
+            nfoFiles.push(filePath);
+        }
+    }
+
+    return nfoFiles;
 }
 
 
@@ -115,4 +151,4 @@ const readDirImage = async function (folderPath: string) {
 }
 
 
-export { saveBase64Picture, fileMove, fileCopy, deleteFile, existsFile, getFileName, readDir, readDirImage, EfileImageInfo }
+export { saveBase64Picture, fileMove, fileCopy, deleteFile, existsFile, getFileName, readDir, readDirDeep, readDirImage, EfileImageInfo }

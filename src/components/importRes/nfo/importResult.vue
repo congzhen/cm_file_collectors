@@ -48,6 +48,10 @@ const resultCount = reactive({
     success: 0,
     fail: 0,
 });
+const init = () => {
+    dataList.value = [];
+    page = 1;
+}
 const setDataList = () => {
     const start = (page - 1) * limit;
     const end = start + limit;
@@ -76,6 +80,7 @@ const handleScroll = (event: any) => {
 
 
 const open = (_data: IimportNfoInsertDatabase) => {
+    init();
     metadata = _data.data;
     resultCount.already = _data.count.already;
     resultCount.success = _data.count.success;

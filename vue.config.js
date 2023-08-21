@@ -13,6 +13,13 @@ module.exports = defineConfig({
           icon: "static/icon/icon.ico", //"icons/icon.ico",
           target: "zip",
         },
+        linux: {
+          target: "rpm",
+          category: "Utility",
+          desktop: {
+            StartupWMClass: "CMCollectors",
+          },
+        },
         extraResources: [
           {
             from: path.resolve(__dirname, "static"),

@@ -62,6 +62,10 @@
                     <div class="rowValue"><el-input v-model="nofConfig.cover"></el-input></div>
                 </div>
                 <div class="rowTwo">
+                    <div class="rowTitle">cover suffix name</div>
+                    <div class="rowValue"><el-input v-model="nofConfig.coverSuffix"></el-input></div>
+                </div>
+                <div class="rowTwo">
                     <div class="rowTitle">cover url</div>
                     <div class="rowValue"><el-input v-model="nofConfig.coverUrl"></el-input></div>
                 </div>
@@ -125,6 +129,7 @@ const defaultNofConfig: IfilesBasesNofConfig = {
     issueNumber: 'num',
     year: 'releasedate|premiered|year',
     cover: 'poster|thumb|fanart',
+    coverSuffix: 'jpg|jpeg|png',
     coverUrl: 'cover',
     tag: 'tag|genre',
     abstract: 'outline|plot',

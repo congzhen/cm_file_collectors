@@ -1,6 +1,6 @@
 <template>
     <div class="detailsDialog" v-show="dialogStatus">
-        <el-dialog v-model="dialogVisible" width="1024px" :close-on-click-modal="false">
+        <el-dialog v-model="dialogVisible" width="1024px">
             <div class="settingMainDiv">
                 <el-scrollbar height="600px">
                     <IndexDetailsView ref="IndexDetailsViewRef" mode="popup"></IndexDetailsView>

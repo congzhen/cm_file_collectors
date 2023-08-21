@@ -1,6 +1,6 @@
 import { CoreDb } from "@/core/core"
 import { sqlResult } from "@/core/coreSqlite";
-import { IfilesBasesSetting, IfilesBasesConfig, IfilesBasesNofConfig } from "@/dataInterface/filesBasesSetting.interface"
+import { IfilesBasesSetting, IfilesBasesConfig, IfilesBasesNofConfig, IfilesBasesSimpleConfig } from "@/dataInterface/filesBasesSetting.interface"
 interface filesBaseConfig {
     [key: string]: unknown
 }
@@ -22,8 +22,18 @@ const filesBasesSettingServerData = {
         }
         return {} as IfilesBasesNofConfig;
     },
+    getSimpleConfigByfilesBasesId: async function (filesBases_id: string) {
+        const dataInfo = await this.getInfoById(filesBases_id) as IfilesBasesSetting;
+        if (dataInfo && dataInfo.simple_json_data != '') {
+            return JSON.parse(dataInfo.simple_json_data) as IfilesBasesSimpleConfig;
+        }
+        return {} as IfilesBasesSimpleConfig;
+    },
     saveNfoConfigByfilesBasesId: async function (filesBases_id: string, config: IfilesBasesNofConfig) {
         return await CoreDb().table('filesBasesSetting').update(filesBases_id, { nfo_json_data: JSON.stringify(config) }, 'filesBases_id');
+    },
+    saveSimpleConfigByfilesBasesId: async function (filesBases_id: string, config: IfilesBasesSimpleConfig) {
+        return await CoreDb().table('filesBasesSetting').update(filesBases_id, { simple_json_data: JSON.stringify(config) }, 'filesBases_id');
     },
     saveConfig: async function (filesBases_id: string, config: IfilesBasesConfig) {
         const dataInfo = await this.getInfoById(filesBases_id);

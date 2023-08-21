@@ -2,6 +2,7 @@ interface IfilesBasesSetting {
     filesBases_id: string;
     config_json_data: string;
     nfo_json_data: string;
+    simple_json_data: string;
 }
 
 interface IcoverPosterData {
@@ -51,6 +52,7 @@ interface IfilesBasesNofConfig {
     issueNumber: string,
     year: string,
     cover: string,
+    coverSuffix: string,
     coverUrl: string,
     tag: string,
     abstract: string,
@@ -61,4 +63,11 @@ interface IfilesBasesNofConfig {
     performerThumb: string,
 }
 
-export { IfilesBasesSetting, IfilesBasesConfig, IfilesBasesNofConfig };
+interface IfilesBasesSimpleConfig {
+    suffix: string,
+    title: string,
+    cover: string,
+    coverSuffix: string,
+}
+
+export { IfilesBasesSetting, IfilesBasesConfig, IfilesBasesNofConfig, IfilesBasesSimpleConfig };

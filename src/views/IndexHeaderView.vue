@@ -4,7 +4,17 @@
             <el-button type="primary" @click="openResources">{{ $t('column.add') }}</el-button>
             <el-button type="primary" @click="openTagAdmin">{{ $t('column.tag') }}</el-button>
             <el-button type="primary" @click="openPerformerAdmin">{{ $t('column.performer') }}</el-button>
-            <el-button type="primary" @click="openImportRes">{{ $t('column.import') }}</el-button>
+            <el-dropdown>
+                <el-button type="primary">
+                    {{ $t('column.import') }}<el-icon class="el-icon--right"><arrow-down /></el-icon>
+                </el-button>
+                <template #dropdown>
+                    <el-dropdown-menu>
+                        <el-dropdown-item @click="openImportNfoRes">{{ $t('import.mode.nfo') }}</el-dropdown-item>
+                        <el-dropdown-item @click="openImportSimpleRes">{{ $t('import.mode.simple') }}</el-dropdown-item>
+                    </el-dropdown-menu>
+                </template>
+            </el-dropdown>
             <el-button type="primary" @click="openSettings">{{ $t('column.setUp') }}</el-button>
         </div>
         <div class="searchTool">
@@ -30,7 +40,8 @@
         <tagAdminDialog ref="tagAdminDialogRef"></tagAdminDialog>
         <performerAdminDialog ref="performerAdminDialogRef"></performerAdminDialog>
         <settingsDialog ref="settingsDialogRef"></settingsDialog>
-        <importDialog ref="importDialogRef"></importDialog>
+        <importNfoDialog ref="importNfoDialogRef"></importNfoDialog>
+        <importSimpleDialog ref="importSimpleDialogRef"></importSimpleDialog>
     </div>
 </template>
 <script setup lang="ts">
@@ -40,7 +51,8 @@ import resourcesDialog from "@/components/resources/resourcesDialog.vue"
 import tagAdminDialog from "@/components/tagAdmin/tagAdminDialog.vue";
 import performerAdminDialog from "@/components/performerAdmin/performerAdminDialog.vue";
 import settingsDialog from "@/components/settings/settingsDialog.vue";
-import importDialog from "@/components/importRes/importDialog.vue"
+import importNfoDialog from "@/components/importRes/nfo/importDialog.vue"
+import importSimpleDialog from "@/components/importRes/simple/importDialog.vue";
 import { searchStore } from '@/store/search.store'
 import { ref, inject } from "vue";
 import { EresUpdate } from "@/dataInterface/common.enum";
@@ -54,7 +66,8 @@ const resourcesDialogRef = ref<InstanceType<typeof resourcesDialog>>();
 const tagAdminDialogRef = ref<InstanceType<typeof tagAdminDialog>>();
 const performerAdminDialogRef = ref<InstanceType<typeof performerAdminDialog>>();
 const settingsDialogRef = ref<InstanceType<typeof settingsDialog>>();
-const importDialogRef = ref<InstanceType<typeof importDialog>>();
+const importNfoDialogRef = ref<InstanceType<typeof importNfoDialog>>();
+const importSimpleDialogRef = ref<InstanceType<typeof importSimpleDialog>>();
 const searchText = ref('');
 
 const clickSearch = () => {
@@ -79,8 +92,11 @@ const openTagAdmin = () => {
 const openSettings = () => {
     settingsDialogRef.value?.open();
 }
-const openImportRes = () => {
-    importDialogRef.value?.open();
+const openImportNfoRes = () => {
+    importNfoDialogRef.value?.open();
+}
+const openImportSimpleRes = () => {
+    importSimpleDialogRef.value?.open();
 }
 </script>
 <style scoped>
@@ -94,6 +110,10 @@ const openImportRes = () => {
 .btnList {
     padding-left: 5px;
     display: flex;
+}
+
+.btnList .el-dropdown {
+    margin: 0 3px;
 }
 
 .btnList .el-button+.el-button {
