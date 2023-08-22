@@ -219,6 +219,19 @@
                         </div>
                     </div>
                     <div class="settingMainItem">
+                        <h5>{{ $t('settings.coverPoster.displayWidth') }}<label>{{
+                            $t('settings.coverPoster.displayWidthDefinition')
+                        }}</label></h5>
+                        <div class="select-full">
+                            <el-checkbox v-model="coverPosterWidthStatusData"
+                                :label="$t('settings.coverPoster.openCoverPosterWidthStatus')" border />
+                            <label>{{
+                                $t('settings.coverPoster.widthBase')
+                            }}：</label><el-input-number v-model="coverPosterWidthBaseData" :min="50" :max="1080" />
+                        </div>
+
+                    </div>
+                    <div class="settingMainItem">
                         <h5>{{ $t('settings.coverPoster.displayHeight') }}<label>{{
                             $t('settings.coverPoster.displayHeightDefinition')
                         }}</label></h5>
@@ -375,6 +388,17 @@ const coverPosterDataDefaultSelectData = computed({
     get: () => store.filesBasesSettingStore.config.coverPosterDataDefaultSelect,
     set: (value) => store.filesBasesSettingStore.config.coverPosterDataDefaultSelect = value,
 })
+
+const coverPosterWidthStatusData = computed({
+    get: () => store.filesBasesSettingStore.config.coverPosterWidthStatus,
+    set: (value) => store.filesBasesSettingStore.config.coverPosterWidthStatus = value,
+})
+const coverPosterWidthBaseData = computed({
+    get: () => store.filesBasesSettingStore.config.coverPosterWidthBase,
+    set: (value) => store.filesBasesSettingStore.config.coverPosterWidthBase = value,
+})
+
+
 const coverPosterHeightStatusData = computed({
     get: () => store.filesBasesSettingStore.config.coverPosterHeightStatus,
     set: (value) => store.filesBasesSettingStore.config.coverPosterHeightStatus = value,

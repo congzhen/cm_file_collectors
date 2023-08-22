@@ -38,7 +38,9 @@ interface IfilesBasesConfig {
     plugInUnit_Cup_Text: string;
     coverPosterData: Array<IcoverPosterData>;
     coverPosterDataDefaultSelect: number;
+    coverPosterWidthStatus: boolean;
     coverPosterHeightStatus: boolean;
+    coverPosterWidthBase: number;
     coverPosterHeightBase: number;
     playAtlasImageWidth: number;
     playAtlasMode: string;

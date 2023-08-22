@@ -118,10 +118,16 @@ function execToRes(data: any, config: IfilesBasesNofConfig, _nfoBaseInfo: InfoBa
         }
         const coverArr = config.cover.split("|");
         const coverSuffixArr = config.coverSuffix.split("|");
-        const regex = new RegExp(".*" + _nfoBaseInfo.nfoFileName + ".*(" + coverArr.join('|') + ").*(" + coverSuffixArr.join('|') + ")", "i");
         const fuzzyData = readDir(_nfoBaseInfo.folderName, coverSuffixArr);
+        const regex = new RegExp(".*" + _nfoBaseInfo.nfoFileName + ".*(" + coverArr.join('|') + ").*(" + coverSuffixArr.join('|') + ")", "i");
         for (const fd of fuzzyData) {
             if (regex.test(fd)) {
+                return fd;
+            }
+        }
+        const regex1 = new RegExp(".*(" + coverArr.join('|') + ").*(" + coverSuffixArr.join('|') + ")", "i");
+        for (const fd of fuzzyData) {
+            if (regex1.test(fd)) {
                 return fd;
             }
         }

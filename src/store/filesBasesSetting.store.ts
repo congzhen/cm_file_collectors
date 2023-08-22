@@ -33,6 +33,8 @@ const defaultConfig = {
         { name: 'Default 4', width: 480, height: 270, type: 'default' },
     ],
     coverPosterDataDefaultSelect: 0,
+    coverPosterWidthStatus: false,
+    coverPosterWidthBase: 316,
     coverPosterHeightStatus: true,
     coverPosterHeightBase: 218,
     playAtlasImageWidth: 150,

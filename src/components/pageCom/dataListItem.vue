@@ -4,7 +4,8 @@
             {{ $t('definition.' + props.dataInfo.definition) }}
         </div>
         <el-image
-            :src="props.dataInfo.coverPoster != '' ? (setupConfig.resCoverPosterPath + props.dataInfo.filesBases_id + '/' + props.dataInfo.coverPoster) : ''">
+            :src="props.dataInfo.coverPoster != '' ? (setupConfig.resCoverPosterPath + props.dataInfo.filesBases_id + '/' + props.dataInfo.coverPoster) : ''"
+            :fit="getFit()">
             <template #error>
                 <el-empty description=" " :image-size="100" />
             </template>
@@ -42,8 +43,18 @@ const clickHandle = (type: EresDetatilsType) => {
     emits('clickHandle', type, props.dataInfo);
 }
 
+const getFit = () => {
+    if (store.filesBasesSettingStore.config.coverPosterWidthStatus) {
+        return 'cover';
+    } else {
+        return '';
+    }
+}
+
 const getWidth = () => {
-    if (store.filesBasesSettingStore.config.coverPosterHeightStatus) {
+    if (store.filesBasesSettingStore.config.coverPosterWidthStatus) {
+        return store.filesBasesSettingStore.config.coverPosterWidthBase + 'px';
+    } else if (store.filesBasesSettingStore.config.coverPosterHeightStatus) {
         return store.filesBasesSettingStore.config.coverPosterHeightBase / props.dataInfo.coverPosterHeight * props.dataInfo.coverPosterWidth + 'px';
     }
     return props.dataInfo.coverPosterWidth + 'px';
