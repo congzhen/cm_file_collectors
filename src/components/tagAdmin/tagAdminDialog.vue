@@ -1,6 +1,6 @@
 <template>
     <el-dialog class="mainDialog" v-model="dialogVisible" :title="$t('tag.admin')" width="1000px"
-        :close-on-click-modal="false" append-to-body>
+        :close-on-click-modal="false" :fullscreen="fullscreen()" append-to-body>
         <div class="tagAdminMainK">
             <tagAdminMain></tagAdminMain>
         </div>
@@ -11,6 +11,7 @@
     </el-dialog>
 </template>
 <script setup lang="ts">
+import setupConfig from "@/setup/config"
 import tagAdminMain from "./tagAdminMain.vue"
 import tagAdminClassAdd from "./tagAdminClassAdd.vue";
 import { ref } from 'vue'
@@ -23,6 +24,13 @@ const open = () => {
 
 const addClass = () => {
     tagAdminClassAddRef.value?.open('add');
+}
+
+const fullscreen = () => {
+    if (window.innerWidth < setupConfig.isFullscreen.width || window.innerHeight < setupConfig.isFullscreen.height) {
+        return true;
+    }
+    return false;
 }
 
 // eslint-disable-next-line no-undef

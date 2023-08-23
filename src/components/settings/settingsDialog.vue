@@ -1,12 +1,13 @@
 <template>
     <el-dialog class="mainDialog" v-model="dialogVisible" :title="$t('settings.title')" width="800px"
-        :close-on-click-modal="false" append-to-body @close="closeSave">
+        :close-on-click-modal="false" :fullscreen="fullscreen()" append-to-body @close="closeSave">
         <div class="settingMainDiv">
             <settingsMain ref="settingsMainRef"></settingsMain>
         </div>
     </el-dialog>
 </template>
 <script setup lang="ts">
+import setupConfig from "@/setup/config"
 import settingsMain from './settingsMain.vue';
 import { ref, nextTick } from 'vue'
 const dialogVisible = ref(false)
@@ -22,6 +23,13 @@ const open = () => {
         settingsMainRef.value?.openSettings();
     })
 }
+const fullscreen = () => {
+    if (window.innerWidth < setupConfig.isFullscreen.width || window.innerHeight < setupConfig.isFullscreen.height) {
+        return true;
+    }
+    return false;
+}
+
 
 // eslint-disable-next-line no-undef
 defineExpose({

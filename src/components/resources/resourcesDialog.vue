@@ -1,12 +1,13 @@
 <template>
-    <el-dialog class="mainDialog" v-model="dialogVisible" :title="title" width="1405px" :close-on-click-modal="false"
-        top="12vh" append-to-body>
+    <el-dialog class="mainDialog" v-model="dialogVisible" :title="title" width="1405px" :fullscreen="fullscreen()"
+        :close-on-click-modal="false" top="12vh" append-to-body>
         <div class="resourcesMainDiv">
             <resroucesMain ref="resroucesMainRef" @close="dialogVisible = false"></resroucesMain>
         </div>
     </el-dialog>
 </template>
 <script setup lang="ts">
+import setupConfig from "@/setup/config"
 import { Iresources } from "@/dataInterface/resources.interface";
 import resroucesMain from "./resroucesMain.vue"
 import { ref, computed, nextTick } from 'vue'
@@ -27,6 +28,13 @@ const open = (_mode: string, id: string | undefined = undefined, resInfo: Iresou
         resroucesMainRef.value?.open(_mode, id, resInfo);
     })
 
+}
+
+const fullscreen = () => {
+    if (window.innerWidth < setupConfig.isFullscreen.width || window.innerHeight < setupConfig.isFullscreen.height) {
+        return true;
+    }
+    return false;
 }
 
 // eslint-disable-next-line no-undef

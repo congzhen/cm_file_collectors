@@ -1,6 +1,6 @@
 <template>
     <el-dialog class="mainDialog" :top="props.top" v-model="dialogVisible" :title="$t('com.cropper.title')"
-        :close-on-click-modal="false" :width="props.width" append-to-body>
+        :close-on-click-modal="false" :width="props.width" :fullscreen="fullscreen()" append-to-body>
         <div :style="{ height: 'calc(' + props.height + ' - 80px)' }">
             <comCropper v-if="dialogVisible" ref="comCropperRef" :cropWidth="cropWidth" :cropHeight="cropHeight" mode="50%"
                 @sumbit="sumbitCropper">
@@ -9,6 +9,7 @@
     </el-dialog>
 </template>
 <script setup lang="ts">
+import setupConfig from "@/setup/config"
 import comCropper from "./comCropper.vue"
 import { nextTick, ref } from 'vue'
 
@@ -58,6 +59,13 @@ const close = () => {
 const sumbitCropper = (fileData: string) => {
     emits('sumbit', fileData)
     close();
+}
+
+const fullscreen = () => {
+    if (window.innerWidth < setupConfig.isFullscreen.width || window.innerHeight < setupConfig.isFullscreen.height) {
+        return true;
+    }
+    return false;
 }
 
 // eslint-disable-next-line no-undef

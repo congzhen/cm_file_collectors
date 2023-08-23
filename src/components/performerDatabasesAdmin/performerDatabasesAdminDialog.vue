@@ -1,7 +1,7 @@
 <template>
     <div>
         <el-dialog class="mainDialog" v-model="dialogVisible" :title="$t('performerDatabases.title')" width="1080px"
-            :close-on-click-modal="false" append-to-body>
+            :close-on-click-modal="false" :fullscreen="fullscreen()" append-to-body>
             <performerDatabasesAdminMain class="performerDatabasesAdminMain"></performerDatabasesAdminMain>
             <template #footer>
                 <div class="buttonGroup">
@@ -21,6 +21,7 @@
     </div>
 </template>
 <script setup lang="ts">
+import setupConfig from "@/setup/config"
 import { ipcRendererSend } from "@/electronCommon"
 import loading from '@/assets/loading'
 import { importPerformer } from '@/assets/performerExportAndImport'
@@ -53,7 +54,7 @@ const importPerformerDatabases = () => {
                 })
             } else {
                 ElMessage({
-                    message: t('performerDatabases.message.importSuccess',  rd),
+                    message: t('performerDatabases.message.importSuccess', rd),
                     type: 'success',
                 })
             }
@@ -62,6 +63,14 @@ const importPerformerDatabases = () => {
 
     }
 }
+
+const fullscreen = () => {
+    if (window.innerWidth < setupConfig.isFullscreen.width || window.innerHeight < setupConfig.isFullscreen.height) {
+        return true;
+    }
+    return false;
+}
+
 
 // eslint-disable-next-line no-undef
 defineExpose({

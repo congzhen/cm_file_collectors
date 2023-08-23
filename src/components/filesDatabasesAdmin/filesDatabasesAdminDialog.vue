@@ -1,7 +1,7 @@
 <template>
     <div>
         <el-dialog class="mainDialog" v-model="dialogVisible" :title="$t('filesDatabases.title')" width="1260px"
-            :close-on-click-modal="false" append-to-body>
+            :close-on-click-modal="false" :fullscreen="fullscreen()" append-to-body>
             <filesDatabasesAdminMain class="filesDatabasesAdminMain"></filesDatabasesAdminMain>
             <template #footer>
                 <div class="buttonGroup">
@@ -23,6 +23,7 @@
     <dramaSeriesPathReplacer ref="dramaSeriesPathReplacerRef"></dramaSeriesPathReplacer>
 </template>
 <script setup lang="ts">
+import setupConfig from "@/setup/config"
 import filesDatabasesAdminMain from './filesDatabasesAdminMain.vue';
 import filesDatabasesAdminAdd from './filesDatabasesAdminAdd.vue';
 import dramaSeriesPathReplacer from '../pageCom/dramaSeriesPathReplacer.vue';
@@ -40,6 +41,14 @@ const handleAddFilesDatabases = () => {
 const openDramaSeriesPathReplacer = () => {
     dramaSeriesPathReplacerRef.value?.open();
 }
+
+const fullscreen = () => {
+    if (window.innerWidth < setupConfig.isFullscreen.width || window.innerHeight < setupConfig.isFullscreen.height) {
+        return true;
+    }
+    return false;
+}
+
 
 // eslint-disable-next-line no-undef
 defineExpose({

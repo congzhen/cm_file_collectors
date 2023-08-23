@@ -1,10 +1,10 @@
 <template>
     <el-dialog class="mainDialog" v-model="dialogVisible" width="800px" :close-on-click-modal="false" :show-close="false"
-        append-to-body>
+        :fullscreen="fullscreen()" append-to-body>
         <div class="resultCount">
             Success : {{ resultCount.success }} / Already : {{ resultCount.already }} / Fail : {{ resultCount.fail }}
         </div>
-        <div class="settingMainDiv" style="overflow-y: scroll; height: 500px;" @scroll="handleScroll">
+        <div class="settingMainDiv" style="overflow-y: scroll; height: 520px;" @scroll="handleScroll">
             <div class="videoInfo" v-for="item, key in dataList" :key="key">
                 <div :class="[item.msg, 'info']">
                     <div>
@@ -27,6 +27,7 @@
     </el-dialog>
 </template>
 <script setup lang="ts">
+import setupConfig from "@/setup/config"
 import { ipcRendererSend } from "@/electronCommon"
 import { ref, reactive } from 'vue';
 import { IimportSimpleInsertDatabase } from "@/abilities/importSimpleInsertDatabase";
@@ -80,6 +81,14 @@ const handleScroll = (event: any) => {
         setDataList();
     }
 };
+
+const fullscreen = () => {
+    if (window.innerWidth < setupConfig.isFullscreen.width || window.innerHeight < setupConfig.isFullscreen.height) {
+        return true;
+    }
+    return false;
+}
+
 
 
 const open = (_data: IimportSimpleInsertDatabase) => {

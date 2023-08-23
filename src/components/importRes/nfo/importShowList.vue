@@ -1,7 +1,7 @@
 <template>
     <el-dialog class="mainDialog" v-model="dialogVisible" :title="$t('import.titleShowRes', { num: metadata.length })"
-        width="800px" :close-on-click-modal="false" append-to-body>
-        <div class="settingMainDiv" style="overflow-y: scroll; height: 600px;" @scroll="handleScroll">
+        width="800px" :close-on-click-modal="false" :fullscreen="fullscreen()" append-to-body>
+        <div class="settingMainDiv" style="overflow-y: scroll; height: 520px;" @scroll="handleScroll">
             <div class="videoInfo" v-for="item, key in dataList" :key="key">
                 <div class="imgDiv">
                     <el-image :src="getImageSrc(item)" fit="cover" />
@@ -49,6 +49,7 @@
     <importResult ref="importResultRef"></importResult>
 </template>
 <script setup lang="ts">
+import setupConfig from "@/setup/config"
 import importResult from "./importResult.vue"
 import loading from '@/assets/loading'
 import { ElMessage } from 'element-plus'
@@ -133,6 +134,15 @@ const open = (_data: Array<InofData>, _coverPosterMode: number) => {
     setDataList();
     dialogVisible.value = true;
 }
+
+
+const fullscreen = () => {
+    if (window.innerWidth < setupConfig.isFullscreen.width || window.innerHeight < setupConfig.isFullscreen.height) {
+        return true;
+    }
+    return false;
+}
+
 
 // eslint-disable-next-line no-undef
 defineExpose({ open });

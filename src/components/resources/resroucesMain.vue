@@ -427,7 +427,6 @@ defineExpose({ open });
 </script>
 <style scoped>
 .resourcesMain {
-    width: 100%;
     height: 100%;
     display: flex;
     justify-content: space-between;
@@ -481,6 +480,7 @@ defineExpose({ open });
 .resourcesMain .right {
     width: calc(100% - 315px);
     height: 100%;
+    overflow: hidden;
 }
 
 .resourcesMain .right .formBody {
@@ -495,10 +495,13 @@ defineExpose({ open });
 .formHalving {
     width: 100%;
     display: flex;
+    overflow: hidden;
+    flex-wrap: wrap;
 }
 
 .formHalving .formHalvingBlock {
     width: 50%;
+    min-width: 250px;
 }
 
 .formBlockGroup {
@@ -506,7 +509,7 @@ defineExpose({ open });
 }
 
 .formBlockGroup .formBlock {
-    width: calc(100% - 10px);
+    width: calc(50% - 10px);
     margin-right: 10px;
 }
 
@@ -531,7 +534,7 @@ defineExpose({ open });
 }
 
 .dramaSeries .dramaSeriesContent {
-    width: 364px;
+    width: calc(100% - 151px);
     padding-left: 5px;
     padding-right: 5px;
 }
