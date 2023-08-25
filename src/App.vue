@@ -90,8 +90,4 @@ a.router-link-exact-active {
 .mainDialog .el-dialog__footer {
   padding: 0px 20px 20px 20px;
 }
-
-.is-fullscreen .el-dialog__body {
-  height: calc(100% - 80px);
-}
 </style>
