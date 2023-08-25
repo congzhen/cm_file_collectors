@@ -6,6 +6,17 @@
         <div class="updataLogsBody">
             <el-timeline>
                 <el-scrollbar height="500px">
+                    <el-timeline-item timestamp="2023/8/25" placement="top">
+                        <h4>{{ $t('system.updateLogs.version') }}：v 2.0.4</h4>
+                        <div class="rawContent">
+                            <h5>新特性</h5>
+                            <p class="logContent">增加网络视频链接</p>
+                            <p class="logContent">增加低分辨率适配（将就用下吧，时分不完美）</p>
+                            <p class="logContent">更新web端，增加播放视频链接以及排序方式</p>
+                            <p class="logContent">添加.nfo文件导入时，海报优先匹配海报配置项词语</p>
+                            <p class="logContent">增加海报宽度基数设置选项</p>
+                        </div>
+                    </el-timeline-item>
                     <el-timeline-item timestamp="2023/8/14" placement="top">
                         <h4>{{ $t('system.updateLogs.version') }}：v 2.0.3</h4>
                         <div class="rawContent">
