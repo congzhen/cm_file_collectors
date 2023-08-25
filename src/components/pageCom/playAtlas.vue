@@ -1,6 +1,6 @@
 <template>
-    <el-dialog class="mainDialog" v-model="dialogVisible" :title="dialogTitle" width="90%" top="4vh" :append-to-body="true"
-        :close-on-click-modal="false">
+    <el-dialog class="mainDialog" v-model="dialogVisible" :title="dialogTitle" width="90%" top="4vh"
+        :fullscreen="fullscreen()" :append-to-body="true" :close-on-click-modal="false">
         <div class="mainBody" :style="{ height: getHeihgt() }">
             <el-scrollbar height="100%">
 
@@ -45,6 +45,7 @@
     </el-dialog>
 </template>
 <script setup lang="ts">
+import setupConfig from "@/setup/config"
 import dataset from "@/assets/dataset"
 import loading from '@/assets/loading'
 
@@ -80,6 +81,9 @@ watch(
 
 
 const getHeihgt = () => {
+    if (window.innerWidth < setupConfig.isFullscreen.width || window.innerHeight < setupConfig.isFullscreen.height) {
+        return (window.innerHeight - 150) + 'px';
+    }
     return (window.innerHeight - 200) + 'px';
 }
 
@@ -108,6 +112,14 @@ const show = async (path: string, title = '') => {
     dialogTitle.value = title;
     dialogVisible.value = true;
     await loading.closeSync();
+}
+
+
+const fullscreen = () => {
+    if (window.innerWidth < setupConfig.isFullscreen.width || window.innerHeight < setupConfig.isFullscreen.height) {
+        return true;
+    }
+    return false;
 }
 
 // eslint-disable-next-line no-undef

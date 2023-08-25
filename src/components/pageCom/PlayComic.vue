@@ -1,6 +1,6 @@
 <template>
-    <el-dialog class="mainDialog" v-model="dialogVisible" :title="dialogTitle" width="1280" top="5vh" :append-to-body="true"
-        :close-on-click-modal="false">
+    <el-dialog class="mainDialog" v-model="dialogVisible" :title="dialogTitle" width="1280" top="5vh"
+        :fullscreen="fullscreen()" :append-to-body="true" :close-on-click-modal="false">
         <div class="playComicBody" :style="{ height: getHeihgt() }">
             <div class="left">
                 <el-scrollbar ref="previewScrollbarRef" height="100%">
@@ -45,6 +45,7 @@
     </el-dialog>
 </template>
 <script setup lang="ts">
+import setupConfig from "@/setup/config"
 import loading from '@/assets/loading'
 import { readDir } from "@/assets/file"
 import { filesBasesStore } from '@/store/filesBases.store';
@@ -64,6 +65,9 @@ const filesList = ref<Array<string>>();
 const nowPage = ref(0);
 
 const getHeihgt = () => {
+    if (window.innerWidth < setupConfig.isFullscreen.width || window.innerHeight < setupConfig.isFullscreen.height) {
+        return (window.innerHeight - 90) + 'px';
+    }
     return (window.innerHeight - 200) + 'px';
 }
 
@@ -98,6 +102,13 @@ const show = async (path: string, title = '', _nowPage = 0) => {
     nowPage.value = _nowPage;
     dialogVisible.value = true;
     await loading.closeSync();
+}
+
+const fullscreen = () => {
+    if (window.innerWidth < setupConfig.isFullscreen.width || window.innerHeight < setupConfig.isFullscreen.height) {
+        return true;
+    }
+    return false;
 }
 
 // eslint-disable-next-line no-undef
