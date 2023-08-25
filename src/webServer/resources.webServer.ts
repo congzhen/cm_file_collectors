@@ -7,14 +7,15 @@ import { IsearchCondition } from "@/dataInterface/common.interface";
 import { resourcesDramaSeriesServerData } from '@/serverData/resourcesDramaSeries.serverData';
 import { readDirImage, existsFile } from '@/assets/file';
 const registerApiResrouces = (app: Express) => {
-    app.post('/api/resroucesDataList/:filesBasesId/:page/:limit', async (req, res) => {
+    app.post('/api/resroucesDataList/:filesBasesId/:page/:limit/:sortMode', async (req, res) => {
         const filesBases_id = req.params.filesBasesId;
         const page = parseInt(req.params.page);
         const limit = parseInt(req.params.limit);
+        const sortMode = req.params.sortMode ? req.params.sortMode : 'desc';
         const searchCondition = JSON.parse(req.body.condition) as IsearchCondition;
 
-        console.log(filesBases_id, page, limit, searchCondition);
-        const data = await resourcesServerData.getDataListPagingBySearchCondition(filesBases_id, searchCondition, page, limit);
+        //console.log(filesBases_id, page, limit, searchCondition, sortMode);
+        const data = await resourcesServerData.getDataListPagingBySearchCondition(filesBases_id, searchCondition, page, limit, sortMode);
         res.json(data);
     });
 

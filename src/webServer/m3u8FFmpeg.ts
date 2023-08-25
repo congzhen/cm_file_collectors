@@ -128,8 +128,8 @@ export const m3u8 = {
             }
             return NaN;
         }).filter((d) => !isNaN(d));
-        console.log(cmdReadKeyframeExec.split('\n'));
-        console.log(_keyframes);
+        //        console.log(cmdReadKeyframeExec.split('\n'));
+        //        console.log(_keyframes);
         const { keyframes, maxDuration, addDuration } = this.keyframesFusion(_keyframes);
         const cmdReadMeta = `${ffprobePath} -v quiet -print_format json -show_format -show_streams ${pathSpaceConversion(videoFile)}`;
         const resMeta = JSON.parse(await execPromise(cmdReadMeta));
