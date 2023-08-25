@@ -115,11 +115,11 @@
                                             :disable-transitions="true">{{ (key + 1) }}</el-tag>
                                         <div class="dramaSeriesContent">
                                             <el-input v-model="item.src"
-                                                :placeholder="item.type == EresDramaSeriesType.videoLink ? $t('resources.form.pleaseSelectLinkAddress') : $t('resources.form.pleaseSelectFileAddress')" />
+                                                :placeholder="$t('resources.form.pleaseSelectFileAddress')" />
                                         </div>
                                         <el-button-group>
-                                            <el-button type="success" icon="FolderOpened" @click="reSelectDramaSeries(item)"
-                                                v-if="item.type != EresDramaSeriesType.videoLink" />
+                                            <el-button type="success" icon="FolderOpened"
+                                                @click="reSelectDramaSeries(item)" />
                                             <el-button type="danger" icon="Delete" @click="deleteDramaSeries(item)" />
                                         </el-button-group>
                                     </div>
@@ -135,10 +135,6 @@
                                 <div v-else-if="formData.mode == 'files'">
                                     <el-button icon="CirclePlus" @click="addMultipleFiles">{{
                                         $t('resources.form.btn.addfiles') }}</el-button>
-                                </div>
-                                <div v-else-if="formData.mode == 'videoLink'">
-                                    <el-button icon="Link" @click="addOneLink">{{
-                                        $t('resources.form.btn.addVideoLink') }}</el-button>
                                 </div>
                                 <div v-else>
                                     <el-button icon="Plus" @click="addFolderPath(formData.mode)">{{
@@ -378,10 +374,6 @@ const addMultipleFiles = () => {
     files.forEach((filePath) => {
         addDramaSeries(EresDramaSeriesType.files, filePath);
     })
-}
-
-const addOneLink = () => {
-    addDramaSeries(EresDramaSeriesType.videoLink, '');
 }
 
 const submitForm = async (mode: string) => {

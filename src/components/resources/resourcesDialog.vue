@@ -31,7 +31,7 @@ const open = (_mode: string, id: string | undefined = undefined, resInfo: Iresou
 }
 
 const fullscreen = () => {
-    if (window.innerWidth < setupConfig.isFullscreen.width || window.innerHeight < setupConfig.isFullscreen.height) {
+    if (window.innerWidth < 1410 || window.innerHeight < setupConfig.isFullscreen.height) {
         return true;
     }
     return false;
