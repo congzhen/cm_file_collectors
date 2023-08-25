@@ -107,7 +107,6 @@ const saveFilesBasesSettingStore = () => {
 const show = async (path: string, title = '') => {
     loading.open();
     filesList.value = await readDirImage(path);
-    console.log(77789, filesList.value);
     folder.value = path;
     dialogTitle.value = title;
     dialogVisible.value = true;

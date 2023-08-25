@@ -38,12 +38,14 @@ export default {
                 comic: '漫画',
                 atlas: '图片集',
                 files: '文件',
+                videoLink: '视频链接',
             },
             title: {
                 movies: '影视名称',
                 comic: '漫画名称',
                 atlas: '图片集名称',
                 files: '文件名称',
+                videoLink: '视频链接名称',
             },
             versionNumber: '版号、番号',
             issuingDate: '发行日期',
@@ -54,6 +56,7 @@ export default {
             performer: '演员',
             abstract: '摘要',
             pleaseSelectFileAddress: '请选择本地文件地址',
+            pleaseSelectLinkAddress: '请输入链接地址',
             btn: {
                 addMovie: '添加影片',
                 addMultipleMovie: '添加多个影片',
@@ -61,6 +64,7 @@ export default {
                 addatlas: '添加图集文件夹',
                 addfile: '添加文件',
                 addfiles: '添加多个文件',
+                addVideoLink: '添加视频链接',
             },
             rule: {
                 title: '请输入名称',

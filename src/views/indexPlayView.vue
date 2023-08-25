@@ -2,12 +2,14 @@
     <div class="indexPlay">
         <playAtlas ref="playAtlasRef"></playAtlas>
         <playCommic ref="playCommicRef"></playCommic>
+        <playVideoLink ref="playVideoLinkRef"></playVideoLink>
     </div>
 </template>
 <script setup lang="ts">
 import { elShell } from "@/electronCommon"
 import playAtlas from "@/components/pageCom/playAtlas.vue"
 import playCommic from "@/components/pageCom/PlayComic.vue"
+import playVideoLink from "@/components/pageCom/playVideoLink.vue"
 import { EresDramaSeriesType } from "@/dataInterface/common.enum"
 import { IresDramaSeries, Iresources } from '@/dataInterface/resources.interface';
 import { resourcesServerData } from '@/serverData/resources.serverData'
@@ -19,6 +21,7 @@ import { useI18n } from 'vue-i18n'
 const { t } = useI18n();
 const playAtlasRef = ref<InstanceType<typeof playAtlas>>();
 const playCommicRef = ref<InstanceType<typeof playCommic>>();
+const playVideoLinkRef = ref<InstanceType<typeof playVideoLink>>();
 const playResources = ref<Iresources>();
 const playDramaSeries = ref<IresDramaSeries>();
 
@@ -36,6 +39,9 @@ const exec = () => {
             break;
         case EresDramaSeriesType.comic:
             playCommicRef.value?.show(playDramaSeries.value.src, playResources.value?.title)
+            break;
+        case EresDramaSeriesType.videoLink:
+            playVideoLinkRef.value?.show(playDramaSeries.value.src, playResources.value?.title)
             break;
     }
     updateResInfo(playDramaSeries.value.src);

@@ -32,7 +32,7 @@ const config = {
     performerFacePath,
     resCoverPosterPath,
     webPagePath,
-    isFullscreen: { width: 1440, height: 700 },
+    isFullscreen: { width: 1380, height: 700 },
 }
 
 export const setDbPath = (FPath: string) => {

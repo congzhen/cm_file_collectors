@@ -8,6 +8,7 @@ export enum EresDramaSeriesType {
     comic = 'comic',
     atlas = 'atlas',
     files = 'files',
+    videoLink = 'videoLink',
 }
 
 export enum EresUpdate {

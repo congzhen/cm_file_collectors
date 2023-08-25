@@ -12,7 +12,7 @@ export default {
     tagMode: ['fixed', 'auto'],
     sortMode: ['asc', 'desc', 'issuingDateAsc', 'issuingDateDesc'],
     cup: ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'Max'],
-    resMode: ['movies', 'comic', 'atlas', 'files'],
+    resMode: ['movies', 'comic', 'atlas', 'files', 'videoLink'],
     resourcesShowMode: ['coverPoster', 'table'],
     detailsDramaSeriesMode: ['fileName', 'digit'],
     playAtlasMode: ['waterfall', 'flex'],
