@@ -26,6 +26,9 @@ const filePath = function (path: string, name: string) {
 const getFileName = function (filePath: string) {
     return path.basename(filePath);
 }
+const getFolderPath = function (filePath: string) {
+    return path.dirname(filePath);
+}
 
 
 const existsFile = function (filePath: string) {
@@ -151,4 +154,4 @@ const readDirImage = async function (folderPath: string) {
 }
 
 
-export { saveBase64Picture, fileMove, fileCopy, deleteFile, existsFile, getFileName, readDir, readDirDeep, readDirImage, EfileImageInfo }
+export { saveBase64Picture, fileMove, fileCopy, deleteFile, existsFile, getFileName, getFolderPath, readDir, readDirDeep, readDirImage, EfileImageInfo }

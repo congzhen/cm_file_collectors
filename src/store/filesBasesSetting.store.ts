@@ -24,6 +24,8 @@ const defaultConfig = {
     youLikeWordNumber: 3,
     youLikeTagClass: [],
     resourceDetailsShowMode: 'right',
+    showPreviewImage: false,
+    previewImageFolder: '/',
     plugInUnit_Cup: false,
     plugInUnit_Cup_Text: 'Cup',
     coverPosterData: [

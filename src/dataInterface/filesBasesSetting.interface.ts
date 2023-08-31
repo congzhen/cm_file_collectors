@@ -34,6 +34,8 @@ interface IfilesBasesConfig {
     youLikeWordNumber: number;
     youLikeTagClass: Array<string>;
     resourceDetailsShowMode: string;
+    showPreviewImage: boolean;
+    previewImageFolder: string;
     plugInUnit_Cup: boolean;
     plugInUnit_Cup_Text: string;
     coverPosterData: Array<IcoverPosterData>;

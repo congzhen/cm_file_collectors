@@ -283,7 +283,10 @@ export default {
             showMode: {
                 right: '右侧',
                 popup: '弹窗',
-            }
+            },
+            previewImage: '预览图',
+            showPreviewImage: '显示预览图',
+            previewImageFolder: '预览图文件夹，多个文件夹用,分割',
         },
         plugin: {
             title: '插件管理',

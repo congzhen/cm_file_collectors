@@ -51,4 +51,9 @@ defineExpose({ show, updateData });
     width: 100%;
     height: 600px;
 }
+
+.settingMainDiv :deep(.detailsPreviewImage .imageList .imageBlock) {
+    width: 72px;
+    height: 90px;
+}
 </style>

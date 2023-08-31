@@ -44,6 +44,8 @@
                     <div>{{ $t('video.includedTime') }}: {{ resDataInfo.addTime }}</div>
                     <el-rate v-if="resDataInfo.stars > 0" v-model="resDataInfo.stars" disabled />
                 </div>
+                <detailsPreviewImage class="detailsPreviewImage" ref="detailsPreviewImageRef" :dataInfo="resDataInfo">
+                </detailsPreviewImage>
                 <div class="detailsItem" v-if="resDataInfo.directors.length > 0">
                     <el-alert class="tagAlert" :title="$t('performer.careerMode.director')" :closable="false" />
                     <div class="performerList">
@@ -92,6 +94,7 @@ import loading from '@/assets/loading'
 import setupConfig from '@/setup/config'
 import deleteConfirm from "@/components/common/funDeleteConfirm"
 import { deleteFile } from "@/assets/file"
+import detailsPreviewImage from "@/components/pageCom/detailsPreviewImage.vue";
 import detailsDramaSeries from '@/components/pageCom/detailsDramaSeries.vue';
 import performerCom from "@/components/smallCom/performerCom.vue"
 import resourcesDialog from "@/components/resources/resourcesDialog.vue"
@@ -120,6 +123,7 @@ const store = {
     tagStore: tagStore(),
     performerStore: performerStore(),
 }
+const detailsPreviewImageRef = ref<InstanceType<typeof detailsPreviewImage>>();
 const resourcesDialogRef = ref<InstanceType<typeof resourcesDialog>>();
 const indexPlayViewRef = ref<InstanceType<typeof indexPlayView>>();
 const detailsTop = ref(null);
@@ -326,5 +330,9 @@ defineExpose({ show, updateData });
 
 .indexDetailsPopup .functionGroupBtn .el-button-group {
     width: 240px;
+}
+
+.detailsPreviewImage {
+    margin-bottom: 5px;
 }
 </style>

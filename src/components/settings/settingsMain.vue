@@ -104,18 +104,22 @@
                         <el-checkbox v-model="youLikeModuleData"
                             :label="$t('settings.parameterSettings.enableRecordingModule.youLike')" border />
                     </div>
-                    <div class="settingMainItem">
-                        <h5>{{ $t('settings.parameterSettings.enableRecordingModule.historyNumber') }}</h5>
-                        <el-input-number v-model="historyNumberData" :min="1" :max="999" />
+
+                    <div style="display: flex;">
+                        <div class="settingMainItem" style="width: 160px;">
+                            <h5>{{ $t('settings.parameterSettings.enableRecordingModule.historyNumber') }}</h5>
+                            <el-input-number v-model="historyNumberData" :min="1" :max="999" />
+                        </div>
+                        <div class="settingMainItem" style="width: 160px;">
+                            <h5>{{ $t('settings.parameterSettings.enableRecordingModule.hotNumber') }}</h5>
+                            <el-input-number v-model="hotNumberData" :min="1" :max="999" />
+                        </div>
+                        <div class="settingMainItem" style="width: 160px;">
+                            <h5>{{ $t('settings.parameterSettings.enableRecordingModule.youLikeNumber') }}</h5>
+                            <el-input-number v-model="youLikeNumberData" :min="1" :max="999" />
+                        </div>
                     </div>
-                    <div class="settingMainItem">
-                        <h5>{{ $t('settings.parameterSettings.enableRecordingModule.hotNumber') }}</h5>
-                        <el-input-number v-model="hotNumberData" :min="1" :max="999" />
-                    </div>
-                    <div class="settingMainItem">
-                        <h5>{{ $t('settings.parameterSettings.enableRecordingModule.youLikeNumber') }}</h5>
-                        <el-input-number v-model="youLikeNumberData" :min="1" :max="999" />
-                    </div>
+
                     <div class="settingMainItem">
                         <h5>{{ $t('settings.parameterSettings.enableRecordingModule.youLikeWordNumber') }}</h5>
                         <el-input-number v-model="youLikeWordNumberData" :min="1" :max="99" />
@@ -133,7 +137,6 @@
                         <h5>{{ $t('settings.parameterSettings.enableRecordingModule.youLikeNowWord') }}</h5>
                         <div class="flexDiv">
                             <el-tag v-for="tag, key in youLikeNowWord" :key="key">{{ tag.name }}</el-tag>
-
                         </div>
                     </div>
 
@@ -151,6 +154,18 @@
                             <el-option v-for="item in dataset.resourceDetailsShowMode" :key="item"
                                 :label="$t('settings.details.showMode.' + item)" :value="item" />
                         </el-select>
+                    </div>
+
+                    <div class="settingMainItem">
+                        <h5>{{ $t('settings.details.previewImage') }}</h5>
+                        <el-checkbox v-model="showPreviewImageData" :label="$t('settings.details.showPreviewImage')"
+                            border />
+                    </div>
+                    <div class="settingMainItem">
+                        <h5>{{ $t('settings.details.previewImageFolder') }}</h5>
+                        <div class="select-full">
+                            <el-input v-model="previewImageFolderData" />
+                        </div>
                     </div>
 
                 </div>
@@ -373,7 +388,18 @@ const resourceDetailsShowModeData = computed({
     },
 })
 
+const showPreviewImageData = computed({
+    get: () => store.filesBasesSettingStore.config.showPreviewImage,
+    set: (value) => {
+        store.filesBasesSettingStore.config.showPreviewImage = value
+        getYouLikeNowWord();
+    },
+})
 
+const previewImageFolderData = computed({
+    get: () => store.filesBasesSettingStore.config.previewImageFolder,
+    set: (value) => store.filesBasesSettingStore.config.previewImageFolder = value,
+})
 
 
 const plugInUnit_CupData = computed({
