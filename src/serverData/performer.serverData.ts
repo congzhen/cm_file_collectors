@@ -12,6 +12,9 @@ const performerServerData = {
     getInfoByName: async function (name: string) {
         return await CoreDb().table('performer').where('name', '=', name).getFind() as Iperformer | undefined;
     },
+    existPhoto: async function (photo: string) {
+        return await CoreDb().table('performer').where('photo', '=', photo).getFind() === undefined ? false : true;
+    },
     SQL_DataListByPerformerBases_id: function (performerBases_id: string) {
         return CoreDb().table('performer').where('performerBases_id', '=', performerBases_id).where('status', '=', '1')
     },

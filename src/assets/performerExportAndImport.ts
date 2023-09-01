@@ -45,9 +45,11 @@ export const importPerformer = async function (_performerDatabasesId: string, fi
         for (const imageData of importData.performerFace) {
             const _file = path.join(performerFacePath, imageData.name);
             if (!existsFile(_file)) {
-                const buffer = Buffer.from(imageData.data, 'base64');
-                fs.writeFileSync(_file, buffer);
-                result.performerFaceCount++;
+                if (await performerServerData.existPhoto(imageData.name)) {
+                    const buffer = Buffer.from(imageData.data, 'base64');
+                    fs.writeFileSync(_file, buffer);
+                    result.performerFaceCount++;
+                }
             }
         }
         return result;
