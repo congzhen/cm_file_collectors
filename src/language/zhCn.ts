@@ -194,7 +194,11 @@ export default {
             exportSuccess: '导出数据成功',
             importSuccess: '导入数据成功，演员 {performerCount} 条，头像 {performerFaceCount} 张, 重启软件后生效.',
             importError: '导入数据失败',
-        }
+        },
+        importTo: '导入到数据集',
+        sameNameNoImport: '同名不导入',
+        selectImportPerformerDatabases: '请选择导入到演员数据集',
+        selectImportFile: '选择导入文件',
     },
     import: {
         mode: {

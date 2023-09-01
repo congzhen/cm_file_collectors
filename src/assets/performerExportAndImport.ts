@@ -5,8 +5,8 @@ import { performerStore } from '@/store/performer.store';
 import { performerBasesStore } from '@/store/performerBases.store';
 import { readDir, existsFile } from "@/assets/file";
 import { Iperformer } from '@/dataInterface/performer.interface';
-import { performerBasesServerData } from '@/serverData/performerBases.serverData';
 import { performerServerData } from '@/serverData/performer.serverData';
+import { checkFolderAndMkdir } from "@/assets/file";
 export const exportPerformer = function (performerDatabasesId: string, savePath: string) {
     const performerFacePath = path.join(setupConfig.performerFacePath, `/${performerDatabasesId}/`);
     const performerFaceImageList = readDir(performerFacePath + '', ['jpg', 'jpeg', 'png']);
@@ -21,7 +21,7 @@ export const exportPerformer = function (performerDatabasesId: string, savePath:
     fs.writeFileSync(path.join(savePath, '/performerFace-' + performerDatabasesId + '.json'), JSON.stringify(exportData, null, 2));
 }
 
-export const importPerformer = async function (fileName: string) {
+export const importPerformer = async function (_performerDatabasesId: string, fileName: string, sameNameNoImport = true) {
     try {
         const importData: {
             performerDatabasesId: string,
@@ -29,21 +29,18 @@ export const importPerformer = async function (fileName: string) {
             dataList: Array<Iperformer>,
             performerFace: Array<{ name: string, data: string }>
         } = JSON.parse(fs.readFileSync(fileName).toString('utf-8'));
-        const performerFacePath = path.join(setupConfig.performerFacePath, `/${importData.performerDatabasesId}/`);
-        const performerDatabasesInfo = await performerBasesServerData.getInfoById(importData.performerDatabasesId);
-        if (performerDatabasesInfo == undefined) {
-            const addResult = await performerBasesServerData.addSimple(importData.performerDatabasesId, importData.performerDatabasesName);
-            if (!addResult) {
-                return false;
-            }
-            fs.mkdirSync(performerFacePath, { recursive: true });
+        importData.performerDatabasesId = _performerDatabasesId;
+        for (const per of importData.dataList) {
+            per.performerBases_id = _performerDatabasesId;
         }
+        const performerFacePath = path.join(setupConfig.performerFacePath, `/${importData.performerDatabasesId}/`);
+        checkFolderAndMkdir(performerFacePath);
         const result = {
             performerCount: 0,
             performerFaceCount: 0,
         }
 
-        result.performerCount = await performerServerData.addPerformerDataList(importData.dataList);
+        result.performerCount = await performerServerData.addPerformerDataList(importData.dataList, sameNameNoImport);
 
         for (const imageData of importData.performerFace) {
             const _file = path.join(performerFacePath, imageData.name);

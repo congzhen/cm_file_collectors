@@ -9,6 +9,9 @@ const performerServerData = {
     getInfoById: async function (id: string) {
         return await CoreDb().table('performer').getInfo(id) as Iperformer;
     },
+    getInfoByName: async function (name: string) {
+        return await CoreDb().table('performer').where('name', '=', name).getFind() as Iperformer | undefined;
+    },
     SQL_DataListByPerformerBases_id: function (performerBases_id: string) {
         return CoreDb().table('performer').where('performerBases_id', '=', performerBases_id).where('status', '=', '1')
     },
@@ -24,12 +27,19 @@ const performerServerData = {
         delete formdataObj.career;
         return formdataObj;
     },
-    addPerformerDataList: async function (dataList: Array<Iperformer>) {
+    addPerformerDataList: async function (dataList: Array<Iperformer>, sameNameNoImport = true) {
         let performerCount = 0;
         const tID = await CoreDb().beginTrans();
         for (const performer of dataList) {
             const pS = await performerServerData.getInfoById(performer.id) as Iperformer | undefined;
+
             if (pS == undefined) {
+                if (sameNameNoImport) {
+                    const pSName = await performerServerData.getInfoByName(performer.name) as Iperformer | undefined;
+                    if (pSName != undefined) {
+                        continue;
+                    }
+                }
                 const addResult = await performerServerData.addSimple(performer);
                 if (addResult) {
                     performerCount++;

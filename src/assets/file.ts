@@ -154,4 +154,4 @@ const readDirImage = async function (folderPath: string) {
 }
 
 
-export { saveBase64Picture, fileMove, fileCopy, deleteFile, existsFile, getFileName, getFolderPath, readDir, readDirDeep, readDirImage, EfileImageInfo }
+export { checkFolderAndMkdir, saveBase64Picture, fileMove, fileCopy, deleteFile, existsFile, getFileName, getFolderPath, readDir, readDirDeep, readDirImage, EfileImageInfo }

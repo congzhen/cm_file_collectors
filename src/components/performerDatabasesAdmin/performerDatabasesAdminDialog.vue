@@ -18,20 +18,19 @@
             </template>
         </el-dialog>
         <performerDatabasesAdminAdd ref="performerDatabasesAdminAddRef"></performerDatabasesAdminAdd>
+        <performerDatabasesAdminImport ref="performerDatabasesAdminImportRef"></performerDatabasesAdminImport>
     </div>
 </template>
 <script setup lang="ts">
 import setupConfig from "@/setup/config"
-import { ipcRendererSend } from "@/electronCommon"
-import loading from '@/assets/loading'
-import { importPerformer } from '@/assets/performerExportAndImport'
-import { ElMessage } from 'element-plus'
 import performerDatabasesAdminMain from './performerDatabasesAdminMain.vue';
 import performerDatabasesAdminAdd from './performerDatabasesAdminAdd.vue'
+import performerDatabasesAdminImport from "./performerDatabasesAdminImport.vue";
 import { ref } from 'vue'
 import { useI18n } from 'vue-i18n'
 const { t } = useI18n();
 const performerDatabasesAdminAddRef = ref<InstanceType<typeof performerDatabasesAdminAdd>>();
+const performerDatabasesAdminImportRef = ref<InstanceType<typeof performerDatabasesAdminImport>>();
 const dialogVisible = ref(false);
 const open = () => {
     dialogVisible.value = true;
@@ -41,27 +40,8 @@ const handleAddPerformerDatabases = () => {
 }
 
 const importPerformerDatabases = () => {
-    const fileName = ipcRendererSend.dialogGetFileSync();
-    if (fileName != undefined) {
-        loading.open();
-        setTimeout(async () => {
-            const rd = await importPerformer(fileName);
-            await loading.closeSync();
-            if (rd === false) {
-                ElMessage({
-                    message: t('performerDatabases.message.importError'),
-                    type: 'error',
-                })
-            } else {
-                ElMessage({
-                    message: t('performerDatabases.message.importSuccess', rd),
-                    type: 'success',
-                })
-            }
+    performerDatabasesAdminImportRef.value?.open();
 
-        }, 500);
-
-    }
 }
 
 const fullscreen = () => {
