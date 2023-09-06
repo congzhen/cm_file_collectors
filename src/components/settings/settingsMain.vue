@@ -260,6 +260,32 @@
 
                     </div>
                 </div>
+                <div class="settingMainBlock">
+                    <div class="blockTitle">
+                        <el-alert :title="$t('settings.route.title')" type="success" :closable="false" />
+                    </div>
+                    <div class="settingMainItem">
+                        <h5>
+                            <label>{{ $t('settings.route.explain') }}</label>
+                        </h5>
+                        <div class="routeAdmin">
+                            <ul>
+                                <li v-for="( item, index ) in  store.filesBasesSettingStore.config.routeConversion "
+                                    :key="index">
+                                    <label>FROM:</label>
+                                    <el-input v-model="item.from" size="small"></el-input>
+                                    <label>TO:</label>
+                                    <el-input v-model="item.to" size="small"></el-input>
+                                    <el-button class="coverPosterAdmin-btn" type="danger" icon="delete" size="small"
+                                        @click="deleteRoute(index)"></el-button>
+                                </li>
+                            </ul>
+                        </div>
+                        <div>
+                            <el-button plain @click="addRoute">{{ $t('settings.route.addBtn') }}</el-button>
+                        </div>
+                    </div>
+                </div>
 
             </div>
         </el-scrollbar>
@@ -440,6 +466,8 @@ const coverPosterData = computed({
     set: () => { },
 })
 
+
+
 const youLikeNowWord = ref<Itag[]>();
 
 
@@ -455,6 +483,13 @@ const deleteCoverPoster = (index: number) => {
 }
 const coverPosterBz = (width: number, height: number) => {
     return ratio(width, height).join(' : ');
+}
+
+const addRoute = () => {
+    store.filesBasesSettingStore.config.routeConversion.push({ from: '', to: '' });
+}
+const deleteRoute = (index: number) => {
+    store.filesBasesSettingStore.config.routeConversion.splice(index, 1);
 }
 
 const openSettings = async () => {
@@ -556,5 +591,25 @@ defineExpose({ openSettings, saveSettings });
 
 .coverPosterAdmin .coverPosterAdmin-btn {
     margin-top: 2px;
+}
+
+.routeAdmin ul {
+    list-style-type: none;
+}
+
+.routeAdmin ul li {
+    display: flex;
+    padding: 5px 0px;
+}
+
+.routeAdmin ul li label {
+    padding: 0 5px;
+    line-height: 22px;
+    font-size: 12px;
+}
+
+.routeAdmin ul li .el-input {
+    width: 200px;
+    padding: 0 10px;
 }
 </style>

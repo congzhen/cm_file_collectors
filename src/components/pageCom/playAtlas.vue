@@ -50,7 +50,7 @@ import dataset from "@/assets/dataset"
 import loading from '@/assets/loading'
 
 import { Throttle } from "@/assets/tool"
-import { readDirImage, EfileImageInfo } from "@/assets/file"
+import { readDirImage, EfileImageInfo, existsFile } from "@/assets/file"
 import { filesBasesStore } from "@/store/filesBases.store"
 import { filesBasesSettingStore } from '@/store/filesBasesSetting.store';
 import { computed } from "vue";
@@ -105,12 +105,16 @@ const saveFilesBasesSettingStore = () => {
 }
 
 const show = async (path: string, title = '') => {
+    if (!existsFile(path)) {
+        return undefined;
+    }
     loading.open();
     filesList.value = await readDirImage(path);
     folder.value = path;
     dialogTitle.value = title;
     dialogVisible.value = true;
     await loading.closeSync();
+    return true;
 }
 
 

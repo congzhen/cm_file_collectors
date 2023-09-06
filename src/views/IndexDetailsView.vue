@@ -90,6 +90,7 @@
 </template>
 <script setup lang="ts">
 import { elShell } from "@/electronCommon"
+import virtualRouteConverter from "@/abilities/virtualRouteConverter"
 import loading from '@/assets/loading'
 import setupConfig from '@/setup/config'
 import deleteConfirm from "@/components/common/funDeleteConfirm"
@@ -162,7 +163,7 @@ const play = async (info: Iresources, dramaSeries: IresDramaSeries | undefined =
 
 const openFolder = async () => {
     if (resDataInfo.value?.dramaSeries[0] && resDataInfo.value?.dramaSeries[0].src != '') {
-        await elShell.openPath(resDataInfo.value.dramaSeries[0].src);
+        await elShell.openPath(virtualRouteConverter(resDataInfo.value.dramaSeries[0].src));
     }
 }
 

@@ -42,6 +42,7 @@ const defaultConfig = {
     playAtlasImageWidth: 150,
     playAtlasMode: 'waterfall',
     playComicMode: 'fullScreen',
+    routeConversion: [],
 } as IfilesBasesConfig
 
 export const filesBasesSettingStore = defineStore('filesBasesSetting', {

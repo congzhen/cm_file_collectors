@@ -99,6 +99,7 @@ const elShell = {
         if (fs.existsSync(filePath)) {
             return await shell.openPath(filePath);
         }
+        return undefined;
     },
 }
 

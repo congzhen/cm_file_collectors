@@ -8,6 +8,7 @@
     </div>
 </template>
 <script setup lang="ts">
+import virtualRouteConverter from "@/abilities/virtualRouteConverter"
 import { existsFile, getFolderPath, readDirImage, EfileImageInfo } from '@/assets/file';
 import { EresDramaSeriesType } from '@/dataInterface/common.enum';
 import { Iresources } from '@/dataInterface/resources.interface';
@@ -50,7 +51,7 @@ const getImageList = async (_dataInfo: Iresources) => {
     ) {
         return imageList;
     }
-    const resFilePath = _dataInfo.dramaSeries.find(item => item.type == EresDramaSeriesType.movies)!.src;
+    const resFilePath = virtualRouteConverter(_dataInfo.dramaSeries.find(item => item.type == EresDramaSeriesType.movies)!.src);
     if (!existsFile(resFilePath)) {
         return imageList
     }
@@ -60,7 +61,6 @@ const getImageList = async (_dataInfo: Iresources) => {
     for (const path of folderPathList) {
         imageList = imageList.concat(await readDirImage(path));
     }
-    console.log(66666666, imageList);
     return imageList;
 }
 

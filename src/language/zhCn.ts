@@ -249,7 +249,7 @@ export default {
                 asc: '添加时间正序',
                 desc: '添加时间倒序',
                 issuingDateAsc: '发行时间正序',
-                issuingDateDesc: '发现时间倒叙',
+                issuingDateDesc: '发行时间倒叙',
             },
             resourcesShowMode: '显示模式',
             resourcesShowModeData: {
@@ -311,6 +311,11 @@ export default {
             openCoverPosterHeightStatus: '开启封面海报高度控制',
             heightBase: '高度基数',
         },
+        route: {
+            title: '路径虚拟转换',
+            addBtn: '添加虚拟路径',
+            explain: '视频文件夹整体移动位置时，可以使用虚拟路径转换功能，例如：from D:\\video to E:\\myVideo，*!to SoftwareDrive:\\myVideo 则转换至软件当前所在的盘符地址!*，如果需要真实转换数据库中的地址，请使用数据库资源路径替换器。',
+        },
     },
     filesDatabases: {
         title: '文件数据库',
@@ -360,6 +365,7 @@ export default {
     },
     play: {
         resNoHasDramaSeries: '该操作无法执行，缺少对应资源信息。',
+        noFindSrc: '无法找到路径：{src}',
         comic: {
             perPage: '上一页',
             lastPage: '下一页',

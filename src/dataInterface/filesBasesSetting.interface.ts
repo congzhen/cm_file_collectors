@@ -12,6 +12,11 @@ interface IcoverPosterData {
     type: string;
 }
 
+interface IrouteConversion {
+    from: string;
+    to: string;
+}
+
 interface IfilesBasesConfig {
     leftDisplay: Array<string>;
     country: Array<string>;
@@ -47,6 +52,7 @@ interface IfilesBasesConfig {
     playAtlasImageWidth: number;
     playAtlasMode: string;
     playComicMode: string;
+    routeConversion: Array<IrouteConversion>;
 }
 
 interface IfilesBasesNofConfig {

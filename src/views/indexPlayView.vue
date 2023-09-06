@@ -6,6 +6,7 @@
     </div>
 </template>
 <script setup lang="ts">
+import virtualRouteConverter from "@/abilities/virtualRouteConverter"
 import { elShell } from "@/electronCommon"
 import playAtlas from "@/components/pageCom/playAtlas.vue"
 import playCommic from "@/components/pageCom/PlayComic.vue"
@@ -25,26 +26,34 @@ const playVideoLinkRef = ref<InstanceType<typeof playVideoLink>>();
 const playResources = ref<Iresources>();
 const playDramaSeries = ref<IresDramaSeries>();
 
-const exec = () => {
+const exec = async () => {
     if (playDramaSeries.value == undefined) {
         return;
     }
+    const playSrc = virtualRouteConverter(playDramaSeries.value.src);
+    let playStatus;
     switch (playDramaSeries.value.type) {
         case EresDramaSeriesType.movies:
         case EresDramaSeriesType.files:
-            elShell.execFile(playDramaSeries.value.src);
+            playStatus = await elShell.execFile(playSrc);
             break;
         case EresDramaSeriesType.atlas:
-            playAtlasRef.value?.show(playDramaSeries.value.src, playResources.value?.title)
+            playStatus = await playAtlasRef.value?.show(playSrc, playResources.value?.title)
             break;
         case EresDramaSeriesType.comic:
-            playCommicRef.value?.show(playDramaSeries.value.src, playResources.value?.title)
+            playStatus = await playCommicRef.value?.show(playSrc, playResources.value?.title)
             break;
         case EresDramaSeriesType.videoLink:
             playVideoLinkRef.value?.show(playDramaSeries.value.src, playResources.value?.title)
+            playStatus = true;
             break;
     }
-    updateResInfo(playDramaSeries.value.src);
+    if (playStatus == undefined) {
+        ElMessage.error(t('play.noFindSrc', { src: playSrc }))
+    } else {
+        updateResInfo(playDramaSeries.value.src);
+    }
+
 }
 
 const updateResInfo = async (lastPlayFile: string) => {

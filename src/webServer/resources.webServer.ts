@@ -3,7 +3,7 @@ import { Express } from 'express'
 import setupConfig from "@/setup/config"
 import { resourcesServerData } from "@/serverData/resources.serverData"
 import { IsearchCondition } from "@/dataInterface/common.interface";
-
+import virtualRouteConverter from "@/abilities/virtualRouteConverter"
 import { resourcesDramaSeriesServerData } from '@/serverData/resourcesDramaSeries.serverData';
 import { readDirImage, existsFile } from '@/assets/file';
 const registerApiResrouces = (app: Express) => {
@@ -44,7 +44,7 @@ const registerApiResrouces = (app: Express) => {
         const dramaSeriesId = req.params.dramaSeriesId;
         const dramaSeriesInfo = await resourcesDramaSeriesServerData.getDramaSeriesInfoById(dramaSeriesId);
         const resourcesBaseInfo = await resourcesServerData.getBaseInfoById(dramaSeriesInfo.resources_id);
-        const filesList = await readDirImage(dramaSeriesInfo.src);
+        const filesList = await readDirImage(virtualRouteConverter(dramaSeriesInfo.src));
         res.json({ ...dramaSeriesInfo, filesList, title: resourcesBaseInfo.title });
     });
     app.get('/api/resourceDramaSeriesVideoInfo/:mode/:dramaSeriesId/', async (req, res) => {
@@ -54,7 +54,7 @@ const registerApiResrouces = (app: Express) => {
         const resourcesBaseInfo = await resourcesServerData.getBaseInfoById(dramaSeriesInfo.resources_id);
         let m3u8 = false;
         if (mode == 'm3u8') {
-            if (existsFile(dramaSeriesInfo.src + '.m3u8')) {
+            if (existsFile(virtualRouteConverter(dramaSeriesInfo.src) + '.m3u8')) {
                 m3u8 = true;
             }
         }

@@ -47,7 +47,7 @@
 <script setup lang="ts">
 import setupConfig from "@/setup/config"
 import loading from '@/assets/loading'
-import { readDir } from "@/assets/file"
+import { readDir, existsFile } from "@/assets/file"
 import { filesBasesStore } from '@/store/filesBases.store';
 import { filesBasesSettingStore } from '@/store/filesBasesSetting.store';
 import { ref } from "vue"
@@ -95,6 +95,9 @@ const changeNowPage = (mode: string) => {
 
 
 const show = async (path: string, title = '', _nowPage = 0) => {
+    if (!existsFile(path)) {
+        return undefined;
+    }
     loading.open();
     filesList.value = readDir(path);
     folder.value = path;
@@ -102,6 +105,7 @@ const show = async (path: string, title = '', _nowPage = 0) => {
     nowPage.value = _nowPage;
     dialogVisible.value = true;
     await loading.closeSync();
+    return true;
 }
 
 const fullscreen = () => {
