@@ -6,6 +6,16 @@
         <div class="updataLogsBody">
             <el-timeline>
                 <el-scrollbar height="500px">
+                    <el-timeline-item timestamp="2023/9/7" placement="top">
+                        <h4>{{ $t('system.updateLogs.version') }}：v 2.0.5</h4>
+                        <div class="rawContent">
+                            <h5>新特性</h5>
+                            <p class="logContent">增加读取视频文件夹下预览图</p>
+                            <p class="logContent">导入演员集数据指定目标</p>
+                            <p class="logContent">增加虚拟路径转换功能</p>
+                            <p class="logContent">批量导入后重启软件更改为刷新数据</p>
+                        </div>
+                    </el-timeline-item>
                     <el-timeline-item timestamp="2023/8/25" placement="top">
                         <h4>{{ $t('system.updateLogs.version') }}：v 2.0.4</h4>
                         <div class="rawContent">
