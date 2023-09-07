@@ -29,10 +29,11 @@
 <script setup lang="ts">
 import setupConfig from "@/setup/config"
 import { ipcRendererSend } from "@/electronCommon"
-import { ref, reactive } from 'vue';
+import { ref, reactive, inject } from 'vue';
 import { IimportSimpleInsertDatabase } from "@/abilities/importSimpleInsertDatabase";
 import { ISimpleData } from "@/abilities/importSimple";
-
+const AppInitDataInject = inject<() => void>('AppInitData');
+const indexUpdateResourcesDataInject = inject<() => void>('indexUpdateResourcesData');
 const dialogVisible = ref(false);
 const dataList = ref<Array<{
     data: ISimpleData,
@@ -49,6 +50,10 @@ const resultCount = reactive({
     success: 0,
     fail: 0,
 });
+
+
+// eslint-disable-next-line no-undef
+const emits = defineEmits(['importCompleted']);
 
 const init = () => {
     dataList.value = [];
@@ -102,7 +107,14 @@ const open = (_data: IimportSimpleInsertDatabase) => {
 }
 
 const handleRestart = () => {
+    //更新数据
+    if (AppInitDataInject) AppInitDataInject();
+    if (indexUpdateResourcesDataInject) indexUpdateResourcesDataInject();
+    dialogVisible.value = false;
+    emits("importCompleted");
+    /*
     ipcRendererSend.execAppRestart();
+    */
 }
 
 // eslint-disable-next-line no-undef

@@ -46,7 +46,7 @@
             </div>
         </template>
     </el-dialog>
-    <importResult ref="importResultRef"></importResult>
+    <importResult ref="importResultRef" @importCompleted="dialogVisible = false"></importResult>
 </template>
 <script setup lang="ts">
 import setupConfig from "@/setup/config"

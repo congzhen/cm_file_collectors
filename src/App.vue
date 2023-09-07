@@ -31,14 +31,18 @@ const AppInit = async (_currentFilesBases_id: string | undefined = undefined, ca
   await store.performerBasesStore.init();
   await store.filesRelatedPerformerBasesStore.init();
   await store.filesBasesSettingStore.init(store.filesBasesStore.currentFilesBases.id);
-  await store.tagClassStore.init();
-  await store.tagStore.init();
-  await store.performerStore.init();
+  await AppInitData();
   store.performerStore.currentAdminPerformerBases_id = store.filesBasesStore.getCurrentFilesMainPerformerBasesId;
   displayStatus.value = true;
   await loading.closeSync();
   console.log(store);
   callBack();
+}
+
+const AppInitData = async () => {
+  await store.tagClassStore.init();
+  await store.tagStore.init();
+  await store.performerStore.init();
 }
 
 
@@ -47,6 +51,7 @@ onMounted(async () => {
   await AppInit();
 })
 provide('AppInit', AppInit);
+provide('AppInitData', AppInitData);
 </script>
 <style>
 * {

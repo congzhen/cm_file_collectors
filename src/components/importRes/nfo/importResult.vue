@@ -31,7 +31,9 @@ import setupConfig from "@/setup/config"
 import { ipcRendererSend } from "@/electronCommon"
 import { InofData } from '@/abilities/importNfo';
 import { IimportNfoInsertDatabase } from '@/abilities/importNfoInsertDatabase';
-import { ref, reactive } from 'vue';
+import { ref, reactive, inject } from 'vue';
+const AppInitDataInject = inject<() => void>('AppInitData');
+const indexUpdateResourcesDataInject = inject<() => void>('indexUpdateResourcesData');
 
 const dialogVisible = ref(false);
 const dataList = ref<Array<{
@@ -49,6 +51,10 @@ const resultCount = reactive({
     success: 0,
     fail: 0,
 });
+
+// eslint-disable-next-line no-undef
+const emits = defineEmits(['importCompleted']);
+
 const init = () => {
     dataList.value = [];
     page = 1;
@@ -91,7 +97,12 @@ const open = (_data: IimportNfoInsertDatabase) => {
 }
 
 const handleRestart = () => {
-    ipcRendererSend.execAppRestart();
+    //更新数据
+    if (AppInitDataInject) AppInitDataInject();
+    if (indexUpdateResourcesDataInject) indexUpdateResourcesDataInject();
+    dialogVisible.value = false;
+    emits("importCompleted");
+    //ipcRendererSend.execAppRestart();
 }
 
 const fullscreen = () => {
