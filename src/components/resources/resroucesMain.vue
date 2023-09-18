@@ -181,7 +181,7 @@ import { performerStore } from "@/store/performer.store"
 import { filesBasesSettingStore } from '@/store/filesBasesSetting.store';
 import comMultipleSearchSelect from "@/components/common/comMultipleSearchSelect.vue"
 import { resourcesServerData, EnumResExecMode } from "@/serverData/resources.serverData"
-import { ref, reactive, computed, inject } from 'vue'
+import { ref, reactive, computed, inject, nextTick } from 'vue'
 import type { FormRules, UploadFile, ElScrollbar } from 'element-plus'
 import { useI18n } from 'vue-i18n';
 import { IresDramaSeries, Iresources } from "@/dataInterface/resources.interface";
@@ -419,12 +419,16 @@ const submitForm = async (mode: string) => {
 
 const open = async (_mode: string, id: string | undefined = undefined, resInfo: Iresources | undefined = undefined) => {
     loading.open();
-    if (_mode == 'add') {
-        keyNum.value++;
-    }
-    init(id, resInfo);
-    comFormRef.value?.open(_mode);
-    await loading.closeSync();
+    //if (_mode == 'add') {
+    keyNum.value++;
+    //}
+    nextTick(async () => {
+        init(id, resInfo);
+        comFormRef.value?.open(_mode);
+        await loading.closeSync();
+    })
+
+
 }
 const close = () => {
     emits('close');
