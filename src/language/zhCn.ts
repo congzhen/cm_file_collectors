@@ -241,6 +241,18 @@ export default {
             performerShowNum: '演员标签显示数量',
             performerPreferred: '优先显示演员',
         },
+        displaySettings: {
+            title: '显示设置',
+            definition: {
+                bgRgba: '清晰度标签背景色',
+                fontColor: '清晰度标签字体颜色',
+            },
+            showTag: {
+                title: '封面上显示标签',
+                bgRgba: '标签背景色',
+                fontColor: '标签字体颜色',
+            }
+        },
         parameterSettings: {
             title: '参数设置',
             pageLimit: '分页显示数量',

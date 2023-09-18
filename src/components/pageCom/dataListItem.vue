@@ -1,8 +1,15 @@
 <template>
     <div class="videoItem" @click="clickHandle(EresDetatilsType.show)" :style="{ width: getWidth(), height: getHeight() }">
-        <div class="videoDefinitionTap" v-if="props.dataInfo.definition != ''">
-            {{ $t('definition.' + props.dataInfo.definition) }}
+        <div class="topFloatBar" :style="{ width: getWidth() }">
+            <div class="tag" v-if="props.dataInfo.definition != ''"
+                :style="{ backgroundColor: store.filesBasesSettingStore.config.definitionRgba, color: store.filesBasesSettingStore.config.definitionFontColor }">
+                {{ $t('definition.' + props.dataInfo.definition) }}
+            </div>
+            <div class="tag" v-for="tagInfo, key in showTag" :key="key"
+                :style="{ backgroundColor: store.filesBasesSettingStore.config.coverDisplayTagRgba, color: store.filesBasesSettingStore.config.coverDisplayTagColor }">
+                {{ tagInfo.name }}</div>
         </div>
+
         <el-image
             :src="props.dataInfo.coverPoster != '' ? (setupConfig.resCoverPosterPath + props.dataInfo.filesBases_id + '/' + props.dataInfo.coverPoster) : ''"
             :fit="getFit()">
@@ -21,10 +28,14 @@
 </template>
 <script setup lang="ts">
 import setupConfig from "@/setup/config"
+
 import { EresDetatilsType } from "@/dataInterface/common.enum"
 import { IresourcesBase } from '@/dataInterface/resources.interface';
 import { filesBasesSettingStore } from "@/store/filesBasesSetting.store";
-
+import { tagStore } from "@/store/tag.store";
+import { resourcesTagsServerData } from "@/serverData/resourcesTags.serverData"
+import { onMounted, nextTick, ref, watch } from 'vue'
+import { Itag } from "@/dataInterface/tag.interface";
 // eslint-disable-next-line no-undef
 const props = defineProps({
     dataInfo: {
@@ -37,7 +48,15 @@ const emits = defineEmits(['clickHandle']);
 
 const store = {
     filesBasesSettingStore: filesBasesSettingStore(),
+    tagStore: tagStore(),
 }
+
+watch(
+    () => props.dataInfo,
+    () => getTag()
+)
+
+const showTag = ref<Array<Itag>>([]);
 
 const clickHandle = (type: EresDetatilsType) => {
     emits('clickHandle', type, props.dataInfo);
@@ -67,6 +86,33 @@ const getHeight = () => {
     return props.dataInfo.coverPosterHeight + 'px';
 }
 
+const getTag = () => {
+    console.log(123123);
+    if (store.filesBasesSettingStore.config.coverDisplayTag.length > 0) {
+        resourcesTagsServerData.getDataListByResources_id(props.dataInfo.id).then((res) => {
+            const arr: Array<Itag> = [];
+            for (const tag of res) {
+                if (store.filesBasesSettingStore.config.coverDisplayTag.includes(tag.tag_id)) {
+                    const tagInfo = store.tagStore.getTagById(tag.tag_id);
+                    if (tagInfo) {
+                        arr.push(tagInfo);
+                    }
+                }
+            }
+            showTag.value = arr;
+        });
+    } else {
+        showTag.value = [];
+    }
+}
+
+onMounted(() => {
+    nextTick(() => {
+        getTag()
+    })
+
+})
+
 </script>
 <style scoped>
 .videoItem {
@@ -83,22 +129,27 @@ const getHeight = () => {
     display: block;
 }
 
-.videoItem .videoDefinitionTap {
-    width: auto;
-    padding: 1px 7px;
+.videoItem .topFloatBar {
+    padding: 1px;
     font-size: 12px;
     line-height: 16px;
-    height: 16px;
     position: absolute;
     margin-left: 3px;
     margin-top: 3px;
-    background-color: #9B58B6;
-    opacity: 0.5;
-    color: #F3F3F3;
     z-index: 10;
+}
+
+.videoItem .topFloatBar .tag {
+    width: auto;
+    padding: 1px 7px;
+    line-height: 16px;
+    height: 16px;
     text-align: center;
     border-radius: 3px;
+    display: inline-block;
+    margin: 0px 2px 2px 0px;
 }
+
 
 .videoItem .el-image {
     width: 100%;

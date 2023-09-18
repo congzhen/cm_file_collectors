@@ -65,7 +65,7 @@
                 </div>
                 <div class="settingMainBlock">
                     <div class="blockTitle">
-                        <el-alert :title="$t('settings.parameterSettings.title')" type="success" :closable="false" />
+                        <el-alert :title="$t('settings.displaySettings.title')" type="success" :closable="false" />
                     </div>
                     <div class="settingMainItem">
                         <h5>{{ $t('settings.parameterSettings.pageLimit') }}</h5>
@@ -94,6 +94,68 @@
                                 :value="item" />
                         </el-select>
                     </div>
+                    <div class="settingMainItem">
+                        <h5>{{ $t('settings.details.showModeTitle') }}</h5>
+                        <el-select v-model="resourceDetailsShowModeData">
+                            <el-option v-for="item in dataset.resourceDetailsShowMode" :key="item"
+                                :label="$t('settings.details.showMode.' + item)" :value="item" />
+                        </el-select>
+                    </div>
+
+                    <div class="settingMainItem">
+                        <h5>{{ $t('settings.details.previewImage') }}</h5>
+                        <el-checkbox v-model="showPreviewImageData" :label="$t('settings.details.showPreviewImage')"
+                            border />
+                    </div>
+                    <div class="settingMainItem">
+                        <h5>{{ $t('settings.details.previewImageFolder') }}</h5>
+                        <div class="select-full">
+                            <el-input v-model="previewImageFolderData" />
+                        </div>
+                    </div>
+
+                    <div class="settingMainItem">
+                        <div style="display: flex;">
+                            <div style="width: 160px;">
+                                <h5>{{ $t('settings.displaySettings.definition.bgRgba') }}</h5>
+                                <el-color-picker v-model="store.filesBasesSettingStore.config.definitionRgba" show-alpha
+                                    :predefineColors="predefineColors" />
+                            </div>
+                            <div style="width: 160px;">
+                                <h5>{{ $t('settings.displaySettings.definition.fontColor') }}</h5>
+                                <el-color-picker v-model="store.filesBasesSettingStore.config.definitionFontColor" />
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="settingMainItem">
+                        <h5>{{ $t('settings.displaySettings.showTag.title') }}</h5>
+                        <div class="select-full">
+                            <comMultipleSearchSelect v-model="coverDisplayTagData"
+                                :dataList="store.tagStore.tagList.filter(item => item.status)" :selectField="['name']"
+                                :showSelectField="['name']">
+                            </comMultipleSearchSelect>
+                        </div>
+                        <div style="display: flex;">
+                            <div style="width: 160px;">
+                                <h5>{{ $t('settings.displaySettings.showTag.bgRgba') }}</h5>
+                                <el-color-picker v-model="store.filesBasesSettingStore.config.coverDisplayTagRgba"
+                                    show-alpha :predefineColors="predefineColors" />
+                            </div>
+                            <div style="width: 160px;">
+                                <h5>{{ $t('settings.displaySettings.showTag.fontColor') }}</h5>
+                                <el-color-picker v-model="store.filesBasesSettingStore.config.coverDisplayTagColor" />
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+                <div class="settingMainBlock">
+                    <div class="blockTitle">
+                        <el-alert :title="$t('settings.parameterSettings.title')" type="success" :closable="false" />
+                    </div>
+
+
 
                     <div class="settingMainItem">
                         <h5>{{ $t('settings.parameterSettings.enableRecordingModule.title') }}</h5>
@@ -154,25 +216,6 @@
                             :max="999" />
                     </div>
 
-                    <div class="settingMainItem">
-                        <h5>{{ $t('settings.details.showModeTitle') }}</h5>
-                        <el-select v-model="resourceDetailsShowModeData">
-                            <el-option v-for="item in dataset.resourceDetailsShowMode" :key="item"
-                                :label="$t('settings.details.showMode.' + item)" :value="item" />
-                        </el-select>
-                    </div>
-
-                    <div class="settingMainItem">
-                        <h5>{{ $t('settings.details.previewImage') }}</h5>
-                        <el-checkbox v-model="showPreviewImageData" :label="$t('settings.details.showPreviewImage')"
-                            border />
-                    </div>
-                    <div class="settingMainItem">
-                        <h5>{{ $t('settings.details.previewImageFolder') }}</h5>
-                        <div class="select-full">
-                            <el-input v-model="previewImageFolderData" />
-                        </div>
-                    </div>
 
                 </div>
 
@@ -303,19 +346,40 @@ import { ratio } from "@/assets/math"
 import loading from '@/assets/loading'
 import comMultipleSearchSelect from "@/components/common/comMultipleSearchSelect.vue"
 import { performerStore } from "@/store/performer.store"
+import { tagStore } from "@/store/tag.store"
 import { tagClassStore } from "@/store/tagClass.store"
 import { filesBasesStore } from "@/store/filesBases.store"
 import { filesBasesSettingStore } from "@/store/filesBasesSetting.store"
 import { filesBasesSettingServerData } from "@/serverData/filesBasesSetting.serverData"
 import { tagServerData } from '@/serverData/tag.serverData';
-import { computed, ref } from 'vue';
+import { computed, ref, inject } from 'vue';
 import { Itag } from "@/dataInterface/tag.interface"
+import { EresUpdate } from "@/dataInterface/common.enum"
+const indexUpdateResourcesDataInject = inject<(_up: Array<EresUpdate>) => void>('indexUpdateResourcesData');
 const store = {
     filesBasesStore: filesBasesStore(),
     filesBasesSettingStore: filesBasesSettingStore(),
+    tagStore: tagStore(),
     tagClassStore: tagClassStore(),
     performerStore: performerStore(),
 }
+
+const predefineColors = ref([
+    '#ff4500',
+    '#ff8c00',
+    '#ffd700',
+    '#90ee90',
+    '#00ced1',
+    '#1e90ff',
+    '#c71585',
+    'rgba(255, 69, 0, 0.68)',
+    'rgb(255, 120, 0)',
+    'hsv(51, 100, 98)',
+    'hsva(120, 40, 94, 0.5)',
+    'hsl(181, 100%, 37%)',
+    'hsla(209, 100%, 56%, 0.73)',
+    '#c7158577',
+])
 
 
 const countryData = computed({
@@ -471,6 +535,17 @@ const coverPosterData = computed({
     // eslint-disable-next-line @typescript-eslint/no-empty-function
     set: () => { },
 })
+
+const coverDisplayTagData = computed({
+    get: () => store.filesBasesSettingStore.config.coverDisplayTag,
+    set: (value) => {
+        store.filesBasesSettingStore.config.coverDisplayTag = value;
+        if (indexUpdateResourcesDataInject) {
+            indexUpdateResourcesDataInject([EresUpdate.updateData])
+        }
+    }
+})
+
 
 
 

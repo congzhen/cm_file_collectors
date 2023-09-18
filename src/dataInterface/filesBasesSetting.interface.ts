@@ -54,6 +54,11 @@ interface IfilesBasesConfig {
     playAtlasPageLimit: number;
     playComicMode: string;
     routeConversion: Array<IrouteConversion>;
+    definitionRgba: string;
+    definitionFontColor: string;
+    coverDisplayTag: Array<string>;
+    coverDisplayTagRgba: string;
+    coverDisplayTagColor: string;
 }
 
 interface IfilesBasesNofConfig {
