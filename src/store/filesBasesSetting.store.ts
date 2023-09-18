@@ -41,6 +41,7 @@ const defaultConfig = {
     coverPosterHeightBase: 218,
     playAtlasImageWidth: 150,
     playAtlasMode: 'waterfall',
+    playAtlasPageLimit: 100,
     playComicMode: 'fullScreen',
     routeConversion: [],
 } as IfilesBasesConfig

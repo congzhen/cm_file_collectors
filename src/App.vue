@@ -95,4 +95,37 @@ a.router-link-exact-active {
 .mainDialog .el-dialog__footer {
   padding: 0px 20px 20px 20px;
 }
+
+/* 滚动条样式 */
+::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+
+/* 滚动块 */
+::-webkit-scrollbar-thumb {
+  background: #999;
+  border-radius: 5px;
+}
+
+/* 悬停状态下滚动块 */
+::-webkit-scrollbar-thumb:hover {
+  background: #555;
+}
+
+/* 滚动条轨道 */
+::-webkit-scrollbar-track {
+  background: #eee;
+  border-radius: 5px;
+}
+
+/* 滚动条轨道悬停状态 */
+::-webkit-scrollbar-track:hover {
+  background: #ccc;
+}
+
+/* 滚动条角落 */
+::-webkit-scrollbar-corner {
+  background: #eee;
+}
 </style>

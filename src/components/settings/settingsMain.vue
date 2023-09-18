@@ -149,6 +149,12 @@
                     </div>
 
                     <div class="settingMainItem">
+                        <h5>{{ $t('settings.play.playAtlasPageLimit') }}</h5>
+                        <el-input-number v-model="store.filesBasesSettingStore.config.playAtlasPageLimit" :min="1"
+                            :max="999" />
+                    </div>
+
+                    <div class="settingMainItem">
                         <h5>{{ $t('settings.details.showModeTitle') }}</h5>
                         <el-select v-model="resourceDetailsShowModeData">
                             <el-option v-for="item in dataset.resourceDetailsShowMode" :key="item"

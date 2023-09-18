@@ -280,7 +280,8 @@ export default {
             playAtlasModeData: {
                 waterfall: '瀑布流',
                 flex: '固定',
-            }
+            },
+            playAtlasPageLimit: '图集分批读取数量',
         },
         details: {
             showModeTitle: '详情显示模式',

@@ -135,6 +135,19 @@ interface EfileImageInfo {
     height: number;
 }
 
+const readfileImageInfo = async function (folderPath: string, fileName: string) {
+    const src = path.join(folderPath, fileName);
+    const metadata = await sharp(src).metadata();
+    return {
+        src,
+        name: fileName,
+        format: metadata.format,
+        density: metadata.density,
+        width: metadata.width,
+        height: metadata.height,
+    } as EfileImageInfo
+}
+
 const readDirImage = async function (folderPath: string) {
     const imageInfoList: Array<EfileImageInfo> = [];
     const imageList = readDir(folderPath, ['jpg', 'jpeg', 'png', 'gif']);
@@ -154,4 +167,4 @@ const readDirImage = async function (folderPath: string) {
 }
 
 
-export { checkFolderAndMkdir, saveBase64Picture, fileMove, fileCopy, deleteFile, existsFile, getFileName, getFolderPath, readDir, readDirDeep, readDirImage, EfileImageInfo }
+export { checkFolderAndMkdir, saveBase64Picture, fileMove, fileCopy, deleteFile, existsFile, getFileName, getFolderPath, readDir, readDirDeep, readfileImageInfo, readDirImage, EfileImageInfo }

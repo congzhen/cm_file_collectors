@@ -51,6 +51,7 @@ interface IfilesBasesConfig {
     coverPosterHeightBase: number;
     playAtlasImageWidth: number;
     playAtlasMode: string;
+    playAtlasPageLimit: number;
     playComicMode: string;
     routeConversion: Array<IrouteConversion>;
 }
