@@ -87,14 +87,13 @@ const getHeight = () => {
 }
 
 const getTag = () => {
-    console.log(123123);
     if (store.filesBasesSettingStore.config.coverDisplayTag.length > 0) {
         resourcesTagsServerData.getDataListByResources_id(props.dataInfo.id).then((res) => {
             const arr: Array<Itag> = [];
             for (const tag of res) {
                 if (store.filesBasesSettingStore.config.coverDisplayTag.includes(tag.tag_id)) {
                     const tagInfo = store.tagStore.getTagById(tag.tag_id);
-                    if (tagInfo) {
+                    if (tagInfo && tagInfo.status) {
                         arr.push(tagInfo);
                     }
                 }
