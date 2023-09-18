@@ -211,6 +211,7 @@ defineExpose({ show });
 .list {
     width: 100%;
     flex-wrap: wrap;
+    display: flex;
 }
 
 .list .item {
