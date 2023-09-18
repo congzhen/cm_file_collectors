@@ -92,6 +92,10 @@ const clickDataHandle = (type: EresDetatilsType, dataInfo: IresourcesBase) => {
     }
 }
 
+const playRes = (dataInfo: IresourcesBase) => {
+    clickDataHandle(EresDetatilsType.show, dataInfo);
+}
+
 const gerResDataListClass = () => {
     if (store.filesBasesSettingStore.config.resourceDetailsShowMode == 'right') {
         return 'dataList';
@@ -108,7 +112,7 @@ onMounted(async () => {
 });
 
 // eslint-disable-next-line no-undef
-defineExpose({ updateData, updataDetailsView });
+defineExpose({ updateData, updataDetailsView, playRes });
 
 </script>
 <style scoped>

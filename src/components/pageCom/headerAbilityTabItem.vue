@@ -1,5 +1,5 @@
 <template>
-    <div class="headerAbilityTabItem">
+    <div class="headerAbilityTabItem" @click="playRes">
         <div class="photo">
             <el-image
                 :src="props.dataInfo.coverPoster != '' ? (setupConfig.resCoverPosterPath + props.dataInfo.filesBases_id + '/' + props.dataInfo.coverPoster) : ''"
@@ -26,11 +26,11 @@
 </template>
 <script setup lang="ts">
 import setupConfig from "@/setup/config"
-import { Iresources } from '@/dataInterface/resources.interface';
+import { Iresources, IresourcesBase } from '@/dataInterface/resources.interface';
 import { performerStore } from "@/store/performer.store";
 import { tagStore } from "@/store/tag.store";
-import { computed } from 'vue'
-
+import { computed, inject } from 'vue'
+const indexPlayResourcesDataInject = inject<(_resourcesBase: IresourcesBase) => void>('indexPlayResourcesData');
 const store = {
     performerStore: performerStore(),
     tagStore: tagStore(),
@@ -65,6 +65,12 @@ const dataInfoTag_C = computed(() => {
     })
     return tagNameArr.join(',');
 });
+
+const playRes = async () => {
+    if (indexPlayResourcesDataInject) {
+        indexPlayResourcesDataInject(props.dataInfo);
+    }
+}
 
 </script>
 <style scoped>
