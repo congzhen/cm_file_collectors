@@ -4,6 +4,8 @@ import { IfilesBasesConfig } from "@/dataInterface/filesBasesSetting.interface"
 
 const defaultConfig = {
     leftDisplay: ['country', 'definition', 'year', 'starRating', 'performer', 'diyTag'],
+    leftColumnWidth: 319,
+    leftColumnMode: 'fixed',
     country: ['China', 'Japan', 'SouthKorea', 'America', 'England', 'France', 'OtherCountry'],
     definition: ['8K', '4K', '2K', '1080P', '720P', 'HighDefinition', 'StandardDefinition'],
     tagMode: 'fixed',

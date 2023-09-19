@@ -19,6 +19,8 @@ interface IrouteConversion {
 
 interface IfilesBasesConfig {
     leftDisplay: Array<string>;
+    leftColumnWidth: number;
+    leftColumnMode: string;
     country: Array<string>;
     definition: Array<string>;
     tagMode: string;

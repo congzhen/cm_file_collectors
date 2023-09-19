@@ -232,6 +232,12 @@ export default {
         leftSidebar: {
             title: '左侧边栏',
             leftSidebarShowItem: '左侧边栏显示项',
+            leftColumnMode: '左侧边栏显示模式',
+            leftColumnModeData: {
+                fixed: '固定',
+                float: '悬浮',
+            },
+            LeftColumnWidth: '左侧边栏宽度',
             leftSidebarTagShowMode: '标签显示模式',
         },
         performerTag: {

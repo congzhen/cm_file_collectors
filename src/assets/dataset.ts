@@ -9,6 +9,7 @@ export default {
     },
     definition: ['8K', '4K', '2K', '1080P', '720P', 'HighDefinition', 'StandardDefinition'],
     leftDisplay: ['country', 'definition', 'year', 'starRating', 'performer', 'diyTag'],
+    leftColumnMode: ['fixed', 'float'],
     tagMode: ['fixed', 'auto'],
     sortMode: ['asc', 'desc', 'issuingDateAsc', 'issuingDateDesc'],
     cup: ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'Max'],

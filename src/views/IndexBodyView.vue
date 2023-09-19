@@ -1,9 +1,15 @@
 <template>
-    <div class="indexBody">
-        <div class="indexBodyTag">
+    <div ref="indexBodyRef" class="indexBody">
+        <div ref="indexBodyTagRef" class="indexBodyTag" :style="{ ...leftStype_C, position: leftPosition_C }"
+            @mouseleave.stop="indexBodyTagMove">
             <IndexTagView></IndexTagView>
         </div>
-        <div class="indexBodyMain">
+        <div class="arrow" v-if="store.filesBasesSettingStore.config.leftColumnMode == 'float'" @click="openIndexBodyTag">
+            <el-icon>
+                <ArrowRightBold />
+            </el-icon>
+        </div>
+        <div class="indexBodyMain" :style="mainStype_C">
             <div class="content">
                 <div :class="[gerResDataListClass()]">
                     <IndexDataListTableModeView v-if="store.filesBasesSettingStore.config.resourcesShowMode == 'table'"
@@ -35,11 +41,13 @@ import { resourcesServerData } from "@/serverData/resources.serverData"
 import { filesBasesStore } from '@/store/filesBases.store';
 import { filesBasesSettingStore } from '@/store/filesBasesSetting.store';
 
-import { ref, reactive, onMounted, watch } from 'vue';
+import { ref, reactive, onMounted, watch, computed } from 'vue';
 const store = {
     filesBasesStore: filesBasesStore(),
     filesBasesSettingStore: filesBasesSettingStore(),
 }
+const indexBodyRef = ref<HTMLDivElement>();
+const indexBodyTagRef = ref<HTMLDivElement>();
 const IndexDetailsViewRef = ref<InstanceType<typeof IndexDetailsView>>();
 const IndexDetailsPopupViewRef = ref<InstanceType<typeof IndexDetailsPopupView>>();
 const resDataList = ref<Array<IresourcesBase>>([]);
@@ -61,6 +69,37 @@ watch(
         updateData();
     }
 );
+
+// eslint-disable-next-line no-undef
+const leftStype_C = computed(() => {
+    return {
+        width: store.filesBasesSettingStore.config.leftColumnWidth + 'px',
+        height: store.filesBasesSettingStore.config.leftColumnMode == 'fixed' ? '100%' : indexBodyRef.value?.offsetHeight + 'px',
+        left: -store.filesBasesSettingStore.config.leftColumnWidth + 'px',
+        zIndex: 90,
+        backgroundColor: '#FFFFFF',
+    }
+})
+const leftPosition_C = computed(() => {
+    return store.filesBasesSettingStore.config.leftColumnMode == 'fixed' ? 'unset' : 'absolute';
+})
+const mainStype_C = computed(() => {
+    const width = store.filesBasesSettingStore.config.leftColumnMode == 'fixed' ? 'calc(100% - ' + (store.filesBasesSettingStore.config.leftColumnWidth + 1) + 'px)' : '100%';
+    return {
+        width,
+    }
+})
+
+const openIndexBodyTag = () => {
+    if (store.filesBasesSettingStore.config.leftColumnMode == 'float' && indexBodyTagRef.value) {
+        indexBodyTagRef.value.style.left = '0px';
+    }
+}
+const indexBodyTagMove = () => {
+    if (store.filesBasesSettingStore.config.leftColumnMode == 'float' && indexBodyTagRef.value) {
+        indexBodyTagRef.value.style.left = -store.filesBasesSettingStore.config.leftColumnWidth + 'px';
+    }
+}
 
 const updateData = async () => {
     await getDataList(store.filesBasesStore.currentFilesBases.id, resWhereObj);
@@ -120,12 +159,35 @@ defineExpose({ updateData, updataDetailsView, playRes });
     width: 100%;
     height: 100%;
     display: flex;
+
+}
+
+.indexBody .arrow {
+    width: 18px;
+    height: 40px;
+    line-height: 42px;
+    overflow: hidden;
+    background-color: #409EFF;
+    color: #E4E7ED;
+    position: fixed;
+    top: 50%;
+    margin-top: -10px;
+    left: 0px;
+    border-top-right-radius: 8px;
+    border-bottom-right-radius: 8px;
+    z-index: 89;
+    cursor: pointer;
+}
+
+.indexBody .arrow:hover {
+    background-color: #79BBFF;
 }
 
 .indexBodyTag {
     width: 319px;
     height: 100%;
     border-right: 1px solid #E4E7ED;
+    transition: left 0.5s;
 }
 
 .indexBodyMain {

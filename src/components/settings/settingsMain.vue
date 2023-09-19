@@ -35,6 +35,18 @@
                         </el-select>
                     </div>
                     <div class="settingMainItem">
+                        <h5>{{ $t('settings.leftSidebar.leftColumnMode') }}</h5>
+                        <el-select v-model="store.filesBasesSettingStore.config.leftColumnMode">
+                            <el-option v-for="item in dataset.leftColumnMode" :key="item"
+                                :label="$t('settings.leftSidebar.leftColumnModeData.' + item)" :value="item" />
+                        </el-select>
+                    </div>
+                    <div class="settingMainItem">
+                        <h5>{{ $t('settings.leftSidebar.LeftColumnWidth') }}</h5>
+                        <el-input-number v-model="store.filesBasesSettingStore.config.leftColumnWidth" :min="100"
+                            :max="600" />
+                    </div>
+                    <div class="settingMainItem">
                         <h5>{{ $t('settings.leftSidebar.leftSidebarTagShowMode') }}</h5>
                         <el-select v-model="tagModeData">
                             <el-option v-for="item in dataset.tagMode" :key="item" :label="$t('defaultTag.tagMode.' + item)"
