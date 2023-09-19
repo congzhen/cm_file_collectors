@@ -32,7 +32,7 @@
         </el-tag>
         <div v-for="tagClass, tagClassKey in store.searchStore.searchCondition.diyTag" :key="tagClassKey">
             <el-tag v-for="item, key in tagClass.value" :key="key" :type="tagType(tagClass.logic)" size="large"
-                @close="closeTag(tagClass.value, key)" closable>
+                @close="closeTag(tagClass.value, key)" :effect="tagClassKey == 'temporaryTag' ? 'dark' : 'light'" closable>
                 {{ store.tagStore.getTagById(item)?.name }}
             </el-tag>
         </div>

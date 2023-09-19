@@ -70,7 +70,7 @@
                     <div class="tagList">
                         <el-tag type="info" effect="plain" size="large"
                             v-for="item, key in resDataInfo.tags.filter(item => store.tagStore.tagExist(item.tag_id))"
-                            :key="key">
+                            :key="key" @click="selectTag(item)">
                             {{ store.tagStore.getTagById(item.tag_id)?.name }}
                         </el-tag>
                     </div>
@@ -100,11 +100,12 @@ import detailsDramaSeries from '@/components/pageCom/detailsDramaSeries.vue';
 import performerCom from "@/components/smallCom/performerCom.vue"
 import resourcesDialog from "@/components/resources/resourcesDialog.vue"
 import indexPlayView from "@/views/indexPlayView.vue"
-import { EresDetatilsType } from "@/dataInterface/common.enum"
-import { IresourcesBase, Iresources, IresDramaSeries } from '@/dataInterface/resources.interface';
+import { EresDetatilsType, EsearchLogic } from "@/dataInterface/common.enum"
+import { IresourcesBase, Iresources, IresDramaSeries, IresTagsInfo } from '@/dataInterface/resources.interface';
 import { resourcesServerData } from "@/serverData/resources.serverData"
 import { tagStore } from '@/store/tag.store';
 import { performerStore } from '@/store/performer.store';
+import { searchStore } from '@/store/search.store';
 import { EresUpdate } from "@/dataInterface/common.enum"
 import { ElMessage } from 'element-plus'
 import { ref, inject } from 'vue'
@@ -123,6 +124,7 @@ const indexUpdateResourcesDataInject = inject<(_up: Array<EresUpdate>) => void>(
 const store = {
     tagStore: tagStore(),
     performerStore: performerStore(),
+    searchStore: searchStore(),
 }
 const detailsPreviewImageRef = ref<InstanceType<typeof detailsPreviewImage>>();
 const resourcesDialogRef = ref<InstanceType<typeof resourcesDialog>>();
@@ -174,6 +176,7 @@ const editResources = () => {
 }
 
 
+
 const show = async (type: EresDetatilsType, dataInfo: IresourcesBase) => {
     const info = await getResDataInfo(dataInfo.id);
     if (type == EresDetatilsType.show) {
@@ -209,6 +212,12 @@ const deleteResources = async () => {
         });
     }
 }
+
+const selectTag = (tagData: IresTagsInfo) => {
+    store.searchStore.setSearchData('temporaryTag', EsearchLogic.single, [tagData.tag_id]);
+    if (indexUpdateResourcesDataInject) indexUpdateResourcesDataInject([EresUpdate.updateData]);
+}
+
 
 // eslint-disable-next-line no-undef
 defineExpose({ show, updateData });
@@ -290,6 +299,7 @@ defineExpose({ show, updateData });
 
 .tagList .el-tag {
     margin: 0px 4px 4px 0px;
+    cursor: pointer;
 }
 
 .abstract {
