@@ -1,14 +1,16 @@
 <template>
     <div ref="indexBodyRef" class="indexBody">
-        <div ref="indexBodyTagRef" class="indexBodyTag" :style="{ ...leftStype_C, position: leftPosition_C }"
-            @mouseleave.stop="indexBodyTagMove">
+        <div ref="indexBodyTagRef" class="indexBodyTag" :style="{ ...leftStype_C, position: leftPosition_C }">
             <IndexTagView></IndexTagView>
         </div>
-        <div class="arrow" v-if="store.filesBasesSettingStore.config.leftColumnMode == 'float'" @click="openIndexBodyTag">
+        <div ref="arrowRef" class="arrow" v-if="store.filesBasesSettingStore.config.leftColumnMode == 'float'"
+            @click="openIndexBodyTag">
             <el-icon>
-                <ArrowRightBold />
+                <ArrowLeftBold v-if="arrowStatus" />
+                <ArrowRightBold v-else />
             </el-icon>
         </div>
+
         <div class="indexBodyMain" :style="mainStype_C">
             <div class="content">
                 <div :class="[gerResDataListClass()]">
@@ -48,10 +50,12 @@ const store = {
 }
 const indexBodyRef = ref<HTMLDivElement>();
 const indexBodyTagRef = ref<HTMLDivElement>();
+const arrowRef = ref<HTMLDivElement>();
 const IndexDetailsViewRef = ref<InstanceType<typeof IndexDetailsView>>();
 const IndexDetailsPopupViewRef = ref<InstanceType<typeof IndexDetailsPopupView>>();
 const resDataList = ref<Array<IresourcesBase>>([]);
 const resDataCount = ref(0);
+const arrowStatus = ref(false);
 const resWhereObj = reactive<IresWhereObj>({
     page: 1,
     limit: store.filesBasesSettingStore.config.pageLimit,
@@ -75,7 +79,7 @@ const leftStype_C = computed(() => {
     return {
         width: store.filesBasesSettingStore.config.leftColumnWidth + 'px',
         height: store.filesBasesSettingStore.config.leftColumnMode == 'fixed' ? '100%' : indexBodyRef.value?.offsetHeight + 'px',
-        left: -store.filesBasesSettingStore.config.leftColumnWidth + 'px',
+        left: arrowStatus.value ? '0px' : -store.filesBasesSettingStore.config.leftColumnWidth + 'px',
         zIndex: 90,
         backgroundColor: '#FFFFFF',
     }
@@ -90,14 +94,17 @@ const mainStype_C = computed(() => {
     }
 })
 
+
 const openIndexBodyTag = () => {
-    if (store.filesBasesSettingStore.config.leftColumnMode == 'float' && indexBodyTagRef.value) {
-        indexBodyTagRef.value.style.left = '0px';
-    }
-}
-const indexBodyTagMove = () => {
-    if (store.filesBasesSettingStore.config.leftColumnMode == 'float' && indexBodyTagRef.value) {
-        indexBodyTagRef.value.style.left = -store.filesBasesSettingStore.config.leftColumnWidth + 'px';
+    if (store.filesBasesSettingStore.config.leftColumnMode == 'float' && indexBodyTagRef.value && arrowRef.value) {
+        if (arrowStatus.value) {
+            indexBodyTagRef.value.style.left = -store.filesBasesSettingStore.config.leftColumnWidth + 'px';
+            arrowRef.value.style.left = '0px';
+        } else {
+            indexBodyTagRef.value.style.left = '0px';
+            arrowRef.value.style.left = store.filesBasesSettingStore.config.leftColumnWidth + 'px';
+        }
+        arrowStatus.value = !arrowStatus.value;
     }
 }
 
@@ -163,24 +170,26 @@ defineExpose({ updateData, updataDetailsView, playRes });
 }
 
 .indexBody .arrow {
-    width: 18px;
-    height: 40px;
-    line-height: 42px;
+    width: 15px;
+    height: 80px;
+    line-height: 82px;
     overflow: hidden;
     background-color: #409EFF;
     color: #E4E7ED;
     position: fixed;
     top: 50%;
-    margin-top: -10px;
+    margin-top: -40px;
     left: 0px;
-    border-top-right-radius: 8px;
-    border-bottom-right-radius: 8px;
+    border-top-right-radius: 7px;
+    border-bottom-right-radius: 7px;
     z-index: 89;
     cursor: pointer;
+    transition: left 0.5s;
 }
 
 .indexBody .arrow:hover {
     background-color: #79BBFF;
+
 }
 
 .indexBodyTag {
