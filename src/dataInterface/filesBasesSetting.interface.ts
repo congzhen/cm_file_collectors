@@ -61,6 +61,11 @@ interface IfilesBasesConfig {
     coverDisplayTag: Array<string>;
     coverDisplayTagRgba: string;
     coverDisplayTagColor: string;
+    randomPosterStatus: boolean;
+    randomPosterPath: string;
+    randomPosterAutoSize: boolean;
+    randomPosterWidth: number;
+    randomPosterHeight: number;
 }
 
 interface IfilesBasesNofConfig {

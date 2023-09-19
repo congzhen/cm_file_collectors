@@ -51,6 +51,12 @@ const defaultConfig = {
     coverDisplayTag: [],
     coverDisplayTagRgba: 'rgba(230, 162, 60,0.7)',
     coverDisplayTagColor: '#F3F3F3',
+    randomPosterStatus: false,
+    randomPosterPath: '',
+    randomPosterAutoSize: false,
+    randomPosterWidth: 156,
+    randomPosterHeight: 218,
+
 } as IfilesBasesConfig
 
 export const filesBasesSettingStore = defineStore('filesBasesSetting', {

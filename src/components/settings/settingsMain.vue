@@ -161,6 +161,43 @@
                         </div>
                     </div>
 
+                    <div class="settingMainItem">
+                        <h5>{{ $t('settings.displaySettings.randomPoster.title') }}</h5>
+                        <div>
+                            <el-checkbox v-model="store.filesBasesSettingStore.config.randomPosterStatus"
+                                :label="$t('settings.displaySettings.randomPoster.open')" border />
+                            <!-- 海报自动宽高暂时无用
+                            <el-checkbox v-model="store.filesBasesSettingStore.config.randomPosterAutoSize"
+                                :label="$t('settings.displaySettings.randomPoster.randomPosterAutoSize')" border />
+                                -->
+                        </div>
+                    </div>
+                    <div style="display: flex;">
+                        <div class="settingMainItem" style="width: 160px;">
+                            <h5>{{ $t('settings.displaySettings.randomPoster.randomPosterWidth') }}</h5>
+                            <el-input-number v-model="store.filesBasesSettingStore.config.randomPosterWidth" :min="50"
+                                :max="1080" />
+                        </div>
+                        <div class="settingMainItem" style="width: 160px;">
+                            <h5>{{ $t('settings.displaySettings.randomPoster.randomPosterHeight') }}</h5>
+                            <el-input-number v-model="store.filesBasesSettingStore.config.randomPosterHeight" :min="50"
+                                :max="800" />
+                        </div>
+                    </div>
+                    <div class="settingMainItem">
+                        <h5>{{ $t('settings.displaySettings.randomPoster.path') }}</h5>
+                        <div>
+                            <el-input class="select-full" v-model="store.filesBasesSettingStore.config.randomPosterPath"
+                                disabled :placeholder="$t('settings.displaySettings.randomPoster.selectPath')">
+                                <template #append>
+                                    <el-button icon="Search" @click="selectRandomPosterPath">
+                                        {{ $t('system.softConfig.select') }}
+                                    </el-button>
+                                </template>
+                            </el-input>
+                        </div>
+                    </div>
+
                 </div>
                 <div class="settingMainBlock">
                     <div class="blockTitle">
@@ -367,6 +404,7 @@ import { tagServerData } from '@/serverData/tag.serverData';
 import { computed, ref, inject } from 'vue';
 import { Itag } from "@/dataInterface/tag.interface"
 import { EresUpdate } from "@/dataInterface/common.enum"
+import { ipcRendererSend } from "@/electronCommon"
 const indexUpdateResourcesDataInject = inject<(_up: Array<EresUpdate>) => void>('indexUpdateResourcesData');
 const store = {
     filesBasesStore: filesBasesStore(),
@@ -576,6 +614,13 @@ const deleteCoverPoster = (index: number) => {
 }
 const coverPosterBz = (width: number, height: number) => {
     return ratio(width, height).join(' : ');
+}
+
+const selectRandomPosterPath = () => {
+    const path = ipcRendererSend.dialogGetFolderPathSync();
+    if (path != undefined) {
+        store.filesBasesSettingStore.config.randomPosterPath = path;
+    }
 }
 
 const addRoute = () => {

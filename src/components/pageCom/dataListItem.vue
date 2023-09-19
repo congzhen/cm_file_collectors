@@ -10,9 +10,7 @@
                 {{ tagInfo.name }}</div>
         </div>
 
-        <el-image
-            :src="props.dataInfo.coverPoster != '' ? (setupConfig.resCoverPosterPath + props.dataInfo.filesBases_id + '/' + props.dataInfo.coverPoster) : ''"
-            :fit="getFit()">
+        <el-image :src="getCoverSrc()" :fit="getFit()">
             <template #error>
                 <el-empty description=" " :image-size="100" />
             </template>
@@ -28,7 +26,7 @@
 </template>
 <script setup lang="ts">
 import setupConfig from "@/setup/config"
-
+import randomPoster from "@/abilities/randomPoster"
 import { EresDetatilsType } from "@/dataInterface/common.enum"
 import { IresourcesBase } from '@/dataInterface/resources.interface';
 import { filesBasesSettingStore } from "@/store/filesBasesSetting.store";
@@ -62,8 +60,24 @@ const clickHandle = (type: EresDetatilsType) => {
     emits('clickHandle', type, props.dataInfo);
 }
 
+const getCoverSrc = () => {
+    if (props.dataInfo.coverPoster != '') {
+        return setupConfig.resCoverPosterPath + props.dataInfo.filesBases_id + '/' + props.dataInfo.coverPoster;
+    } else {
+        return randomPoster(props.dataInfo.addTime);
+    }
+}
+
+const useRandomPosters = () => {
+    if (props.dataInfo.coverPoster == '' && store.filesBasesSettingStore.config.randomPosterStatus && store.filesBasesSettingStore.config.randomPosterPath != '') {
+        return true;
+    }
+    return false;
+}
+
+
 const getFit = () => {
-    if (store.filesBasesSettingStore.config.coverPosterWidthStatus) {
+    if (store.filesBasesSettingStore.config.coverPosterWidthStatus || useRandomPosters()) {
         return 'cover';
     } else {
         return '';
@@ -71,6 +85,9 @@ const getFit = () => {
 }
 
 const getWidth = () => {
+    if (useRandomPosters() && !store.filesBasesSettingStore.config.randomPosterAutoSize) {
+        return store.filesBasesSettingStore.config.randomPosterWidth + 'px';
+    }
     if (store.filesBasesSettingStore.config.coverPosterWidthStatus) {
         return store.filesBasesSettingStore.config.coverPosterWidthBase + 'px';
     } else if (store.filesBasesSettingStore.config.coverPosterHeightStatus) {
@@ -80,6 +97,9 @@ const getWidth = () => {
 }
 
 const getHeight = () => {
+    if (useRandomPosters() && !store.filesBasesSettingStore.config.randomPosterAutoSize) {
+        return store.filesBasesSettingStore.config.randomPosterHeight + 'px';
+    }
     if (store.filesBasesSettingStore.config.coverPosterHeightStatus) {
         return store.filesBasesSettingStore.config.coverPosterHeightBase + 'px';
     }

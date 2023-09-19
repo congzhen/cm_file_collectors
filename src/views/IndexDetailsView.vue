@@ -2,8 +2,7 @@
     <div :class="[props.mode == 'right' ? 'indexDetails' : 'indexDetailsPopup']" v-if="resDataInfo != undefined">
         <div ref="detailsTop" class="detailsTop">
             <div class="poster">
-                <el-image :src="setupConfig.resCoverPosterPath + resDataInfo.filesBases_id + '/' + resDataInfo.coverPoster"
-                    @load="loadImage" @error="errorImage" fit="contain">
+                <el-image :src="getCoverSrc()" @load="loadImage" @error="errorImage" fit="contain">
                     <template #error>
                         <div class="image-slot">
                             <el-empty :description="$t('details.noPoster')" />
@@ -110,6 +109,7 @@ import { EresUpdate } from "@/dataInterface/common.enum"
 import { ElMessage } from 'element-plus'
 import { ref, inject } from 'vue'
 import { useI18n } from 'vue-i18n';
+import randomPoster from "@/abilities/randomPoster"
 const { t } = useI18n()
 
 // eslint-disable-next-line no-undef
@@ -138,6 +138,23 @@ const loadImage = () => {
 const errorImage = () => {
     setDetailsBodyHeight(false);
 }
+
+
+const getCoverSrc = () => {
+    if (resDataInfo.value) {
+        if (resDataInfo.value.coverPoster != '') {
+            return setupConfig.resCoverPosterPath + resDataInfo.value.filesBases_id + '/' + resDataInfo.value.coverPoster;
+        } else {
+            return randomPoster(resDataInfo.value?.addTime);
+        }
+    } else {
+        return '';
+    }
+
+}
+
+
+
 const setDetailsBodyHeight = (status: boolean) => {
     if (status && detailsTop.value != null) {
         detailsBodyHeight.value = 'calc(100% - ' + (detailsTop.value as HTMLDivElement).clientHeight + 'px)';

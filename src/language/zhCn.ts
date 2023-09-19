@@ -257,6 +257,15 @@ export default {
                 title: '封面上显示标签',
                 bgRgba: '标签背景色',
                 fontColor: '标签字体颜色',
+            },
+            randomPoster: {
+                title: '随机海报',
+                open: '开启随机海报',
+                path: '随机海报路径',
+                selectPath: '请选择随机海报所在路径',
+                randomPosterAutoSize: '随机海报自动宽高',
+                randomPosterWidth: '随机海报宽度',
+                randomPosterHeight: '随机海报高度',
             }
         },
         parameterSettings: {
