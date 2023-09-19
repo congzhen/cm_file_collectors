@@ -74,6 +74,10 @@
                     <div class="rowValue"><el-input v-model="nofConfig.tag"></el-input></div>
                 </div>
                 <div class="rowTwo">
+                    <div class="rowTitle">removed tag</div>
+                    <div class="rowValue"><el-input v-model="nofConfig.removedTag"></el-input></div>
+                </div>
+                <div class="rowTwo">
                     <div class="rowTitle">abstract</div>
                     <div class="rowValue"><el-input v-model="nofConfig.abstract"></el-input></div>
                 </div>
@@ -132,6 +136,7 @@ const defaultNofConfig: IfilesBasesNofConfig = {
     coverSuffix: 'jpg|jpeg|png',
     coverUrl: 'cover',
     tag: 'tag|genre',
+    removedTag: '',
     abstract: 'outline|plot',
     country: 'country',
     star: 'star',

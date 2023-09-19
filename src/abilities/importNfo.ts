@@ -106,6 +106,17 @@ function execToRes(data: any, config: IfilesBasesNofConfig, _nfoBaseInfo: InfoBa
         if (_data == undefined || !Array.isArray(_data)) {
             return [];
         }
+        if (config.removedTag != '') {
+            const removedTagArr = config.removedTag.split("|");
+            _data = _data.filter((item) => {
+                for (const remTag of removedTagArr) {
+                    if (item.indexOf(remTag) !== -1) {
+                        return false;
+                    }
+                }
+                return true;
+            });
+        }
         return _data;
     }
     function cto_cover(coverName: string) {

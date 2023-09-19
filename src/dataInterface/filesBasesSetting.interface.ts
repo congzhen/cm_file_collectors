@@ -73,6 +73,7 @@ interface IfilesBasesNofConfig {
     coverSuffix: string,
     coverUrl: string,
     tag: string,
+    removedTag: string,
     abstract: string,
     country: string,
     star: string,
