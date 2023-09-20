@@ -17,6 +17,7 @@
     }
     .noSelect{
         background-color: #262727;
+        color: #CCCCCC;
     }
     .indexMenu{
         background-color: #1F1F1F;
@@ -42,7 +43,12 @@
     .footer{
         background-color: #181818;
     }
-
+    .performerCom .name{
+        color: #CCCCCC;
+    }
+    .performerCom .photo ,.performerSubB .performerPhoto{
+        border-color:#a7a7a7 ;
+    }
     .paMain{
         .paList .paFooter{
             background-color: #181818;
