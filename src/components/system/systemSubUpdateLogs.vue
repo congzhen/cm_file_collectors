@@ -6,6 +6,27 @@
         <div class="updataLogsBody">
             <el-timeline>
                 <el-scrollbar height="500px">
+                    <el-timeline-item timestamp="2023/9/20" placement="top">
+                        <h4>{{ $t('system.updateLogs.version') }}：v 2.0.6</h4>
+                        <div class="rawContent">
+                            <h5>新特性</h5>
+                            <p class="logContent">增加深色主题</p>
+                            <p class="logContent">增加清晰度在封面显示时自定义颜色设置</p>
+                            <p class="logContent">增加将标签自定义设置到封面显示上</p>
+                            <p class="logContent">增加详情栏的标签可以点击为新的检索条件，该检索条件是独立的，不与左侧标签栏条件冲突</p>
+                            <p class="logContent">增加左侧标签栏的浮动模式以及自定义宽度</p>
+                            <p class="logContent">增加导入nfo文件时，移除某些tag的配置（removed tag）</p>
+                            <p class="logContent">增加批量nfo导入时，可以将文件夹下的其他视频文件导入为剧集</p>
+                            <p class="logContent">添加视频和演员时，海报可以拖动上传</p>
+                            <p class="logContent">增加拖拽添加资源信息功能</p>
+                        </div>
+                        <div class="rawContent">
+                            <h5>BUG修复</h5>
+                            <p class="logContent">修复历史记录，热度，猜你喜欢，点击无反应情况</p>
+                            <p class="logContent">修复图集模式大量图片导致程序卡死</p>
+                            <p class="logContent">修复修改资源时，因前次使用多选搜索功能，导致遗留搜索条件问题</p>
+                        </div>
+                    </el-timeline-item>
                     <el-timeline-item timestamp="2023/9/7" placement="top">
                         <h4>{{ $t('system.updateLogs.version') }}：v 2.0.5</h4>
                         <div class="rawContent">
