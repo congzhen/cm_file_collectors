@@ -1,9 +1,7 @@
 <template>
     <div class="headerAbilityTabItem" @click="playRes">
         <div class="photo">
-            <el-image
-                :src="props.dataInfo.coverPoster != '' ? (setupConfig.resCoverPosterPath + props.dataInfo.filesBases_id + '/' + props.dataInfo.coverPoster) : ''"
-                style="width: 78px; height:84px" fit="contain">
+            <el-image :src="getCoverSrc()" style="width: 78px; height:84px" fit="contain">
                 <template #error>
                     <el-empty description=" " :image-size="30" />
                 </template>
@@ -30,6 +28,7 @@ import { Iresources, IresourcesBase } from '@/dataInterface/resources.interface'
 import { performerStore } from "@/store/performer.store";
 import { tagStore } from "@/store/tag.store";
 import { computed, inject } from 'vue'
+import randomPoster from "@/abilities/randomPoster";
 const indexPlayResourcesDataInject = inject<(_resourcesBase: IresourcesBase) => void>('indexPlayResourcesData');
 const store = {
     performerStore: performerStore(),
@@ -43,7 +42,13 @@ const props = defineProps({
         required: true,
     },
 });
-
+const getCoverSrc = () => {
+    if (props.dataInfo.coverPoster != '') {
+        return setupConfig.resCoverPosterPath + props.dataInfo.filesBases_id + '/' + props.dataInfo.coverPoster;
+    } else {
+        return randomPoster(props.dataInfo.addTime);
+    }
+}
 const dataInfoPerformer_C = computed(() => {
     const performerNameArr: Array<string> = [];
     props.dataInfo.performers.forEach(perInfo => {
