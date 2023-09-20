@@ -7,11 +7,15 @@ import { init, i18n } from "@/setup/init";
 
 import ElementPlus from "element-plus";
 import "element-plus/dist/index.css";
+import 'element-plus/theme-chalk/dark/css-vars.css'
 import * as ElementPlusIconsVue from "@element-plus/icons-vue";
 
 import zhCn from 'element-plus/dist/locale/zh-cn.mjs'
 
 import { VueMasonryPlugin } from 'vue-masonry';
+
+
+import './style/dark.style.scss'
 
 const pinia = createPinia();
 const app = createApp(App);

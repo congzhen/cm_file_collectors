@@ -19,7 +19,7 @@
                     </el-input>
                 </div>
                 <div class="row">
-                    <label>封面海报类型：</label>
+                    <label>{{ $t('import.coverPosterType') }}: </label>
                     <el-select v-model="coverPosterMode">
                         <el-option v-for="item, index in store.filesBasesSettingStore.config.coverPosterData" :key="index"
                             :label="item.name" :value="index" />

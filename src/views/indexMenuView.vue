@@ -6,6 +6,7 @@
             <span>{{ softwareInformation.version }}</span>
         </div>
         <div class="menuTool">
+            <div class="switchTheme" @click="switchTheme">{{ $t('menu.switchTheme') }}</div>
             <div class="mItem">
                 <el-button-group size="small">
                     <el-button icon="Minus" @click.stop="changeWindowSize('min')" />
@@ -20,12 +21,25 @@
 <script setup lang="ts">
 import { ipcRendererSend } from "@/electronCommon"
 import softwareInformation from "@/setup/softwareInformation"
+import { useDark, useToggle } from '@vueuse/core'
+import { softWareConfigData, setSoftWareConfigValue } from '@/setup/softwareConfig'
 
 const changeWindowSize = (type = 'min') => {
     ipcRendererSend.changeWindowSize(type);
 }
 const execWindowClose = () => {
     ipcRendererSend.execWindowClose();
+}
+
+const switchTheme = () => {
+    const theme = softWareConfigData.theme == 'light' ? 'dark' : 'light';
+    setSoftWareConfigValue('theme', theme, true)
+    const isDark = useDark({
+        selector: 'html',
+        attribute: 'class',
+        valueLight: theme,
+    })
+    useToggle(isDark)
 }
 
 </script>
@@ -42,7 +56,7 @@ const execWindowClose = () => {
 }
 
 .indexMenu .title {
-    width: calc(100% - 122px);
+    width: calc(100% - 122px - 80px);
     display: flex;
     padding: 4px 0px 0px 5px;
     /**该属性可以拖动app，需要在创建窗口是，设置movable: true */
@@ -74,6 +88,13 @@ const execWindowClose = () => {
 
 .indexMenu .menuTool {
     display: flex;
+}
+
+.indexMenu .switchTheme {
+    line-height: 30px;
+    font-size: 12px;
+    cursor: pointer;
+    padding: 0px 10px;
 }
 
 .indexMenu .menuTool .mItem {

@@ -9,6 +9,7 @@ export default {
     },
     menu: {
         friendlyRewards: '友情打赏',
+        switchTheme: '切换主题',
     },
     headers: {
         selectInputPlaceholder: '请输入名称、版号、番号',

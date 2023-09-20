@@ -1,0 +1,76 @@
+.dark  {
+    .el-button--primary{
+        background-color: #0f0505;
+        border-color: #404040;
+    }
+    .el-button--primary:hover{
+        background-color: #181818;
+        border-color: #404040;
+    }
+    
+    #app{
+        background-color: #1F1F1F;
+        color: #CCCCCC;
+    }
+    .select{
+        background-color: #868686;
+    }
+    .noSelect{
+        background-color: #262727;
+    }
+    .indexMenu{
+        background-color: #1F1F1F;
+        color: #CCCCCC;
+    }
+    .indexBodyTag{
+        background-color: #181818;
+        border-right: 1px solid #404040;
+    }
+    .indexBody .arrow{
+        background-color: #0f0505;
+        border-color: #404040;
+    }
+    .indexBody .arrow:hover{
+        background-color: #181818;
+        border-color: #404040;
+    }
+    .detailsBody {
+        .title,.detailsIntro,.abstract{
+            color: #CCCCCC;
+        }
+    }
+    .footer{
+        background-color: #181818;
+    }
+
+    .paMain{
+        .paList .paFooter{
+            background-color: #181818;
+        }
+    }
+
+    .tagAdminMainK {
+        background-color: #181818;
+        .tagSectionEnable{
+            background-color: #181818;
+            border: 1px solid #404040;
+            color: #CCCCCC;
+        }
+        .el-icon{
+            color: #CCCCCC;
+        }
+    }
+
+    .multipleSelectTag{
+        background-color: #868686;
+        color: #CCCCCC;
+    }
+    .headerAbilityTabItem:hover{
+        background-color: #262727;
+        color: #CCCCCC;
+    }
+
+    .mainBody{
+        background-color: #181818;
+    }
+ }

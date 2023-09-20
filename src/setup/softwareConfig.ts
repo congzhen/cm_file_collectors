@@ -11,6 +11,7 @@ const softWareConfigData: IsoftWareConfigData = {
     serverPassword: '',
     language: 'zhCn',
     dbPath: '',
+    theme: 'light',
 }
 
 function softwareConfigInit() {

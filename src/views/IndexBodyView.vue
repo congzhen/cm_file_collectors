@@ -81,7 +81,6 @@ const leftStype_C = computed(() => {
         height: store.filesBasesSettingStore.config.leftColumnMode == 'fixed' ? '100%' : indexBodyRef.value?.offsetHeight + 'px',
         left: arrowStatus.value ? '0px' : -store.filesBasesSettingStore.config.leftColumnWidth + 'px',
         zIndex: 90,
-        backgroundColor: '#FFFFFF',
     }
 })
 const leftPosition_C = computed(() => {
@@ -196,6 +195,7 @@ defineExpose({ updateData, updataDetailsView, playRes });
     width: 319px;
     height: 100%;
     border-right: 1px solid #E4E7ED;
+    background-color: #fff;
     transition: left 0.5s;
 }
 

@@ -1,4 +1,4 @@
-<template>
+<template >
   <indexView v-if="displayStatus" />
 </template>
 <script setup lang="ts">
@@ -12,7 +12,9 @@ import { tagClassStore } from "@/store/tagClass.store";
 import { tagStore } from "@/store/tag.store";
 import { performerStore } from "./store/performer.store";
 import loading from '@/assets/loading'
+import { useDark, useToggle } from '@vueuse/core'
 import { ref, onMounted, provide } from 'vue';
+import { softWareConfigData } from "./setup/softwareConfig";
 const displayStatus = ref(false);
 const store = {
   filesBasesStore: filesBasesStore(),
@@ -45,8 +47,18 @@ const AppInitData = async () => {
   await store.performerStore.init();
 }
 
+const useTheme = () => {
+  const theme = softWareConfigData.theme == 'dark' ? 'dark' : 'light';
+  const isDark = useDark({
+    selector: 'html',
+    attribute: 'class',
+    valueLight: theme,
+  })
+  useToggle(isDark)
+}
 
 onMounted(async () => {
+  useTheme();
   ipcRendererSend.mainStartup();
   await AppInit();
 })
