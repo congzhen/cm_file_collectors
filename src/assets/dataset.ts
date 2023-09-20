@@ -19,4 +19,5 @@ export default {
     playAtlasMode: ['waterfall', 'flex'],
     playComicMode: ['scaleToOriginal', 'fullScreen'],
     resourceDetailsShowMode: ['right', 'popup'],
+    videoSuffixName: ['.mp4', '.avi', '.rmvb', '.wmv', '.mov', '.mkv', '.flv', '.ts', '.webm', '.iso', '.mpg', '.m4v'],
 }

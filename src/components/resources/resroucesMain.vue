@@ -145,6 +145,15 @@
                                     <el-button icon="Plus" @click="addFolderPath(formData.mode)">{{
                                         $t('resources.form.btn.add' + formData.mode) }}</el-button>
                                 </div>
+
+                                <div class="resDragUpload" v-if="formData.mode != 'videoLink'">
+                                    <el-upload action="/" :on-change="dropFileOrFolderHere" :show-file-list="false"
+                                        :auto-upload="false" :multiple="true" drag>
+                                        <div class="el-upload__text">
+                                            {{ $t('resources.dropFileOrFolderHere') }}
+                                        </div>
+                                    </el-upload>
+                                </div>
                             </div>
                             <div class="formBlock">
                                 <div class="formTitle">
@@ -172,7 +181,7 @@ import loading from '@/assets/loading'
 import { coreCreateGuid } from '@/core/coreGuid'
 import dataset from '@/assets/dataset';
 import setupConfig from "@/setup/config"
-import { saveBase64Picture, deleteFile } from "@/assets/file"
+import { saveBase64Picture, deleteFile, isDirectory, isVideo, getFileName } from "@/assets/file"
 import comForm from '../common/comForm.vue';
 import comCropperDialog from "@/components/common/comCropper.vue/comCropperDialog.vue";
 import { filesBasesStore } from "@/store/filesBases.store";
@@ -187,6 +196,8 @@ import type { FormRules, UploadFile, ElScrollbar } from 'element-plus'
 import { useI18n } from 'vue-i18n';
 import { IresDramaSeries, Iresources } from "@/dataInterface/resources.interface";
 import { EresDramaSeriesType, EresUpdate } from "@/dataInterface/common.enum";
+import { ffprobeTool } from "@/webServer/m3u8FFmpeg";
+import { definitionConvert } from "@/abilities/definitionConvert";
 const { t } = useI18n();
 const indexUpdateResourcesDataInjectAdd = inject<(_up: Array<EresUpdate>) => void>('indexUpdateResourcesData');
 const indexUpdateResourcesDataInjectEdit = inject<() => void>('indexUpdateResourcesData');
@@ -324,6 +335,22 @@ const changeCoverPosterMode = () => {
 const handleUploadCoverPoster = (_uploadFile: UploadFile) => {
     comCropperDialogRef.value?.open(_uploadFile.raw, '70%', formData.coverPosterWidth, formData.coverPosterHeight);
 }
+
+const dropFileOrFolderHere = async (uploadFile: UploadFile) => {
+    if (!uploadFile.raw || (formData.mode == EresDramaSeriesType.movies && !isVideo(uploadFile.raw.path))) {
+        return;
+    }
+    addDramaSeries(formData.mode, uploadFile.raw.path);
+    if (formData.title == '') {
+        formData.title = getFileName(uploadFile.raw.path);
+    }
+    if (formData.mode == EresDramaSeriesType.movies && formData.definition == '') {
+        const videoInfo = await ffprobeTool.getVideoInfo(uploadFile.raw.path);
+        formData.definition = definitionConvert(videoInfo.height);
+    }
+}
+
+
 const cropperSubmit = (fileData: string) => {
     coverPosterSrc.value = fileData;
     coverPosterData.value = fileData;
@@ -556,5 +583,13 @@ defineExpose({ open });
     width: calc(100% - 151px);
     padding-left: 5px;
     padding-right: 5px;
+}
+
+.resDragUpload {
+    margin-top: 10px;
+}
+
+.resDragUpload :deep(.el-upload-dragger) {
+    padding: 20px 0px;
 }
 </style>

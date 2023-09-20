@@ -26,6 +26,7 @@ export default {
             edit: '编辑资源',
         },
         clickUploadCoverPoster: '点击或拖拽上传封面海报',
+        dropFileOrFolderHere: '拖拽文件或文件夹至此',
         form: {
             name: '名称',
             subclass: {

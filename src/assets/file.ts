@@ -1,6 +1,7 @@
 import fs from 'fs'
 import path from 'path'
 import sharp from 'sharp'
+import dataset from '@/assets/dataset'
 import { coreCreateGuid } from '@/core/coreGuid';
 
 
@@ -17,6 +18,14 @@ const checkSuffixName = (suffixName: string, suffixArr: Array<string>) => {
     return suffixArr.includes(suffixName.toLocaleLowerCase())
 }
 
+
+const isDirectory = (folderPath: string) => {
+    return fs.statSync(folderPath).isDirectory();
+}
+
+const isVideo = (filePath: string) => {
+    return dataset.videoSuffixName.includes(path.extname(filePath).toLowerCase());
+}
 
 const filePath = function (path: string, name: string) {
     checkFolderAndMkdir(path);
@@ -167,4 +176,4 @@ const readDirImage = async function (folderPath: string) {
 }
 
 
-export { checkFolderAndMkdir, saveBase64Picture, fileMove, fileCopy, deleteFile, existsFile, getFileName, getFolderPath, readDir, readDirDeep, readfileImageInfo, readDirImage, EfileImageInfo }
+export { isDirectory, isVideo, checkFolderAndMkdir, saveBase64Picture, fileMove, fileCopy, deleteFile, existsFile, getFileName, getFolderPath, readDir, readDirDeep, readfileImageInfo, readDirImage, EfileImageInfo }
