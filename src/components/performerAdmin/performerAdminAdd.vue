@@ -3,7 +3,7 @@
         append-to-body>
         <div class="performerAdd">
             <div class="left">
-                <el-upload action="/" :on-change="handleUploadPhotos" :show-file-list="false" :auto-upload="false">
+                <el-upload action="/" :on-change="handleUploadPhotos" :show-file-list="false" :auto-upload="false" drag>
                     <div class="photo">
                         <el-image :src="photoSrc">
                             <template #error>
@@ -308,6 +308,13 @@ defineExpose({ open });
     width: 274px;
 }
 
+.performerAdd :deep(.el-upload-dragger) {
+    padding: 0px;
+    border: 0px;
+    border-radius: 0px;
+}
+
+
 .performerAdd .photo {
     width: 270px;
     height: 320px;
@@ -315,7 +322,9 @@ defineExpose({ open });
     padding: 1px;
     overflow: hidden;
     cursor: pointer;
+    border-radius: 5px;
 }
+
 
 .performerAdd .photo .image-slot {
     width: 270px;

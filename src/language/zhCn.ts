@@ -25,7 +25,7 @@ export default {
             add: '添加资源',
             edit: '编辑资源',
         },
-        clickUploadCoverPoster: '点击上传封面海报',
+        clickUploadCoverPoster: '点击或拖拽上传封面海报',
         form: {
             name: '名称',
             subclass: {
@@ -155,7 +155,7 @@ export default {
         form: {
             add: '添加演员/导演',
             edit: '编辑演员/导演',
-            clickUploadPhotos: '点击上传照片',
+            clickUploadPhotos: '点击或拖拽上传照片',
             uploadPhotos: '上传照片',
             ruleName: '请输入演员/导演姓名',
             ruleCareer: '请至少选择一项职业',

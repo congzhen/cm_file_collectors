@@ -3,7 +3,8 @@
         <div class="left">
             <div class="coverPoster"
                 v-bind:style="{ height: coverPosterHeight + 'px', lineHeight: coverPosterHeight + 'px' }">
-                <el-upload action="/" :on-change="handleUploadCoverPoster" :show-file-list="false" :auto-upload="false">
+                <el-upload action="/" :on-change="handleUploadCoverPoster" :show-file-list="false" :auto-upload="false"
+                    drag>
                     <div class="photo"
                         v-bind:style="{ height: coverPosterHeight + 'px', lineHeight: coverPosterHeight + 'px' }">
                         <el-image :src="coverPosterSrc">
@@ -455,6 +456,12 @@ defineExpose({ open });
     border-radius: 5px;
     padding: 1px;
     overflow: hidden;
+}
+
+.resourcesMain .coverPoster :deep(.el-upload-dragger) {
+    padding: 0px;
+    border: 0px;
+    border-radius: 0px;
 }
 
 .resourcesMain .coverPoster .image-slot {
