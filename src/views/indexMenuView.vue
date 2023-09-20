@@ -7,6 +7,9 @@
         </div>
         <div class="menuTool">
             <div class="switchTheme" @click="switchTheme">{{ $t('menu.switchTheme') }}</div>
+            <div class="switchTheme">|</div>
+            <div class="switchTheme" @click.stop="cl_friendlyRewards">{{ $t('menu.friendlyRewards')
+            }}</div>
             <div class="mItem">
                 <el-button-group size="small">
                     <el-button icon="Minus" @click.stop="changeWindowSize('min')" />
@@ -17,20 +20,29 @@
             </div>
         </div>
     </div>
+    <el-dialog v-model="dialogVisibleFriendlyRewards" :title="$t('menu.friendlyRewards')" width="300px" append-to-body>
+        <div class="friendlyRewardsImage">
+            <img src="~@/assets/weixin.jpg">
+        </div>
+        <div class="friendlyRewardsImage">WeChat Payment</div>
+    </el-dialog>
 </template>
 <script setup lang="ts">
 import { ipcRendererSend } from "@/electronCommon"
 import softwareInformation from "@/setup/softwareInformation"
 import { useDark, useToggle } from '@vueuse/core'
 import { softWareConfigData, setSoftWareConfigValue } from '@/setup/softwareConfig'
-
+import { ref } from 'vue'
+const dialogVisibleFriendlyRewards = ref(false);
 const changeWindowSize = (type = 'min') => {
     ipcRendererSend.changeWindowSize(type);
 }
 const execWindowClose = () => {
     ipcRendererSend.execWindowClose();
 }
-
+const cl_friendlyRewards = () => {
+    dialogVisibleFriendlyRewards.value = true
+}
 const switchTheme = () => {
     const theme = softWareConfigData.theme == 'light' ? 'dark' : 'light';
     setSoftWareConfigValue('theme', theme, true)
@@ -56,7 +68,7 @@ const switchTheme = () => {
 }
 
 .indexMenu .title {
-    width: calc(100% - 122px - 80px);
+    width: calc(100% - 280px);
     display: flex;
     padding: 4px 0px 0px 5px;
     /**该属性可以拖动app，需要在创建窗口是，设置movable: true */
@@ -94,10 +106,16 @@ const switchTheme = () => {
     line-height: 30px;
     font-size: 12px;
     cursor: pointer;
-    padding: 0px 10px;
+    padding: 0px 5px;
 }
 
 .indexMenu .menuTool .mItem {
     padding: 2px 5px 0px 5px;
+}
+
+
+.friendlyRewardsImage {
+    display: flex;
+    justify-content: center;
 }
 </style>
