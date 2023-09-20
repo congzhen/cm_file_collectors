@@ -215,6 +215,7 @@ export default {
         importIllustrate: '导入时，会读取文件夹下所有.nfo文件，根据其中的内容生成数据。',
         importPathPlaceholder: '请选择所需导入的文件夹地址',
         nfoConfigTitle: 'nfo文件配置',
+        autoConverSeries: '文件夹多视频自动转剧集',
         submit: '导入',
         cancel: '取消',
         restoreDefaultValues: '恢复默认值',

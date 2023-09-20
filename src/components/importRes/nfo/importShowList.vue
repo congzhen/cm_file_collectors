@@ -30,8 +30,12 @@
                             <el-tag v-for="per, pkey in item.performer" :key="pkey">{{ per.name }}</el-tag>
                         </p>
                     </div>
-                    <div class="block"><span class="title">File Path: </span>
-                        <p class="content">{{ item.videoPath }}</p>
+                    <div class="block">
+                        <span class="title">File Path: </span>
+                        <div class="content">
+                            <div>{{ item.videoPath }}</div>
+                            <div v-for="series, seriesKey in item.series" :key="seriesKey">{{ series }}</div>
+                        </div>
                     </div>
                 </div>
             </div>

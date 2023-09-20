@@ -32,9 +32,15 @@
                 <el-alert :title="$t('import.nfoConfigTitle')" type="warning" :closable="false" />
             </div>
             <div class="blockBtnGroup">
-                <el-button @click="restoreDefaultValues">
-                    {{ $t('import.restoreDefaultValues') }}
-                </el-button>
+                <div style="padding-left: 160px;">
+                    <el-checkbox v-model="nofConfig.autoConverSeries">{{ $t('import.autoConverSeries') }}</el-checkbox>
+                </div>
+                <div>
+                    <el-button @click="restoreDefaultValues">
+                        {{ $t('import.restoreDefaultValues') }}
+                    </el-button>
+                </div>
+
             </div>
             <div class="blockBody">
                 <div class="rowTwo">
@@ -127,6 +133,7 @@ const importShowListRef = ref<InstanceType<typeof importShowList>>();
 const retrieveFolderPath = ref('');
 const coverPosterMode = ref(0);
 const defaultNofConfig: IfilesBasesNofConfig = {
+    autoConverSeries: false,
     suffix: '.mp4|.avi|.rmvb|.wmv|.mov|.mkv|.flv|.ts|.webm|.iso|.mpg|.m4v',
     root: 'movie',
     title: 'originaltitle|title|sorttitle',
@@ -177,13 +184,17 @@ const getNofConfig = async () => {
     })
 }
 
+const saveNofConfig = async () => {
+    await filesBasesSettingServerData.saveNfoConfigByfilesBasesId(store.filesBasesStore.currentFilesBases.id, nofConfig);
+}
+
 const submit = async () => {
     if (retrieveFolderPath.value == '') {
         ElMessage({ message: t('import.pleaseSelectFolder'), type: 'error' })
         return
     }
     loading.open();
-    await filesBasesSettingServerData.saveNfoConfigByfilesBasesId(store.filesBasesStore.currentFilesBases.id, nofConfig);
+    await saveNofConfig();
     try {
         const dataList = await nfoToRes(retrieveFolderPath.value, nofConfig);
         importShowListRef.value?.open(dataList, coverPosterMode.value);
@@ -200,10 +211,10 @@ const open = async () => {
 }
 
 // eslint-disable-next-line no-undef
-defineExpose({ open, submit })
+defineExpose({ open, submit, saveNofConfig })
 
 </script>
-<style>
+<style scoped>
 .block {
     padding: 10px;
 }
@@ -211,7 +222,7 @@ defineExpose({ open, submit })
 .blockBtnGroup {
     padding: 5px 10px;
     display: flex;
-    justify-content: flex-end;
+    justify-content: space-between;
 }
 
 .row {

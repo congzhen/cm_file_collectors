@@ -35,12 +35,29 @@ async function toResData(nfoFilesPath: string[], config: IfilesBasesNofConfig) {
                 videoPath: videoPath,
                 folder,
                 videoAttributeInfo: await ffprobeTool.getVideoInfo(videoPath),
+                series: getSeries(folder, videoPath, config),
                 ...execToRes(data, config, nfoBaseInfo)
             }
             p.push(nofData);
         }
     }
     return p;
+}
+
+function getSeries(folder: string, mainVideoPath: string, config: IfilesBasesNofConfig) {
+    if (!config.autoConverSeries) {
+        return [];
+    }
+    const suffixArr = config.suffix.split("|");
+    const fuzzyData = readDir(folder, suffixArr);
+    const s = [];
+    for (const data of fuzzyData) {
+        const videoPath = path.join(folder, data);
+        if (videoPath != mainVideoPath) {
+            s.push(videoPath);
+        }
+    }
+    return s;
 }
 
 async function getNfoInfo(_path: string) {
@@ -179,7 +196,7 @@ export interface InofData extends InofBaseData {
     videoPath: string,
     folder: string,
     videoAttributeInfo: IvideoAttributeInfo,
-
+    series: Array<string>,
 }
 
 

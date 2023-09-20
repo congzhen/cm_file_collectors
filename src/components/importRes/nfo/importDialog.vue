@@ -1,6 +1,6 @@
 <template>
     <el-dialog class="mainDialog" v-model="dialogVisible" :title="$t('import.title.nfo')" width="800px"
-        :close-on-click-modal="false" :fullscreen="fullscreen()" append-to-body>
+        :close-on-click-modal="false" :fullscreen="fullscreen()" @close="close" append-to-body>
         <div class="settingMainDiv">
             <el-scrollbar height="520px">
                 <importMain ref="importMainRef"></importMain>
@@ -32,6 +32,10 @@ const open = () => {
         importMainRef.value?.open();
     })
 
+}
+
+const close = () => {
+    importMainRef.value?.saveNofConfig();
 }
 
 const handleAdd = () => {

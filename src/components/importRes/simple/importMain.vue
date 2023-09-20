@@ -96,10 +96,10 @@ const selectRetrieveFolders = () => {
 }
 
 const restoreDefaultValues = () => {
-    setNofConfig(defaultNofConfig);
+    setSimpleConfig(defaultNofConfig);
 }
 
-const setNofConfig = (config: IfilesBasesSimpleConfig) => {
+const setSimpleConfig = (config: IfilesBasesSimpleConfig) => {
     if (config) {
         for (const key in config) {
             // eslint-disable-next-line @typescript-eslint/ban-ts-comment
@@ -109,13 +109,17 @@ const setNofConfig = (config: IfilesBasesSimpleConfig) => {
     }
 }
 
-const getNofConfig = async () => {
+const getSimpleConfig = async () => {
     loading.open();
     nextTick(async () => {
         const config = await filesBasesSettingServerData.getSimpleConfigByfilesBasesId(store.filesBasesStore.currentFilesBases.id);
-        setNofConfig(config);
+        setSimpleConfig(config);
         await loading.closeSync();
     })
+}
+
+const saveSimpleConfig = async () => {
+    await filesBasesSettingServerData.saveSimpleConfigByfilesBasesId(store.filesBasesStore.currentFilesBases.id, nofConfig);
 }
 
 const submit = async () => {
@@ -124,7 +128,7 @@ const submit = async () => {
         return
     }
     loading.open();
-    await filesBasesSettingServerData.saveSimpleConfigByfilesBasesId(store.filesBasesStore.currentFilesBases.id, nofConfig);
+    await saveSimpleConfig();
     try {
         const dataList = await simpleToRes(retrieveFolderPath.value, nofConfig);
         importShowListRef.value?.open(dataList, coverPosterMode.value);
@@ -137,11 +141,11 @@ const submit = async () => {
 }
 
 const open = async () => {
-    await getNofConfig();
+    await getSimpleConfig();
 }
 
 // eslint-disable-next-line no-undef
-defineExpose({ open, submit })
+defineExpose({ open, submit, saveSimpleConfig })
 
 </script>
 <style>

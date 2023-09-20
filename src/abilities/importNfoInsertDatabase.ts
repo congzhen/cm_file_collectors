@@ -336,5 +336,13 @@ function createDramaSeriesData(nofData: InofData, resources_id: string) {
         src: nofData.videoPath,
         type: EresDramaSeriesType.movies
     }];
+    for (const series of nofData.series) {
+        list.push({
+            id: coreCreateGuid(),
+            resources_id,
+            src: series,
+            type: EresDramaSeriesType.movies
+        });
+    }
     return list;
 }

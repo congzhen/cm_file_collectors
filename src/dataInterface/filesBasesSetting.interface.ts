@@ -69,6 +69,7 @@ interface IfilesBasesConfig {
 }
 
 interface IfilesBasesNofConfig {
+    autoConverSeries: boolean,
     suffix: string,
     root: string,
     title: string,
