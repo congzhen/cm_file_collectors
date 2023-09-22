@@ -38,6 +38,14 @@
             </div>
             <div class="blockBody">
                 <div class="rowTwo">
+                    <div class="rowTitle"></div>
+                    <div class="rowValue">
+                        <el-checkbox v-model="nofConfig.importCheckTitleAlready">
+                            {{ $t('import.importCheckTitleAlready') }}
+                        </el-checkbox>
+                    </div>
+                </div>
+                <div class="rowTwo">
                     <div class="rowTitle">suffix name</div>
                     <div class="rowValue"><el-input v-model="nofConfig.suffix"></el-input></div>
                 </div>
@@ -80,6 +88,7 @@ const importShowListRef = ref<InstanceType<typeof importShowList>>();
 const retrieveFolderPath = ref('');
 const coverPosterMode = ref(0);
 const defaultNofConfig: IfilesBasesSimpleConfig = {
+    importCheckTitleAlready: true,
     suffix: '.mp4|.avi|.rmvb|.wmv|.mov|.mkv|.flv|.ts|.webm|.iso|.mpg|.m4v',
     title: 'file|folder',
     cover: 'poster|thumb|fanart',
@@ -131,7 +140,7 @@ const submit = async () => {
     await saveSimpleConfig();
     try {
         const dataList = await simpleToRes(retrieveFolderPath.value, nofConfig);
-        importShowListRef.value?.open(dataList, coverPosterMode.value);
+        importShowListRef.value?.open(dataList, coverPosterMode.value, nofConfig);
     } catch (error: unknown) {
         ElMessage({ message: error as string, type: 'error' })
     }

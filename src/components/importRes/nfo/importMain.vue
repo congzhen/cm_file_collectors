@@ -32,8 +32,8 @@
                 <el-alert :title="$t('import.nfoConfigTitle')" type="warning" :closable="false" />
             </div>
             <div class="blockBtnGroup">
-                <div style="padding-left: 160px;">
-                    <el-checkbox v-model="nofConfig.autoConverSeries">{{ $t('import.autoConverSeries') }}</el-checkbox>
+                <div>
+
                 </div>
                 <div>
                     <el-button @click="restoreDefaultValues">
@@ -43,6 +43,17 @@
 
             </div>
             <div class="blockBody">
+                <div class="rowTwo">
+                    <div class="rowTitle"></div>
+                    <div class="rowValue">
+                        <el-checkbox v-model="nofConfig.autoConverSeries">
+                            {{ $t('import.autoConverSeries') }}
+                        </el-checkbox>
+                        <el-checkbox v-model="nofConfig.importCheckTitleAlready">
+                            {{ $t('import.importCheckTitleAlready') }}
+                        </el-checkbox>
+                    </div>
+                </div>
                 <div class="rowTwo">
                     <div class="rowTitle">suffix name</div>
                     <div class="rowValue"><el-input v-model="nofConfig.suffix"></el-input></div>
@@ -134,6 +145,7 @@ const retrieveFolderPath = ref('');
 const coverPosterMode = ref(0);
 const defaultNofConfig: IfilesBasesNofConfig = {
     autoConverSeries: false,
+    importCheckTitleAlready: true,
     suffix: '.mp4|.avi|.rmvb|.wmv|.mov|.mkv|.flv|.ts|.webm|.iso|.mpg|.m4v',
     root: 'movie',
     title: 'originaltitle|title|sorttitle',
@@ -197,7 +209,7 @@ const submit = async () => {
     await saveNofConfig();
     try {
         const dataList = await nfoToRes(retrieveFolderPath.value, nofConfig);
-        importShowListRef.value?.open(dataList, coverPosterMode.value);
+        importShowListRef.value?.open(dataList, coverPosterMode.value, nofConfig);
     } catch (error: unknown) {
         ElMessage({ message: error as string, type: 'error' })
     }

@@ -13,6 +13,7 @@ import timer from "@/assets/timer";
 import { fileCopy } from "@/assets/file";
 import sharp from "sharp";
 import { IConditions } from "@/core/coreDBS";
+import { IfilesBasesSimpleConfig } from "@/dataInterface/filesBasesSetting.interface";
 export interface IimportSimpleInsertDatabase {
     count: {
         already: number,
@@ -25,7 +26,7 @@ export interface IimportSimpleInsertDatabase {
     }>,
 }
 
-export const dataCopyDatabase = async function (dataList: Array<ISimpleData>, coverPosterMode = 0) {
+export const dataCopyDatabase = async function (dataList: Array<ISimpleData>, coverPosterMode = 0, config: IfilesBasesSimpleConfig) {
     const resultData: IimportSimpleInsertDatabase = {
         count: {
             already: 0,
@@ -41,7 +42,7 @@ export const dataCopyDatabase = async function (dataList: Array<ISimpleData>, co
 
     const tID = await dbs.beginTrans();
     for (const smData of dataList) {
-        if (await checkResExist(filesBases_id, smData.title) > 0) {
+        if (config.importCheckTitleAlready && await checkResExist(filesBases_id, smData.title) > 0) {
             resultData.data.push({
                 data: smData,
                 msg: 'Already',

@@ -217,6 +217,7 @@ export default {
         importPathPlaceholder: '请选择所需导入的文件夹地址',
         nfoConfigTitle: 'nfo文件配置',
         autoConverSeries: '文件夹多视频自动转剧集',
+        importCheckTitleAlready: '导入时检测标题是否存在',
         submit: '导入',
         cancel: '取消',
         restoreDefaultValues: '恢复默认值',

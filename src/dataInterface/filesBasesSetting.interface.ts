@@ -70,6 +70,7 @@ interface IfilesBasesConfig {
 
 interface IfilesBasesNofConfig {
     autoConverSeries: boolean,
+    importCheckTitleAlready: boolean,
     suffix: string,
     root: string,
     title: string,
@@ -89,6 +90,7 @@ interface IfilesBasesNofConfig {
 }
 
 interface IfilesBasesSimpleConfig {
+    importCheckTitleAlready: boolean,
     suffix: string,
     title: string,
     cover: string,

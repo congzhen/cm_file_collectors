@@ -61,6 +61,7 @@ import { InofData } from '@/abilities/importNfo';
 import { dataCopyDatabase } from '@/abilities/importNfoInsertDatabase';
 import { existsFile } from '@/assets/file';
 import { ref, nextTick } from 'vue';
+import { IfilesBasesNofConfig } from "@/dataInterface/filesBasesSetting.interface";
 const importResultRef = ref<InstanceType<typeof importResult>>();
 const dialogVisible = ref(false);
 const dataList = ref<Array<InofData>>([]);
@@ -68,7 +69,7 @@ let page = 1;
 const limit = 30;
 let coverPosterMode = 0;
 let metadata: Array<InofData> = [];
-
+let config: IfilesBasesNofConfig;
 
 const init = () => {
     dataList.value = [];
@@ -116,7 +117,7 @@ const handleAdd = async () => {
     loading.open();
     nextTick(async () => {
         try {
-            const resultImportData = await dataCopyDatabase(metadata, coverPosterMode);
+            const resultImportData = await dataCopyDatabase(metadata, coverPosterMode, config);
             if (resultImportData) {
                 importResultRef.value?.open(resultImportData);
             }
@@ -128,11 +129,12 @@ const handleAdd = async () => {
     })
 }
 
-const open = (_data: Array<InofData>, _coverPosterMode: number) => {
+const open = (_data: Array<InofData>, _coverPosterMode: number, _nofConfig: IfilesBasesNofConfig) => {
     init();
     page = 1;
     coverPosterMode = _coverPosterMode;
     metadata = _data;
+    config = _nofConfig;
     //metadata = Array(100).fill([]).flatMap(() => _data.slice());
 
     setDataList();

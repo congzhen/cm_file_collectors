@@ -37,6 +37,7 @@ import { ElMessage } from 'element-plus'
 import { ISimpleData } from '@/abilities/importSimple';
 import { dataCopyDatabase } from '@/abilities/importSimpleInsertDatabase';
 import { ref, nextTick } from 'vue';
+import { IfilesBasesSimpleConfig } from "@/dataInterface/filesBasesSetting.interface";
 const importResultRef = ref<InstanceType<typeof importResult>>();
 const dialogVisible = ref(false);
 const dataList = ref<Array<ISimpleData>>([]);
@@ -44,7 +45,7 @@ let page = 1;
 const limit = 30;
 let coverPosterMode = 0;
 let metadata: Array<ISimpleData> = [];
-
+let simpleConfig: IfilesBasesSimpleConfig;
 const init = () => {
     dataList.value = [];
     page = 1;
@@ -86,7 +87,7 @@ const handleAdd = async () => {
     loading.open();
     nextTick(async () => {
         try {
-            const resultImportData = await dataCopyDatabase(metadata, coverPosterMode);
+            const resultImportData = await dataCopyDatabase(metadata, coverPosterMode, simpleConfig);
             if (resultImportData) {
                 importResultRef.value?.open(resultImportData);
             }
@@ -106,12 +107,12 @@ const fullscreen = () => {
     return false;
 }
 
-const open = (_data: Array<ISimpleData>, _coverPosterMode: number) => {
+const open = (_data: Array<ISimpleData>, _coverPosterMode: number, _config: IfilesBasesSimpleConfig) => {
     init();
     coverPosterMode = _coverPosterMode;
     metadata = _data;
     //metadata = Array(100).fill([]).flatMap(() => _data.slice());
-
+    simpleConfig = _config;
     setDataList();
     dialogVisible.value = true;
 }

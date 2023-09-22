@@ -16,6 +16,7 @@ import timer from '@/assets/timer';
 import downloadFile from '@/assets/downloadFile';
 import { fileCopy } from "@/assets/file"
 import { tagServerData } from '@/serverData/tag.serverData';
+import { IfilesBasesNofConfig } from '@/dataInterface/filesBasesSetting.interface';
 
 
 const dbs = CoreDb();
@@ -33,7 +34,7 @@ export interface IimportNfoInsertDatabase {
 }
 
 
-export const dataCopyDatabase = async function (dataList: Array<InofData>, coverPosterMode = 0) {
+export const dataCopyDatabase = async function (dataList: Array<InofData>, coverPosterMode = 0, config: IfilesBasesNofConfig) {
     const resultData: IimportNfoInsertDatabase = {
         count: {
             already: 0,
@@ -54,7 +55,7 @@ export const dataCopyDatabase = async function (dataList: Array<InofData>, cover
     const tagClass_id = await getDefaultTagClassId(filesBases_id);
     const tID = await dbs.beginTrans();
     for (const nofData of dataList) {
-        if (await checkResExist(filesBases_id, nofData.title, nofData.issueNumber) > 0) {
+        if (config.importCheckTitleAlready && await checkResExist(filesBases_id, nofData.title, nofData.issueNumber) > 0) {
             resultData.data.push({
                 data: nofData,
                 msg: 'Already',
