@@ -44,6 +44,7 @@ import { filesBasesStore } from '@/store/filesBases.store';
 import { filesBasesSettingStore } from '@/store/filesBasesSetting.store';
 
 import { ref, reactive, onMounted, watch, computed } from 'vue';
+import { IresUpdateDetailsView } from '@/dataInterface/common.interface';
 
 const store = {
     filesBasesStore: filesBasesStore(),
@@ -118,13 +119,13 @@ const openIndexBodyTag = () => {
 }
 
 const updateData = async () => {
-    await getDataList(store.filesBasesStore.currentFilesBases.id, resWhereObj);
+    return await getDataList(store.filesBasesStore.currentFilesBases.id, resWhereObj);
 }
-const updataDetailsView = async () => {
+const updataDetailsView = async (resUpdateDetailsView: IresUpdateDetailsView | undefined = undefined) => {
     if (store.filesBasesSettingStore.config.resourceDetailsShowMode == 'right') {
-        await IndexDetailsViewRef.value?.updateData();
+        await IndexDetailsViewRef.value?.updateData(resUpdateDetailsView);
     } else {
-        await IndexDetailsPopupViewRef.value?.updateData();
+        await IndexDetailsPopupViewRef.value?.updateData(resUpdateDetailsView);
     }
 }
 
@@ -133,6 +134,8 @@ const getDataList = async (filesBases_id: string, _resWhereObj: IresWhereObj) =>
     resDataList.value = resObj.dataList;
     resDataCount.value = resObj.dataCount;
     console.log('resObj', resObj);
+    return resObj;
+
 }
 const currentChange = async (currentPage: number) => {
     resWhereObj.page = currentPage;

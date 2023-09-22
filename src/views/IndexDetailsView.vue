@@ -110,6 +110,7 @@ import { ElMessage } from 'element-plus'
 import { ref, inject } from 'vue'
 import { useI18n } from 'vue-i18n';
 import randomPoster from "@/abilities/randomPoster"
+import { IresUpdateDetailsView } from "@/dataInterface/common.interface"
 const { t } = useI18n()
 
 // eslint-disable-next-line no-undef
@@ -202,9 +203,12 @@ const show = async (type: EresDetatilsType, dataInfo: IresourcesBase) => {
         play(info);
     }
 }
-const updateData = async () => {
-    if (resDataInfo.value?.id) {
-        resDataInfo.value = await getResDataInfo(resDataInfo.value.id);
+const updateData = async (resUpdateDetailsView: IresUpdateDetailsView | undefined = undefined) => {
+    const resId = resUpdateDetailsView ? resUpdateDetailsView.id : resDataInfo.value?.id;
+    if (resId) {
+        resDataInfo.value = await getResDataInfo(resId);
+    } else {
+        resDataInfo.value = undefined;
     }
 }
 const deleteResources = async () => {

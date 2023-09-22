@@ -14,6 +14,7 @@ export enum EresDramaSeriesType {
 export enum EresUpdate {
     updateData,
     updataDetailsView,
+    updataDetailsViewByUpdateDataFirstRecord
 }
 
 export enum EsearchLogic {

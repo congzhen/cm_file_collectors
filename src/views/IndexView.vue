@@ -14,13 +14,21 @@ import IndexBodyView from './IndexBodyView.vue';
 import { ref, provide, onMounted } from 'vue';
 import { EresUpdate } from '@/dataInterface/common.enum';
 import { IresourcesBase } from '@/dataInterface/resources.interface';
+import { IresUpdateDetailsView } from '@/dataInterface/common.interface';
 const IndexBodyViewRef = ref<InstanceType<typeof IndexBodyView>>();
 const indexUpdateResourcesData = async (_up: Array<EresUpdate> = [EresUpdate.updateData, EresUpdate.updataDetailsView]) => {
+    let updateDataObj;
     if (_up.includes(EresUpdate.updateData)) {
-        await IndexBodyViewRef.value?.updateData();
+        updateDataObj = await IndexBodyViewRef.value?.updateData();
     }
     if (_up.includes(EresUpdate.updataDetailsView)) {
         await IndexBodyViewRef.value?.updataDetailsView();
+    }
+    if (_up.includes(EresUpdate.updataDetailsViewByUpdateDataFirstRecord)) {
+        const resUpdateDetailsView: IresUpdateDetailsView = {
+            id: updateDataObj?.dataList[0]?.id,
+        }
+        await IndexBodyViewRef.value?.updataDetailsView(resUpdateDetailsView);
     }
 }
 const indexPlayResourcesData = async (resInfo: IresourcesBase) => {

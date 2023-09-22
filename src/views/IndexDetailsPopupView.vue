@@ -14,11 +14,12 @@ import { EresDetatilsType } from '@/dataInterface/common.enum';
 import { IresourcesBase } from '@/dataInterface/resources.interface';
 import IndexDetailsView from './IndexDetailsView.vue';
 import { ref } from 'vue'
+import { IresUpdateDetailsView } from '@/dataInterface/common.interface';
 const IndexDetailsViewRef = ref<InstanceType<typeof IndexDetailsView>>();
 const dialogVisible = ref(true);
 const dialogStatus = ref(false);
-const updateData = async () => {
-    await IndexDetailsViewRef.value?.updateData();
+const updateData = async (resUpdateDetailsView: IresUpdateDetailsView | undefined = undefined) => {
+    await IndexDetailsViewRef.value?.updateData(resUpdateDetailsView);
 }
 const show = async (type: EresDetatilsType, dataInfo: IresourcesBase) => {
     if (type == EresDetatilsType.show) {

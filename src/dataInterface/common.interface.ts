@@ -20,3 +20,8 @@ export interface IsearchCondition {
     cup: IsearchConditionItem,
     diyTag: { [key: string]: IsearchConditionItem },
 }
+
+export interface IresUpdateDetailsView {
+    id: string | undefined,
+
+}

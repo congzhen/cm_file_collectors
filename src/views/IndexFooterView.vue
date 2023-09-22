@@ -80,7 +80,7 @@ const currentChange = () => {
 
 const changeFilesBases = async (filesBases_id: string) => {
     if (AppInitInject) AppInitInject(filesBases_id, async () => {
-        if (indexUpdateResourcesDataInject) indexUpdateResourcesDataInject([EresUpdate.updateData]);
+        if (indexUpdateResourcesDataInject) indexUpdateResourcesDataInject([EresUpdate.updateData, EresUpdate.updataDetailsViewByUpdateDataFirstRecord]);
     });
 
 }
