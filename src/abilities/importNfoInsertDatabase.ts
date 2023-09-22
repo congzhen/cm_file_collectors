@@ -47,6 +47,7 @@ export const dataCopyDatabase = async function (dataList: Array<InofData>, cover
         filesBasesStore: filesBasesStore(),
     }
     const filesBases_id = store.filesBasesStore.currentFilesBases.id;
+    console.log('导入当前库', filesBases_id);
     const performerBases_id = store.filesBasesStore.getCurrentFilesMainPerformerBasesId;
     if (performerBases_id == undefined) {
         throw new Error('No default performerBases found');
@@ -121,9 +122,9 @@ async function getDefaultTagClassId(filesBases_id: string) {
 
 
 async function checkResExist(filesBases_id: string, title: string, issueNumber: string) {
-    const _dbs = dbs.table('resources').where('filesBases_id', '=', filesBases_id);
+    const _dbs = dbs.table('resources').debug().where('filesBases_id', '=', filesBases_id);
     if (issueNumber != '') {
-        _dbs.whereSql('title = @title or issueNumber = @issueNumber ', {
+        _dbs.whereSql('(title = @title or issueNumber = @issueNumber) ', {
             title, issueNumber
         })
     } else {
