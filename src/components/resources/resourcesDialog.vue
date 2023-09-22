@@ -1,6 +1,6 @@
 <template>
-    <el-dialog class="mainDialog" v-model="dialogVisible" :title="title" width="1405px" :fullscreen="fullscreen()"
-        :close-on-click-modal="false" top="12vh" append-to-body>
+    <el-dialog class="mainDialog" v-model="dialogVisible" :title="title" :width="getDialogWidth()"
+        :fullscreen="fullscreen()" :close-on-click-modal="false" top="12vh" append-to-body>
         <div class="resourcesMainDiv">
             <resroucesMain ref="resroucesMainRef" @close="dialogVisible = false"></resroucesMain>
         </div>
@@ -30,11 +30,22 @@ const open = (_mode: string, id: string | undefined = undefined, resInfo: Iresou
 
 }
 
-const fullscreen = () => {
-    if (window.innerWidth < 1410 || window.innerHeight < setupConfig.isFullscreen.height) {
-        return true;
+const getDialogWidth = () => {
+    if (window.innerWidth < 1405) {
+        return '1280px';
     }
-    return false;
+    return '1405px';
+}
+
+const fullscreen = () => {
+    let stauts = false;
+    if (window.innerWidth < setupConfig.isFullscreen.width || window.innerHeight < setupConfig.isFullscreen.height) {
+        stauts = true;
+    }
+    nextTick(() => {
+        resroucesMainRef.value?.showMode(stauts, (window.innerHeight - 200));
+    })
+    return stauts;
 }
 
 // eslint-disable-next-line no-undef

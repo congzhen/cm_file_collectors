@@ -28,7 +28,7 @@
                 <div class="formTitle">
                     <el-alert :title="$t('resources.form.subclass.headTitle')" type="success" :closable="false" />
                 </div>
-                <div class="formBody">
+                <div ref="formBodyRef" class="formBody">
                     <el-scrollbar ref="scrollbarRef" height="100%">
                         <div class="formBlockGroup">
                             <div class="formBlock">
@@ -214,6 +214,7 @@ const emits = defineEmits(['close']);
 
 const scrollbarRef = ref<InstanceType<typeof ElScrollbar>>();
 const comFormRef = ref<InstanceType<typeof comForm>>();
+const formBodyRef = ref<HTMLDivElement>();
 const comCropperDialogRef = ref<InstanceType<typeof comCropperDialog>>();
 
 const keyNum = ref(0);
@@ -455,14 +456,23 @@ const open = async (_mode: string, id: string | undefined = undefined, resInfo: 
         comFormRef.value?.open(_mode);
         await loading.closeSync();
     })
-
-
 }
 const close = () => {
     emits('close');
 }
+const showMode = (isFullscreen: boolean, height: number) => {
+    nextTick(() => {
+        if (formBodyRef.value) {
+            if (isFullscreen) {
+                formBodyRef.value.style.height = height + 'px';
+            } else {
+                formBodyRef.value.style.height = '460px';
+            }
+        }
+    })
+}
 // eslint-disable-next-line no-undef
-defineExpose({ open });
+defineExpose({ open, showMode });
 
 </script>
 <style scoped>
