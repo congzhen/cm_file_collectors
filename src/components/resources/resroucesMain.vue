@@ -1,5 +1,5 @@
 <template>
-    <div class="resourcesMain" :key="keyNum">
+    <div class="resourcesMain">
         <div class="left">
             <div class="coverPoster"
                 v-bind:style="{ height: coverPosterHeight + 'px', lineHeight: coverPosterHeight + 'px' }">
@@ -83,13 +83,13 @@
                             </div>
                             <div class="formBlock">
                                 <el-form-item :label="$t('resources.form.director')">
-                                    <comMultipleSearchSelect v-model="formData.directors"
+                                    <comMultipleSearchSelect :key="keyNum" v-model="formData.directors"
                                         :dataList="store.performerStore.getPerformerListByFilesBasesId.filter(item => item.careerDirector)"
                                         :selectField="['name', 'aliasName']" :showSelectField="['name', 'aliasName']">
                                     </comMultipleSearchSelect>
                                 </el-form-item>
                                 <el-form-item :label="$t('resources.form.performer')">
-                                    <comMultipleSearchSelect v-model="formData.performers"
+                                    <comMultipleSearchSelect :key="keyNum" v-model="formData.performers"
                                         :dataList="store.performerStore.getPerformerListByFilesBasesId.filter(item => item.careerPerformer)"
                                         :selectField="['name', 'aliasName']" :showSelectField="['name', 'aliasName']">
                                     </comMultipleSearchSelect>
@@ -162,7 +162,7 @@
                                 </div>
                                 <el-form-item v-for="item, index in store.tagClassStore.getTagClassListByCurrentFilesBases"
                                     :key="index" :label="item.name">
-                                    <comMultipleSearchSelect v-model="formData.tags[item.id]"
+                                    <comMultipleSearchSelect :key="keyNum" v-model="formData.tags[item.id]"
                                         :dataList="store.tagStore.tagList.filter(tag => tag.tagClass_id == item.id && tag.status)">
                                     </comMultipleSearchSelect>
                                 </el-form-item>
