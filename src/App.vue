@@ -110,24 +110,24 @@ a.router-link-exact-active {
 
 /* 滚动条样式 */
 ::-webkit-scrollbar {
-  width: 10px;
+  width: 6px;
   height: 10px;
 }
 
 /* 滚动块 */
 ::-webkit-scrollbar-thumb {
-  background: #999;
+  background: #DEDFE1;
   border-radius: 5px;
 }
 
 /* 悬停状态下滚动块 */
 ::-webkit-scrollbar-thumb:hover {
-  background: #555;
+  background: #C8C9CC;
 }
 
 /* 滚动条轨道 */
 ::-webkit-scrollbar-track {
-  background: #eee;
+  background: #eeeeeeb0;
   border-radius: 5px;
 }
 

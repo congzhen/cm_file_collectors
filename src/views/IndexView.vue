@@ -7,10 +7,11 @@
 </template>
   
 <script lang="ts" setup>
+import { Throttle } from '@/assets/tool';
 import indexMenuView from './indexMenuView.vue';
 import IndexHeaderView from './IndexHeaderView.vue';
 import IndexBodyView from './IndexBodyView.vue';
-import { ref, provide } from 'vue';
+import { ref, provide, onMounted } from 'vue';
 import { EresUpdate } from '@/dataInterface/common.enum';
 import { IresourcesBase } from '@/dataInterface/resources.interface';
 const IndexBodyViewRef = ref<InstanceType<typeof IndexBodyView>>();
@@ -27,6 +28,18 @@ const indexPlayResourcesData = async (resInfo: IresourcesBase) => {
 }
 provide('indexUpdateResourcesData', indexUpdateResourcesData);
 provide('indexPlayResourcesData', indexPlayResourcesData);
+
+const ThrottleClass = new Throttle();
+const addEventListenerResize = () => {
+    window.addEventListener('resize', () => {
+        ThrottleClass.throttleTimeout(() => {
+            IndexBodyViewRef.value?.resize();
+        })
+    });
+}
+onMounted(async () => {
+    addEventListenerResize();
+})
 </script>
   <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>

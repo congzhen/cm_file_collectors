@@ -44,11 +44,16 @@ import { filesBasesStore } from '@/store/filesBases.store';
 import { filesBasesSettingStore } from '@/store/filesBasesSetting.store';
 
 import { ref, reactive, onMounted, watch, computed } from 'vue';
+
 const store = {
     filesBasesStore: filesBasesStore(),
     filesBasesSettingStore: filesBasesSettingStore(),
 }
+
 const indexBodyRef = ref<HTMLDivElement>();
+const indexBodyElementData = reactive({
+    height: indexBodyRef.value?.offsetHeight,
+});
 const indexBodyTagRef = ref<HTMLDivElement>();
 const arrowRef = ref<HTMLDivElement>();
 const IndexDetailsViewRef = ref<InstanceType<typeof IndexDetailsView>>();
@@ -74,11 +79,16 @@ watch(
     }
 );
 
+
+const handleIndexBodyResize = () => {
+    indexBodyElementData.height = indexBodyRef.value?.offsetHeight;
+}
+
 // eslint-disable-next-line no-undef
 const leftStype_C = computed(() => {
     return {
         width: store.filesBasesSettingStore.config.leftColumnWidth + 'px',
-        height: store.filesBasesSettingStore.config.leftColumnMode == 'fixed' ? '100%' : indexBodyRef.value?.offsetHeight + 'px',
+        height: store.filesBasesSettingStore.config.leftColumnMode == 'fixed' ? '100%' : indexBodyElementData.height + 'px',
         left: arrowStatus.value ? '0px' : -store.filesBasesSettingStore.config.leftColumnWidth + 'px',
         zIndex: 90,
     }
@@ -150,14 +160,19 @@ const gerResDataListClass = () => {
 }
 
 onMounted(async () => {
+    handleIndexBodyResize();
     await updateData();
     if (resDataList.value.length > 0) {
         IndexDetailsViewRef.value?.show(EresDetatilsType.show, resDataList.value[0]);
     }
 });
 
+const resize = () => {
+    handleIndexBodyResize();
+}
+
 // eslint-disable-next-line no-undef
-defineExpose({ updateData, updataDetailsView, playRes });
+defineExpose({ updateData, updataDetailsView, playRes, resize });
 
 </script>
 <style scoped>
