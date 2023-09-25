@@ -93,7 +93,7 @@ const submitForm = async (mode: string) => {
         }
     }
     if (status) {
-        await store.filesBasesStore.init();
+        await store.filesBasesStore.init(store.filesBasesStore.currentFilesBases.id);
         await store.filesRelatedPerformerBasesStore.init();
         comFormRef.value?.success(t('filesDatabases.message.' + mode + 'Success'));
     } else {

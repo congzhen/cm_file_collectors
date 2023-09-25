@@ -44,6 +44,10 @@ const AppInit = async (_currentFilesBases_id: string | undefined = undefined, ca
 const AppInitData = async () => {
   await store.tagClassStore.init();
   await store.tagStore.init();
+  await AppInitPerformerData();
+}
+
+const AppInitPerformerData = async () => {
   await store.performerStore.init();
 }
 
@@ -64,6 +68,7 @@ onMounted(async () => {
 })
 provide('AppInit', AppInit);
 provide('AppInitData', AppInitData);
+provide('AppInitPerformerData', AppInitPerformerData);
 </script>
 <style>
 * {

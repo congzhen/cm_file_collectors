@@ -25,12 +25,15 @@ import loading from '@/assets/loading'
 import { importPerformer } from '@/assets/performerExportAndImport'
 import { ElMessage } from 'element-plus'
 import comForm from "@/components/common/comForm.vue"
+import { filesBasesStore } from "@/store/filesBases.store"
 import { performerBasesStore } from "@/store/performerBases.store"
-import { reactive, ref } from 'vue'
+import { reactive, ref, inject } from 'vue'
 import type { FormRules } from 'element-plus'
 import { useI18n } from 'vue-i18n';
+const AppInitPerformerData = inject<() => void>('AppInitPerformerData');
 const { t } = useI18n();
 const store = {
+    filesBasesStore: filesBasesStore(),
     performerBasesStore: performerBasesStore(),
 }
 const comFormRef = ref<InstanceType<typeof comForm>>();
@@ -69,10 +72,11 @@ const submitForm = () => {
                 message: t('performerDatabases.message.importSuccess', rd),
                 type: 'success',
             })
+            if (AppInitPerformerData) AppInitPerformerData();
         }
-
     }, 500);
 }
+
 const open = () => {
     comFormRef.value?.open('add');
 }
