@@ -122,7 +122,8 @@ export default {
         },
         infoBtn: {
             delete: '删除',
-        }
+        },
+        recycle: '标签回收站',
     },
     details: {
         noPoster: '没有海报',

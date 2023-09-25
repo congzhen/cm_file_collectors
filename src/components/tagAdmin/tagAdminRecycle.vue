@@ -1,5 +1,5 @@
 <template>
-    <el-dialog class="mainDialog" v-model="dialogVisible" :title="$t('performer.recycle')" width="900px"
+    <el-dialog class="mainDialog" v-model="dialogVisible" :title="$t('tag.recycle')" width="900px"
         :close-on-click-modal="false" append-to-body>
         <el-table :data="dataList" height="500px" size="small" :border="true" :show-header="false" style="width: 100%">
             <el-table-column prop="id" width="160" :show-overflow-tooltip="true" />
@@ -20,6 +20,7 @@
 </template>
 <script setup lang="ts">
 import loading from '@/assets/loading'
+import { filesBasesStore } from '@/store/filesBases.store';
 import { tagStore } from '@/store/tag.store';
 import { tagClassStore } from '@/store/tagClass.store';
 import deleteConfirm from "@/components/common/funDeleteConfirm"
@@ -28,13 +29,15 @@ import { tagServerData } from '@/serverData/tag.serverData';
 import { ref, computed } from 'vue'
 
 const store = {
+    filesBasesStore: filesBasesStore(),
     tagStore: tagStore(),
     tagClassStore: tagClassStore(),
 }
 const dialogVisible = ref(false);
 
 const dataList = computed(() => {
-    return store.tagStore.tagList.filter(obj => !obj.status);
+    const tagClassIdArr = store.tagClassStore.getTagClassListByfilesBasesId(store.filesBasesStore.currentFilesBases.id, 'ALL').map(obj => obj.id);
+    return store.tagStore.tagList.filter(obj => !obj.status && tagClassIdArr.includes(obj.tagClass_id));
 })
 const getTagClassName = (tagObj: Itag) => {
     const tagClass = store.tagClassStore.getTagClassById(tagObj.tagClass_id);
