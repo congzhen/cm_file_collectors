@@ -40,5 +40,8 @@ export const performerBasesStore = defineStore('performerBases', {
                 }
             }
         },
+        delete: function (id: string) {
+            this.performerBasesList = this.performerBasesList.filter(obj => obj.id !== id);
+        }
     }
 });

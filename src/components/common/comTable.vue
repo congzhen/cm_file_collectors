@@ -16,22 +16,26 @@
             <el-table-column fixed="right" :label="$t('com.table.operations')" :width="props.operationsWidth"
                 v-if="props.operationsBtnList.length > 0">
                 <template #default="scope">
-                    <el-button-group>
-                        <el-button v-if="showBtn('edit', scope.row)" size="small"
-                            @click="$emit('editRecordClick', scope.row, nowPage)">{{
-                                $t('com.table.' + props.operationsBtnEdit)
-                            }}</el-button>
-                        <el-button v-if="showBtn('delete', scope.row)" size="small" type="danger"
-                            @click="tableRecordClick(props.operationsBtnDelete, 'delete', scope.row)">{{
-                                $t('com.table.' + props.operationsBtnDelete)
-                            }}</el-button>
-                        <el-button v-if="showBtn('restore', scope.row)" size="small" type="warning"
-                            @click="tableRecordClick(props.operationsBtnRestore, 'restore', scope.row)">{{
-                                $t('com.table.' + props.operationsBtnRestore)
-                            }}</el-button>
-                    </el-button-group>
+                    <div class="operationsTool">
+                        <el-button-group>
+                            <el-button v-if="showBtn('edit', scope.row)" size="small"
+                                @click="$emit('editRecordClick', scope.row, nowPage)">{{
+                                    $t('com.table.' + props.operationsBtnEdit)
+                                }}</el-button>
+                            <el-button v-if="showBtn('delete', scope.row)" size="small" type="danger"
+                                @click="tableRecordClick(props.operationsBtnDelete, 'delete', scope.row)">{{
+                                    $t('com.table.' + props.operationsBtnDelete)
+                                }}</el-button>
+                            <el-button v-if="showBtn('restore', scope.row)" size="small" type="warning"
+                                @click="tableRecordClick(props.operationsBtnRestore, 'restore', scope.row)">{{
+                                    $t('com.table.' + props.operationsBtnRestore)
+                                }}</el-button>
+                        </el-button-group>
+                        <slot name="operations" :rowData="scope"></slot>
+                    </div>
                 </template>
             </el-table-column>
+
         </el-table>
         <div v-if="props.paging" class="pagination">
             <el-pagination v-model:current-page="nowPage" background small layout="prev, pager, next" :total="props.total"
@@ -211,5 +215,9 @@ defineExpose({ deleteSuccess, deleteFail, restoreSuccess, restoreFail, success, 
 .tableCom {
     width: 100%;
     height: 100%;
+}
+
+.operationsTool {
+    display: flex;
 }
 </style>

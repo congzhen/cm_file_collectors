@@ -73,6 +73,7 @@ import photoImageCom from '@/components/smallCom/photoImageCom.vue';
 import { performerServerData } from "@/serverData/performer.serverData"
 import { filesBasesStore } from '@/store/filesBases.store';
 import { filesBasesSettingStore } from '@/store/filesBasesSetting.store'
+import { filesRelatedPerformerBasesStore } from '@/store/filesRelatedPerformerBases.store';
 import { performerStore } from '@/store/performer.store';
 import { Iperformer } from "@/dataInterface/performer.interface";
 import { ref, inject, watch } from 'vue'
@@ -81,6 +82,7 @@ const updatePerformerAdminMainData = inject<() => void>('updatePerformerAdminMai
 const store = {
     filesBasesStore: filesBasesStore(),
     filesBasesSettingStore: filesBasesSettingStore(),
+    filesRelatedPerformerBasesStore: filesRelatedPerformerBasesStore(),
     performerStore: performerStore(),
 }
 
@@ -88,7 +90,10 @@ const store = {
 const performerInfo = ref<Iperformer | undefined>();
 
 watch(
-    () => store.filesBasesStore.currentFilesBases.id,
+    [
+        () => store.filesBasesStore.currentFilesBases.id,
+        () => store.filesRelatedPerformerBasesStore.filesRelatedPerformerBasesList
+    ],
     () => {
         performerInfo.value = store.performerStore.getPerformerListByFilesBasesId[0];
     }

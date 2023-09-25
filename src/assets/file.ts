@@ -89,6 +89,19 @@ const deleteFile = function (path: string, name: string) {
     }
     return status;
 }
+const deleteFolderRecursive = function (folderPath: string) {
+    if (fs.existsSync(folderPath)) {
+        fs.readdirSync(folderPath).forEach((file) => {
+            const currentPath = path.join(folderPath, file);
+            if (fs.lstatSync(currentPath).isDirectory()) {
+                deleteFolderRecursive(currentPath);
+            } else {
+                fs.unlinkSync(currentPath);
+            }
+        });
+        fs.rmdirSync(folderPath);
+    }
+}
 
 /**
  * 读取文件夹中的文件
@@ -176,4 +189,4 @@ const readDirImage = async function (folderPath: string) {
 }
 
 
-export { isDirectory, isVideo, checkFolderAndMkdir, saveBase64Picture, fileMove, fileCopy, deleteFile, existsFile, getFileName, getFolderPath, readDir, readDirDeep, readfileImageInfo, readDirImage, EfileImageInfo }
+export { isDirectory, isVideo, checkFolderAndMkdir, saveBase64Picture, fileMove, fileCopy, deleteFile, deleteFolderRecursive, existsFile, getFileName, getFolderPath, readDir, readDirDeep, readfileImageInfo, readDirImage, EfileImageInfo }

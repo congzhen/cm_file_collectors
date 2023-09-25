@@ -1,6 +1,6 @@
 <template>
     <div>
-        <el-dialog class="mainDialog" v-model="dialogVisible" :title="$t('performerDatabases.title')" width="1080px"
+        <el-dialog class="mainDialog" v-model="dialogVisible" :title="$t('performerDatabases.title')" width="1140px"
             :close-on-click-modal="false" :fullscreen="fullscreen()" append-to-body>
             <performerDatabasesAdminMain class="performerDatabasesAdminMain"></performerDatabasesAdminMain>
             <template #footer>

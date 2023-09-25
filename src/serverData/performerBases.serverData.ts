@@ -1,6 +1,7 @@
 import { CoreDb } from "@/core/core"
 import { IperformerBases } from "@/dataInterface/databases.interface"
 import { filesRelatedPerformerBasesServerData } from "@/serverData/filesRelatedPerformerBases.serverData"
+import { performerServerData } from "./performer.serverData";
 const performerBasesServerData = {
     getInfoById: async function (id: string) {
         return await CoreDb().table('performerBases').noWhere().getInfo(id) as IperformerBases | undefined;
@@ -73,6 +74,28 @@ const performerBasesServerData = {
         await CoreDb().commit(tID);
         return true;
     },
+    //删除演员集前，必需先确定是否删除了所有关联
+    delete: async function (id: string) {
+        const num = await filesRelatedPerformerBasesServerData.getRealtedCountByPerformerBases_id(id);
+        if (num != 0) {
+            return { status: false, num };
+        }
+
+        const dbs = await CoreDb();
+        const tID = await dbs.beginTrans();
+        const rd = await dbs.table('performerBases').delete(id);
+        if (rd == undefined || rd.status == false || rd.aAffectedRows == 0) {
+            await dbs.rollback();
+            return { status: false, num };
+        }
+        const rdDelPerformer = await performerServerData.deleteByPerformerBasesId(dbs, id);
+        if (!rdDelPerformer) {
+            await dbs.rollback();
+            return { status: false, num };
+        }
+        await dbs.commit(tID);
+        return { status: true, num };
+    }
 }
 
 export { performerBasesServerData }

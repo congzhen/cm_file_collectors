@@ -28,15 +28,23 @@
                         $t('performerDatabases.export') }}</el-button>
                 </template>
             </el-table-column>
+            <template v-slot:operations="scope">
+                <el-icon class="delete" @click="deletePerformerDatabases(scope.rowData.row)"
+                    v-if="!scope.rowData.row.status">
+                    <Delete />
+                </el-icon>
+            </template>
         </comTable>
         <performerDatabasesAdminAdd ref="performerDatabasesAdminAddRef"></performerDatabasesAdminAdd>
     </div>
 </template>
 <script setup lang="ts">
+import setupConfig from '@/setup/config'
 import { ElMessage } from 'element-plus'
 import comTable from '../common/comTable.vue';
 import performerDatabasesAdminAdd from "./performerDatabasesAdminAdd.vue"
 import loading from '@/assets/loading'
+import deleteConfirm from "@/components/common/funDeleteConfirm"
 import { exportPerformer } from '@/assets/performerExportAndImport'
 import { ipcRendererSend } from "@/electronCommon"
 import { filesBasesStore } from "@/store/filesBases.store"
@@ -45,8 +53,10 @@ import { performerStore } from '@/store/performer.store';
 import { filesRelatedPerformerBasesStore } from "@/store/filesRelatedPerformerBases.store"
 import { performerBasesServerData } from "@/serverData/performerBases.serverData"
 import { IfilesBases, IperformerBases } from "@/dataInterface/databases.interface"
-import { ref } from 'vue'
+import { ref, inject } from 'vue'
 import { useI18n } from 'vue-i18n'
+import { deleteFolderRecursive } from '@/assets/file';
+const AppInitInject = inject<(_filesBases_id: string) => void>('AppInit');
 const { t } = useI18n();
 const store = {
     filesBasesStore: filesBasesStore(),
@@ -123,6 +133,28 @@ const exportDatabases = async (performerDatabasesId: string) => {
     }
 }
 
+const deletePerformerDatabases = async (performerDatabases: IperformerBases) => {
+    deleteConfirm.exec(performerDatabases.name, async () => {
+        loading.open();
+        const rd = await performerBasesServerData.delete(performerDatabases.id);
+        if (!rd.status && rd.num > 0) {
+            ElMessage({
+                message: t('performerDatabases.message.deleteErrorNoCutAllAssociations'),
+                type: 'error',
+            })
+        } else if (!rd.status && rd.num == 0) {
+            ElMessage({
+                message: t('performerDatabases.message.deleteFail'),
+                type: 'error',
+            })
+        } else if (rd.status) {
+            deleteFolderRecursive(setupConfig.performerFacePath + '/' + performerDatabases.id);
+            if (AppInitInject) AppInitInject(store.filesBasesStore.currentFilesBases.id);
+        }
+        await loading.closeSync();
+    });
+}
+
 </script>
 <style scoped>
 .pdacMain {
@@ -146,5 +178,15 @@ const exportDatabases = async (performerDatabasesId: string) => {
 
 .databases-tag label {
     padding: 3px 3px 0px 5px
+}
+
+.pdacMain .delete {
+    cursor: pointer;
+    margin: 3px 12px;
+    font-size: 16px;
+}
+
+.pdacMain .delete:hover {
+    color: #5CB6FF;
 }
 </style>

@@ -60,5 +60,8 @@ export const tagStore = defineStore('tag', {
                 tagObj.status = value;
             }
         },
+        delete: function (id: string) {
+            this.tagList = this.tagList.filter(obj => obj.id !== id);
+        },
     }
 });

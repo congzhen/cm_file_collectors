@@ -135,5 +135,8 @@ export const performerStore = defineStore('performer', {
                 performerObj.status = value;
             }
         },
+        delete: function (id: string) {
+            this.performerList = this.performerList.filter(obj => obj.id !== id);
+        }
     },
 });

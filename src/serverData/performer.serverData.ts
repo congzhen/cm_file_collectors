@@ -1,5 +1,5 @@
 import { CoreDb } from "@/core/core"
-import { IConditions } from "@/core/coreDBS";
+import { IConditions, coreDBS } from "@/core/coreDBS";
 import { Iperformer } from "@/dataInterface/performer.interface";
 
 const performerServerData = {
@@ -82,6 +82,20 @@ const performerServerData = {
     setStatus: async function (id: string, value: boolean) {
         return this.update(id, { status: value });
     },
+    delete: async function (id: string) {
+        const rd = await CoreDb().table('performer').delete(id);
+        if (rd == undefined || rd.status == false || rd.aAffectedRows == 0) {
+            return false;
+        }
+        return true;
+    },
+    deleteByPerformerBasesId: async function (dbs: coreDBS, performerBases_id: string) {
+        const rd = await dbs.table('performer').where('performerBases_id', '=', performerBases_id).deleteWhere();
+        if (rd == undefined || rd.status == false) {
+            return false;
+        }
+        return true;
+    }
 }
 
 export { performerServerData };

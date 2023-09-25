@@ -120,6 +120,9 @@ export default {
             editSuccess: '修改标签成功',
             editFail: '修改标签失败',
         },
+        infoBtn: {
+            delete: '删除',
+        }
     },
     details: {
         noPoster: '没有海报',
@@ -196,6 +199,8 @@ export default {
             exportSuccess: '导出数据成功',
             importSuccess: '导入数据成功，演员 {performerCount} 条，头像 {performerFaceCount} 张, 重启软件后生效.',
             importError: '导入数据失败',
+            deleteErrorNoCutAllAssociations: '请先切断全部关联',
+            deleteFail: '删除失败',
         },
         importTo: '导入到数据集',
         sameNameNoImport: '同名不导入',

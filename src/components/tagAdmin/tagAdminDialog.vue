@@ -5,16 +5,27 @@
             <tagAdminMain></tagAdminMain>
         </div>
         <template #footer>
-            <el-button type="success" @click="addClass">{{ $t('tag.addClass') }}</el-button>
+            <div class="tagAdminToolList">
+                <div class="btnI" @click="openTagsRecycle">
+                    <el-icon :size="23">
+                        <Delete />
+                    </el-icon>
+                </div>
+                <el-button type="success" @click="addClass">{{ $t('tag.addClass') }}</el-button>
+            </div>
         </template>
-        <tagAdminClassAdd ref="tagAdminClassAddRef"></tagAdminClassAdd>
+
     </el-dialog>
+    <tagAdminClassAdd ref="tagAdminClassAddRef"></tagAdminClassAdd>
+    <tagAdminRecycle ref="tagAdminRecycleRef"></tagAdminRecycle>
 </template>
 <script setup lang="ts">
 import setupConfig from "@/setup/config"
+import tagAdminRecycle from './tagAdminRecycle.vue';
 import tagAdminMain from "./tagAdminMain.vue"
 import tagAdminClassAdd from "./tagAdminClassAdd.vue";
 import { ref } from 'vue'
+const tagAdminRecycleRef = ref<InstanceType<typeof tagAdminRecycle>>();
 const tagAdminClassAddRef = ref<InstanceType<typeof tagAdminClassAdd>>();
 const dialogVisible = ref(false)
 
@@ -24,6 +35,10 @@ const open = () => {
 
 const addClass = () => {
     tagAdminClassAddRef.value?.open('add');
+}
+
+const openTagsRecycle = () => {
+    tagAdminRecycleRef.value?.open();
 }
 
 const fullscreen = () => {
@@ -45,5 +60,20 @@ defineExpose({
     height: 500px;
     padding: 10px;
     background-color: #F4F4F5;
+}
+
+.tagAdminToolList {
+    display: flex;
+    justify-content: flex-end;
+}
+
+.tagAdminToolList .btnI {
+    margin: 4px 18px 0px 0px;
+    color: #606266;
+    cursor: pointer;
+}
+
+.tagAdminToolList .btnI:hover {
+    color: #5CB6FF;
 }
 </style>

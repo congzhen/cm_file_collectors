@@ -1,13 +1,16 @@
 <template>
-    <el-dialog class="mainDialog" v-model="dialogVisible" :title="$t('performer.recycle')" width="800px"
+    <el-dialog class="mainDialog" v-model="dialogVisible" :title="$t('performer.recycle')" width="900px"
         :close-on-click-modal="false" append-to-body>
         <el-table :data="dataList" height="500px" size="small" :border="true" :show-header="false" style="width: 100%">
-            <el-table-column prop="name" width="180" />
-            <el-table-column prop="aliasName" />
-            <el-table-column width="100">
+            <el-table-column prop="id" width="160" :show-overflow-tooltip="true" />
+            <el-table-column prop="name" width="180" :show-overflow-tooltip="true" />
+            <el-table-column prop="aliasName" :show-overflow-tooltip="true" />
+            <el-table-column width="160">
                 <template #default="scope">
                     <el-button size="small" type="warning" icon="RefreshLeft" @click="handleRestore(scope.row)">{{
                         $t('performer.infoBtn.restore') }}</el-button>
+                    <el-button size="small" type="danger" icon="Delete" @click="handleDelete(scope.row)">{{
+                        $t('performer.infoBtn.delete') }}</el-button>
                 </template>
             </el-table-column>
         </el-table>
@@ -18,6 +21,7 @@ import loading from '@/assets/loading'
 import { Iperformer } from '@/dataInterface/performer.interface';
 import { performerStore } from '@/store/performer.store';
 import restoreConfirm from "@/components/common/funRestoreConfirm"
+import deleteConfirm from "@/components/common/funDeleteConfirm"
 import { performerServerData } from '@/serverData/performer.serverData';
 import { ref, computed, inject } from 'vue'
 const updatePerformerAdminMainData = inject<() => void>('updatePerformerAdminMainData');
@@ -44,6 +48,16 @@ const handleRestore = (per: Iperformer) => {
     });
 }
 
+const handleDelete = (per: Iperformer) => {
+    deleteConfirm.exec(per.name, async () => {
+        loading.open();
+        const rd = await performerServerData.delete(per.id);
+        if (rd) {
+            store.performerStore.delete(per.id);
+        }
+        await loading.closeSync();
+    });
+};
 
 const open = (_nowPerformerBasesId: string) => {
     nowPerformerBasesId.value = _nowPerformerBasesId;

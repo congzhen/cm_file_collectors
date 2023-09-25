@@ -45,6 +45,9 @@ const filesRelatedPerformerBasesServerData = {
     getRealtedInfo: async function (filesBases_id: string, performerBases_id: string) {
         return await CoreDb().table('filesRelatedPerformerBases').where('filesBases_id', '=', filesBases_id).where('performerBases_id', '=', performerBases_id).getFind();
     },
+    getRealtedCountByPerformerBases_id: async function (performerBases_id: string) {
+        return await CoreDb().table('filesRelatedPerformerBases').where('performerBases_id', '=', performerBases_id).getCount();
+    },
     add: async function (filesBases_id: string, performerBases_id: string, main = 0) {
         const o = {
             filesBases_id,
