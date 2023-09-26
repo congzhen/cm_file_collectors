@@ -12,6 +12,9 @@ const performerBasesServerData = {
     getCount: async function () {
         return await CoreDb().table('performerBases').getCount();
     },
+    getStatusCount: async function (status: number) {
+        return await CoreDb().table('performerBases').where('status', '=', status.toString()).getCount();
+    },
     addSimple: async function (id: string, name: string) {
         const performerBasesCount = await this.getCount();
         const addResult = await CoreDb().table('performerBases').create({ id, name, sort: (performerBasesCount + 1) });

@@ -144,6 +144,7 @@ class coreDBS {
 
         this.whereObj = {};
 
+        this.createGuidObj = null;
         this.createTimeObj = null;
         this.updateTimeObj = null;
 
@@ -169,14 +170,17 @@ class coreDBS {
         if (_transactionID == this.transactionID) {
             await this.CoreDb.commit();
             this.transactionID = undefined;
+            this.clear();
             return true;
         }
+        this.clear();
         return false;
     }
     //回滚事务
     async rollback() {
         await this.CoreDb.rollback();
         this.transactionID = undefined;
+        this.clear();
     }
 
 

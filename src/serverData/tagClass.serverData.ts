@@ -1,6 +1,7 @@
 import { CoreDb } from "@/core/core"
-import { IConditions } from "@/core/coreDBS";
+import { IConditions, coreDBS } from "@/core/coreDBS";
 import { ItagClass, ItagClassInfo } from "@/dataInterface/tag.interface"
+import { tagServerData } from "./tag.serverData";
 const tagClassServerData = {
     getDataList: async function () {
         return await CoreDb().table('tagClass').fields(['id', 'filesBases_id', 'name', 'leftShow', 'status']).noWhere().order('sort').getList() as Array<ItagClass>;
@@ -82,6 +83,25 @@ const tagClassServerData = {
         }
         return false;
     },
+    deleteByFilesBasesId: async (filesBases_id: string, _dbs: coreDBS | undefined = undefined) => {
+        const dbs = _dbs == undefined ? CoreDb() : _dbs;
+        const tID = await dbs.beginTrans();
+        const tagClassList = await dbs.table('tagClass').debug().where('filesBases_id', '=', filesBases_id).getList() as Array<ItagClass>;
+        for (const tagClass of tagClassList) {
+            const rd = await tagServerData.deleteByTagClassId(tagClass.id, dbs);
+            if (!rd) {
+                await dbs.rollback();
+                return false;
+            }
+        }
+        const delResult = await dbs.table('tagClass').where('filesBases_id', '=', filesBases_id).deleteWhere();
+        if (delResult == undefined || delResult.status == false) {
+            await dbs.rollback();
+            return false;
+        }
+        await dbs.commit(tID);
+        return true;
+    }
 }
 
 

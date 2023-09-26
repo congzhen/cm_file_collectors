@@ -134,34 +134,49 @@ const resourcesServerData = {
         }
         return true;
     },
-    delete: async function (id: string) {
-        const tID = await CoreDb().beginTrans();
-        const delResult = await CoreDb().table('resources').delete(id);
+    delete: async function (id: string, _dbs: coreDBS | undefined = undefined) {
+        const dbs = _dbs == undefined ? CoreDb() : _dbs;
+        const tID = await dbs.beginTrans();
+        const delResult = await dbs.table('resources').delete(id);
         if (delResult == undefined || delResult.status == false) {
-            await CoreDb().rollback();
+            await dbs.rollback();
             return false;
         }
-        const delDirectorsStatus = resourcesDirectorsServerData.deleteDirectorsByResourcesId(id);
+        const delDirectorsStatus = resourcesDirectorsServerData.deleteDirectorsByResourcesId(id, dbs);
         if (!delDirectorsStatus) {
-            await CoreDb().rollback();
+            await dbs.rollback();
             return false;
         }
-        const delPerformersStatus = resourcesPerformersServerData.deletePerformersByResourcesId(id);
+        const delPerformersStatus = resourcesPerformersServerData.deletePerformersByResourcesId(id, dbs);
         if (!delPerformersStatus) {
-            await CoreDb().rollback();
+            await dbs.rollback();
             return false;
         }
-        const delTagsStatus = resourcesTagsServerData.deleteTagsByResourcesId(id);
+        const delTagsStatus = resourcesTagsServerData.deleteTagsByResourcesId(id, dbs);
         if (!delTagsStatus) {
-            await CoreDb().rollback();
+            await dbs.rollback();
             return false;
         }
-        const delDramaSeriesStatus = resourcesDramaSeriesServerData.deleteDramaSeriesByResourcesId(id);
+        const delDramaSeriesStatus = resourcesDramaSeriesServerData.deleteDramaSeriesByResourcesId(id, dbs);
         if (!delDramaSeriesStatus) {
-            await CoreDb().rollback();
+            await dbs.rollback();
             return false;
         }
-        await CoreDb().commit(tID);
+        await dbs.commit(tID);
+        return true;
+    },
+    deleteByFilesBasesId: async function (filesBases_id: string, _dbs: coreDBS | undefined = undefined) {
+        const dbs = _dbs == undefined ? CoreDb() : _dbs;
+        const tID = await dbs.beginTrans();
+        const filesBasesRecordList = await dbs.table('resources').where('filesBases_id', '=', filesBases_id).getList() as Array<IresourcesBase>;
+        for (const resourcesBase of filesBasesRecordList) {
+            const rd = await this.delete(resourcesBase.id, dbs);
+            if (!rd) {
+                await dbs.rollback();
+                return false;
+            }
+        }
+        await dbs.commit(tID);
         return true;
     }
 }

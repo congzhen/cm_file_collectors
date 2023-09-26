@@ -217,7 +217,7 @@ const deleteResources = async () => {
             if (resDataInfo.value) {
                 loading.open();
                 if (resDataInfo.value.coverPoster != '') {
-                    deleteFile(setupConfig.resCoverPosterPath, resDataInfo.value.coverPoster);
+                    deleteFile(setupConfig.resCoverPosterPath + resDataInfo.value.filesBases_id, resDataInfo.value.coverPoster);
                 }
                 const rd = await resourcesServerData.delete(resDataInfo.value.id);
                 if (rd) {

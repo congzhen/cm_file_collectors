@@ -202,6 +202,8 @@ export default {
             importError: '导入数据失败',
             deleteErrorNoCutAllAssociations: '请先切断全部关联',
             deleteFail: '删除失败',
+            leastNeedOnePerformerDatabases: '至少需要保留一个演员集',
+            leastNeedOnePerformerDatabasesStatus: '至少需要开启一个演员集',
         },
         importTo: '导入到数据集',
         sameNameNoImport: '同名不导入',
@@ -371,6 +373,9 @@ export default {
             addFail: '添加文件数据库失败',
             editSuccess: '修改文件数据库成功',
             editFail: '修改文件数据库失败',
+            deleteFail: '删除数据库失败',
+            leastNeedOneFilesDatabases: '至少需要保留一个数据库',
+            leastNeedOneFilesDatabasesStatus: '至少需要开启一个数据库',
         }
     },
     defaultTag: {

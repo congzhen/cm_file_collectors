@@ -18,12 +18,14 @@
 </template>
 <script setup lang="ts">
 import loading from '@/assets/loading'
+import setupConfig from "@/setup/config";
 import { Iperformer } from '@/dataInterface/performer.interface';
 import { performerStore } from '@/store/performer.store';
 import restoreConfirm from "@/components/common/funRestoreConfirm"
 import deleteConfirm from "@/components/common/funDeleteConfirm"
 import { performerServerData } from '@/serverData/performer.serverData';
 import { ref, computed, inject } from 'vue'
+import { deleteFile } from '@/assets/file';
 const updatePerformerAdminMainData = inject<() => void>('updatePerformerAdminMainData');
 const store = {
     performerStore: performerStore(),
@@ -54,6 +56,9 @@ const handleDelete = (per: Iperformer) => {
         const rd = await performerServerData.delete(per.id);
         if (rd) {
             store.performerStore.delete(per.id);
+            if (per.photo != '') {
+                deleteFile(setupConfig.performerFacePath + per.performerBases_id, per.photo)
+            }
         }
         await loading.closeSync();
     });

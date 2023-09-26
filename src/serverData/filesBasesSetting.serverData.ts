@@ -1,4 +1,5 @@
 import { CoreDb } from "@/core/core"
+import { coreDBS } from "@/core/coreDBS";
 import { sqlResult } from "@/core/coreSqlite";
 import { IfilesBasesSetting, IfilesBasesConfig, IfilesBasesNofConfig, IfilesBasesSimpleConfig } from "@/dataInterface/filesBasesSetting.interface"
 interface filesBaseConfig {
@@ -53,6 +54,14 @@ const filesBasesSettingServerData = {
     },
     edit: async function (filesBases_id: string, config: IfilesBasesConfig) {
         return await CoreDb().table('filesBasesSetting').update(filesBases_id, { config_json_data: JSON.stringify(config) }, 'filesBases_id');
+    },
+    delete: async function (filesBases_id: string, _dbs: coreDBS | undefined = undefined) {
+        const dbs = _dbs == undefined ? CoreDb() : _dbs;
+        const rd = await dbs.table('filesBasesSetting').where('filesBases_id', '=', filesBases_id).deleteWhere();
+        if (rd == undefined || rd.status == false) {
+            return false;
+        }
+        return true;
     }
 }
 

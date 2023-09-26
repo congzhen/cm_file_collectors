@@ -1,5 +1,5 @@
 import { CoreDb } from "@/core/core"
-import { IConditions, linkMode } from "@/core/coreDBS";
+import { IConditions, coreDBS, linkMode } from "@/core/coreDBS";
 import { Itag, ItagInfo } from "@/dataInterface/tag.interface"
 const tagServerData = {
     getDataList: async function () {
@@ -77,14 +77,22 @@ const tagServerData = {
         }
         await CoreDb().commit(tID);
     },
-    delete: async function (id: string) {
-        const rd = await CoreDb().table('tag').delete(id);
+    delete: async function (id: string, _dbs: coreDBS | undefined = undefined) {
+        const dbs = _dbs == undefined ? CoreDb() : _dbs;
+        const rd = await dbs.table('tag').delete(id);
         if (rd == undefined || rd.status == false || rd.aAffectedRows == 0) {
             return false;
         }
         return true;
+    },
+    deleteByTagClassId: async function (tagClass_id: string, _dbs: coreDBS | undefined = undefined) {
+        const dbs = _dbs == undefined ? CoreDb() : _dbs;
+        const rd = await dbs.table('tag').where('tagClass_id', '=', tagClass_id).deleteWhere();
+        if (rd == undefined || rd.status == false) {
+            return false;
+        }
+        return true;
     }
-
 }
 
 

@@ -1,4 +1,5 @@
 import { CoreDb } from "@/core/core"
+import { coreDBS } from "@/core/coreDBS";
 import { IfilesRelatedPerformerBases } from "@/dataInterface/databases.interface"
 const filesRelatedPerformerBasesServerData = {
     getDataList: async function () {
@@ -56,8 +57,9 @@ const filesRelatedPerformerBasesServerData = {
         }
         return await CoreDb().table('filesRelatedPerformerBases').createGuid().create(o);
     },
-    delAllByFilesBasesId: async function (filesBases_id: string) {
-        return await CoreDb().table('filesRelatedPerformerBases').where('filesBases_id', '=', filesBases_id).deleteWhere();
+    delAllByFilesBasesId: async function (filesBases_id: string, _dbs: coreDBS | undefined = undefined) {
+        const dbs = _dbs == undefined ? CoreDb() : _dbs;
+        return await dbs.table('filesRelatedPerformerBases').where('filesBases_id', '=', filesBases_id).deleteWhere();
     },
 }
 

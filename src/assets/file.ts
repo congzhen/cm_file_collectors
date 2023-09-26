@@ -79,10 +79,10 @@ const fileCopy = function (filePath: string, copyTo: string) {
     }
 }
 
-const deleteFile = function (path: string, name: string) {
+const deleteFile = function (folderPath: string, name: string) {
     let status: boolean;
     try {
-        fs.unlinkSync(filePath(path, name))
+        fs.unlinkSync(path.join(folderPath, name))
         status = true;
     } catch (err) {
         status = false;
@@ -90,17 +90,22 @@ const deleteFile = function (path: string, name: string) {
     return status;
 }
 const deleteFolderRecursive = function (folderPath: string) {
-    if (fs.existsSync(folderPath)) {
-        fs.readdirSync(folderPath).forEach((file) => {
-            const currentPath = path.join(folderPath, file);
-            if (fs.lstatSync(currentPath).isDirectory()) {
-                deleteFolderRecursive(currentPath);
-            } else {
-                fs.unlinkSync(currentPath);
-            }
-        });
-        fs.rmdirSync(folderPath);
+    try {
+        if (fs.existsSync(folderPath)) {
+            fs.readdirSync(folderPath).forEach((file) => {
+                const currentPath = path.join(folderPath, file);
+                if (fs.lstatSync(currentPath).isDirectory()) {
+                    deleteFolderRecursive(currentPath);
+                } else {
+                    fs.unlinkSync(currentPath);
+                }
+            });
+            fs.rmdirSync(folderPath);
+        }
+    } catch (err) {
+        console.log(err)
     }
+
 }
 
 /**

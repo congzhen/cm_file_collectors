@@ -1,5 +1,5 @@
 import { CoreDb } from "@/core/core";
-import { IConditions } from "@/core/coreDBS";
+import { IConditions, coreDBS } from "@/core/coreDBS";
 import { IresTags, IresTagsInfo } from "@/dataInterface/resources.interface";
 const resourcesTagsServerData = {
     getDataListByResources_id: async function (resources_id: string) {
@@ -26,8 +26,9 @@ const resourcesTagsServerData = {
         const addResult = await CoreDb().table('resourcesTags').create(obj as unknown as IConditions);
         return (addResult && addResult.status == true)
     },
-    deleteTagsByResourcesId: async function (resources_id: string) {
-        const delResult = await CoreDb().table('resourcesTags').where('resources_id', '=', resources_id).deleteWhere();
+    deleteTagsByResourcesId: async function (resources_id: string, _dbs: coreDBS | undefined = undefined) {
+        const dbs = _dbs == undefined ? CoreDb() : _dbs;
+        const delResult = await dbs.table('resourcesTags').where('resources_id', '=', resources_id).deleteWhere();
         return (delResult && delResult.status == true) ? true : false;
     },
 }

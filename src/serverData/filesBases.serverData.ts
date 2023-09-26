@@ -1,12 +1,18 @@
 import { CoreDb } from "@/core/core"
 import { IfilesBases } from "@/dataInterface/databases.interface"
 import { filesRelatedPerformerBasesServerData } from "@/serverData/filesRelatedPerformerBases.serverData"
+import { resourcesServerData } from "@/serverData/resources.serverData"
+import { tagClassServerData } from "./tagClass.serverData"
+import { filesBasesSettingServerData } from "./filesBasesSetting.serverData"
 const filesBasesServerData = {
     getDataList: async function () {
         return await CoreDb().table('filesBases').noWhere().order('sort').getList() as Array<IfilesBases>;
     },
     getCount: async function () {
         return await CoreDb().table('filesBases').getCount();
+    },
+    getStatusCount: async function (status: number) {
+        return await CoreDb().table('filesBases').where('status', '=', status.toString()).getCount();
     },
     add: async function (name: string, mainPerformerId: string, relatedPerformerDatabase: Array<string>): Promise<boolean> {
         const tID = await CoreDb().beginTrans();
@@ -69,6 +75,50 @@ const filesBasesServerData = {
         }
         await CoreDb().commit(tID);
         return true;
+    },
+    delete: async function (id: string) {
+        const databaseNum = await this.getCount();
+        if (databaseNum <= 1) {
+            return false;
+        }
+        const dbs = await CoreDb();
+        const tID = await dbs.beginTrans();
+        try {
+            const rd = await dbs.table('filesBases').delete(id);
+            if (rd == undefined || rd.status == false || rd.aAffectedRows == 0) {
+                await dbs.rollback();
+                return false;
+            }
+            const rdBasesSetting = filesBasesSettingServerData.delete(id, dbs);
+            if (!rdBasesSetting) {
+                await dbs.rollback();
+                return false;
+            }
+
+            const rdRelated = filesRelatedPerformerBasesServerData.delAllByFilesBasesId(id, dbs);
+            if (!rdRelated) {
+                await dbs.rollback();
+                return false;
+            }
+            const rdDelResources = await resourcesServerData.deleteByFilesBasesId(id, dbs);
+            if (!rdDelResources) {
+                await dbs.rollback();
+                return false;
+            }
+            const rdDelTag = await tagClassServerData.deleteByFilesBasesId(id, dbs);
+            if (!rdDelTag) {
+                await dbs.rollback();
+                return false;
+            }
+            await dbs.commit(tID);
+            return true;
+        } catch (e: unknown) {
+            await dbs.rollback();
+            return false;
+        }
+
+
+
     },
 }
 

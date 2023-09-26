@@ -29,6 +29,11 @@
                     </div>
                 </template>
             </el-table-column>
+            <template v-slot:operations="scope">
+                <el-icon class="delete" @click="deleteFilesDatabases(scope.rowData.row)" v-if="!scope.rowData.row.status">
+                    <Delete />
+                </el-icon>
+            </template>
         </comTable>
         <filesDatabasesAdminAdd ref="filesDatabasesAdminAddRef"></filesDatabasesAdminAdd>
     </div>
@@ -36,13 +41,22 @@
 <script setup lang="ts">
 import comTable from '../common/comTable.vue';
 import loading from '@/assets/loading'
+import { ElMessage } from 'element-plus'
+import setupConfig from "@/setup/config";
+import deleteConfirm from "@/components/common/funDeleteConfirm"
 import filesDatabasesAdminAdd from './filesDatabasesAdminAdd.vue'
 import { filesBasesServerData } from "@/serverData/filesBases.serverData"
 import { filesBasesStore } from "@/store/filesBases.store"
 import { performerBasesStore } from "@/store/performerBases.store"
 import { filesRelatedPerformerBasesStore } from "@/store/filesRelatedPerformerBases.store"
 import { IfilesBases, IperformerBases } from '@/dataInterface/databases.interface';
-import { ref } from 'vue'
+import { ref, inject } from 'vue'
+import { deleteFolderRecursive } from '@/assets/file';
+import { useI18n } from 'vue-i18n'
+import { EresUpdate } from '@/dataInterface/common.enum';
+const AppInitInject = inject<(_filesBases_id: string, _callBack: () => void) => void>('AppInit');
+const indexUpdateResourcesDataInject = inject<(_up: Array<EresUpdate>) => void>('indexUpdateResourcesData');
+const { t } = useI18n();
 const store = {
     filesBasesStore: filesBasesStore(),
     performerBasesStore: performerBasesStore(),
@@ -77,13 +91,22 @@ const editRecordClick = (record: IfilesBases) => {
 
 const deleteRecordClick = async (record: IfilesBases) => {
     loading.open();
-    const rd = await filesBasesServerData.status(record.id, false);
-    if (rd) {
-        store.filesBasesStore.setStatus(record.id, false);
-        comTableRef.value?.deleteSuccess();
+    const status1Count = await filesBasesServerData.getStatusCount(1);
+    if (status1Count <= 1) {
+        ElMessage({
+            message: t('filesDatabases.message.leastNeedOneFilesDatabasesStatus'),
+            type: 'warning',
+        })
     } else {
-        comTableRef.value?.deleteFail();
+        const rd = await filesBasesServerData.status(record.id, false);
+        if (rd) {
+            store.filesBasesStore.setStatus(record.id, false);
+            comTableRef.value?.deleteSuccess();
+        } else {
+            comTableRef.value?.deleteFail();
+        }
     }
+
     await loading.closeSync();
 }
 
@@ -108,6 +131,37 @@ const sortRecordClick = async (type: string, _index: number, record: IfilesBases
     await loading.closeSync();
 }
 
+const deleteFilesDatabases = async (filesBases: IfilesBases) => {
+    if (await filesBasesServerData.getCount() <= 1) {
+        ElMessage({
+            message: t('filesDatabases.message.leastNeedOneFilesDatabases'),
+            type: 'error',
+        })
+        return false;
+    }
+    deleteConfirm.exec(filesBases.name, async () => {
+        loading.open();
+        const rd = await filesBasesServerData.delete(filesBases.id);
+        if (rd) {
+            deleteFolderRecursive(setupConfig.resCoverPosterPath + '/' + filesBases.id);
+            let showFilesBasesId = store.filesBasesStore.currentFilesBases.id == filesBases.id ? store.filesBasesStore.filesBasesList[0].id : store.filesBasesStore.currentFilesBases.id;
+            if (showFilesBasesId == filesBases.id && store.filesBasesStore.filesBasesList[1]) {
+                showFilesBasesId = store.filesBasesStore.filesBasesList[1].id;
+            }
+            if (AppInitInject) AppInitInject(showFilesBasesId, async () => {
+                if (indexUpdateResourcesDataInject) indexUpdateResourcesDataInject([EresUpdate.updateData, EresUpdate.updataDetailsViewByUpdateDataFirstRecord]);
+            });
+        } else {
+            ElMessage({
+                message: t('filesDatabases.message.deleteFail'),
+                type: 'error',
+            })
+        }
+        await loading.closeSync();
+    });
+}
+
+
 </script>
 <style scoped>
 .daMain {
@@ -131,5 +185,15 @@ const sortRecordClick = async (type: string, _index: number, record: IfilesBases
 
 .databases-tag label {
     padding: 3px 3px 0px 5px
+}
+
+.daMain .delete {
+    cursor: pointer;
+    margin: 3px 12px;
+    font-size: 16px;
+}
+
+.daMain .delete:hover {
+    color: #5CB6FF;
 }
 </style>

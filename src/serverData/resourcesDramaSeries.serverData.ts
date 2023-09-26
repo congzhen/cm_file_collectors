@@ -1,5 +1,5 @@
 import { CoreDb } from "@/core/core";
-import { IConditions, linkMode } from "@/core/coreDBS";
+import { IConditions, coreDBS, linkMode } from "@/core/coreDBS";
 import { IresDramaSeries, IresDramaSeriesParhReplaceerInfo } from "@/dataInterface/resources.interface";
 const resourcesDramaSeriesServerData = {
     getDramaSeriesInfoById: async function (id: string) {
@@ -36,8 +36,9 @@ const resourcesDramaSeriesServerData = {
         const addResult = await CoreDb().table('resourcesDramaSeries').create(obj as unknown as IConditions);
         return (addResult && addResult.status == true)
     },
-    deleteDramaSeriesByResourcesId: async function (resources_id: string) {
-        const delResult = await CoreDb().table('resourcesDramaSeries').where('resources_id', '=', resources_id).deleteWhere();
+    deleteDramaSeriesByResourcesId: async function (resources_id: string, _dbs: coreDBS | undefined = undefined) {
+        const dbs = _dbs == undefined ? CoreDb() : _dbs;
+        const delResult = await dbs.table('resourcesDramaSeries').where('resources_id', '=', resources_id).deleteWhere();
         return (delResult && delResult.status == true) ? true : false;
     },
     replaceSrc: async function (_search: string, _replace: string, _idList: Array<string>) {

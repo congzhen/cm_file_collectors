@@ -85,13 +85,22 @@ const editRecordClick = (record: IperformerBases) => {
 
 const deleteRecordClick = async (record: IperformerBases) => {
     loading.open();
-    const rd = await performerBasesServerData.status(record.id, false);
-    if (rd) {
-        store.performerBasesStore.setStatus(record.id, false);
-        comTableRef.value?.deleteSuccess();
+    const status1Count = await performerBasesServerData.getStatusCount(1);
+    if (status1Count <= 1) {
+        ElMessage({
+            message: t('performerDatabases.message.leastNeedOnePerformerDatabasesStatus'),
+            type: 'warning',
+        })
     } else {
-        comTableRef.value?.deleteFail();
+        const rd = await performerBasesServerData.status(record.id, false);
+        if (rd) {
+            store.performerBasesStore.setStatus(record.id, false);
+            comTableRef.value?.deleteSuccess();
+        } else {
+            comTableRef.value?.deleteFail();
+        }
     }
+
     await loading.closeSync();
 }
 
@@ -134,6 +143,13 @@ const exportDatabases = async (performerDatabasesId: string) => {
 }
 
 const deletePerformerDatabases = async (performerDatabases: IperformerBases) => {
+    if (await performerBasesServerData.getCount() <= 1) {
+        ElMessage({
+            message: t('performerDatabases.message.leastNeedOnePerformerDatabases'),
+            type: 'error',
+        })
+        return false;
+    }
     deleteConfirm.exec(performerDatabases.name, async () => {
         loading.open();
         const rd = await performerBasesServerData.delete(performerDatabases.id);

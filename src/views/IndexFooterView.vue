@@ -73,6 +73,7 @@ const systemDialogRef = ref<InstanceType<typeof systemDialog>>();
 const currentFilesBases = ref(store.filesBasesStore.currentFilesBases.id);
 
 watch(() => props.dataLimit, (newValue) => pageSize.value = newValue);
+watch(() => store.filesBasesStore.currentFilesBases.id, (newValue) => currentFilesBases.value = newValue);
 
 const currentChange = () => {
     emits('currentChange', currentPage.value);
