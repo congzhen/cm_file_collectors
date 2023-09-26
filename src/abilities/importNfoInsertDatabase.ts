@@ -11,7 +11,7 @@ import { IresDramaSeries, IresPerformers, IresTags, IresourcesBase } from "@/dat
 import { EresDramaSeriesType } from "@/dataInterface/common.enum";
 import { Iperformer } from '@/dataInterface/performer.interface';
 import { IConditions } from '@/core/coreDBS';
-import { ItagClass, ItagInfo } from '@/dataInterface/tag.interface';
+import { ItagClass, ItagClassInfo, ItagInfo } from '@/dataInterface/tag.interface';
 import timer from '@/assets/timer';
 import downloadFile from '@/assets/downloadFile';
 import { fileCopy } from "@/assets/file"
@@ -288,10 +288,16 @@ async function getPerformerInfo(performerBases_id: string, name: string) {
 
 async function createTagData(nofData: InofData, filesBases_id: string, resources_id: string, tagClass_id: string) {
     const tagList: Array<IresTags> = [];
-    console.log(nofData.tag);
     const tagNameArr = nofData.tag.map(item => item.trim());
     for (const tagName of tagNameArr) {
-        const tagInfo = await getTagInfo(tagName);
+        const databaseTagList = await getTagList(tagName) as Array<ItagInfo>;
+        let tagInfo: ItagInfo | undefined = undefined;
+        for (const tag of databaseTagList) {
+            const tagClassInfo = await getTagClassInfo(tag.tagClass_id) as ItagClassInfo;
+            if (tagClassInfo.filesBases_id == filesBases_id) {
+                tagInfo = tag;
+            }
+        }
         let tag_id;
         if (!tagInfo) {
             tag_id = coreCreateGuid();
@@ -305,9 +311,8 @@ async function createTagData(nofData: InofData, filesBases_id: string, resources
                 status: true
             }
             await createTag(info);
-
         } else {
-            tag_id = (tagInfo as IresTags).id;
+            tag_id = (tagInfo as ItagInfo).id;
         }
         tagList.push({
             id: coreCreateGuid(),
@@ -326,10 +331,12 @@ async function createTag(formdataObj: ItagInfo) {
     return true;
 }
 
-async function getTagInfo(tagName: string) {
-    return await dbs.table('tag').where('name', '=', tagName).getFind();
+async function getTagList(tagName: string) {
+    return await dbs.table('tag').where('name', '=', tagName).getList();
 }
-
+async function getTagClassInfo(tagClass_id: string) {
+    return await dbs.table('tagClass').getInfo(tagClass_id);
+}
 
 function createDramaSeriesData(nofData: InofData, resources_id: string) {
     const list: Array<IresDramaSeries> = [{
