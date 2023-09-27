@@ -1,7 +1,7 @@
 import { CoreDb } from "@/core/core";
 import { IConditions, coreDBS } from "@/core/coreDBS";
 import { coreCreateGuid } from "@/core/coreGuid";
-import { IresDramaSeries, IresTags, IresDirectors, IresPerformers, Iresources, IresourcesBase, IresWhereObj } from "@/dataInterface/resources.interface";
+import { IresDramaSeries, IresTags, IresDirectors, IresPerformers, Iresources, IresourcesBase, IresWhereObj, IresSimpleAnddramaSeries } from "@/dataInterface/resources.interface";
 import { resourcesTagsServerData } from "@/serverData/resourcesTags.serverData"
 import { resourcesDirectorsServerData } from "./resourcesDirectors.serverData";
 import { resourcesPerformersServerData } from "./resourcesPerformers.serverData";
@@ -22,6 +22,9 @@ const resourcesServerData = {
     },
     getInfoById: async function (id: string) {
         const info = await this.getBaseInfoById(id);
+        if (!info) {
+            return info;
+        }
         info.directors = await resourcesDirectorsServerData.getDataListByResources_id(id);
         info.dramaSeries = await resourcesDramaSeriesServerData.getDataListByResources_id(id);
         info.performers = await resourcesPerformersServerData.getDataListByResources_id(id);
@@ -58,6 +61,36 @@ const resourcesServerData = {
         }
         const dataList = await cdb.limit(1, limit).order('id', 'Rand').getList() as Array<IresourcesBase>;
         return await this.IresourcesBaseToIresources(dataList);
+    },
+    getDataListAddTimeAndSeries: async function (likeText: string, inFilesBases = [], addTime: null | Array<string> = null) {
+        const CDB = CoreDb().table('resources');
+        if (inFilesBases.length > 0) {
+            CDB.whereIn('filesBases_id', inFilesBases);
+        }
+        if (addTime != null) {
+            CDB.whereDateRange('addTime', 'addTime', addTime[0], addTime[1]);
+        }
+        const datalist = await CDB.getList() as Array<IresourcesBase>;
+        const l: Array<IresSimpleAnddramaSeries> = [];
+        for (const data of datalist) {
+            let seriesList: Array<IresDramaSeries> = [];
+            if (likeText != '') {
+                seriesList = await resourcesDramaSeriesServerData.getDataListByLikeSrcAndResources_id(likeText, data.id);
+                if (seriesList.length == 0) {
+                    continue;
+                }
+            }
+            l.push({
+                id: data.id,
+                title: data.title,
+                filesBases_id: data.filesBases_id,
+                issueNumber: data.issueNumber,
+                addTime: data.addTime,
+                coverPoster: data.coverPoster,
+                dramaSeries: seriesList,
+            })
+        }
+        return l;
     },
     IresourcesBaseToIresources: async function (dataList: Array<IresourcesBase>) {
         const dataInfoList: Array<Iresources> = [];

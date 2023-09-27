@@ -38,6 +38,16 @@ interface IresDramaSeriesParhReplaceerInfo extends IresDramaSeries {
     issueNumber: string;
 }
 
+interface IresSimpleAnddramaSeries {
+    id: string;
+    title: string;
+    issueNumber: string;
+    filesBases_id: string;
+    addTime: string;
+    coverPoster: string;
+    dramaSeries: Array<IresDramaSeries>;
+}
+
 interface IresTags {
     id: string;
     resources_id: string;
@@ -63,4 +73,4 @@ interface IresWhereObj {
     sortMode: string;
 }
 
-export { IresourcesBase, Iresources, IresDramaSeries, IresDramaSeriesParhReplaceerInfo, IresTags, IresTagsInfo, IresDirectors, IresPerformers, IresWhereObj }
+export { IresourcesBase, Iresources, IresDramaSeries, IresSimpleAnddramaSeries, IresDramaSeriesParhReplaceerInfo, IresTags, IresTagsInfo, IresDirectors, IresPerformers, IresWhereObj }

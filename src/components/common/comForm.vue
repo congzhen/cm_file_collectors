@@ -30,7 +30,7 @@
                         }}</el-button>
                         <el-button v-if="showBtn('reset')" @click="resetForm(ruleFormRef)">{{ $t('com.form.reset') }}
                         </el-button>
-                        <el-button v-if="showBtn('goback')" @click="$emit('gobackClick')">{{ $t('com.form.goback') }}
+                        <el-button v-if="showBtn('goback')" @click="$emit('goBack')">{{ $t('com.form.goback') }}
                         </el-button>
                     </div>
                 </el-form-item>

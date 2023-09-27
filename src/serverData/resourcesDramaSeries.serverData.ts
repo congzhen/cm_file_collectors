@@ -8,6 +8,9 @@ const resourcesDramaSeriesServerData = {
     getDataListByResources_id: async function (resources_id: string) {
         return await CoreDb().table('resourcesDramaSeries').where('resources_id', '=', resources_id).getList() as Array<IresDramaSeries>;
     },
+    getDataListByLikeSrcAndResources_id: async function (likeText: string, resources_id: string) {
+        return await CoreDb().table('resourcesDramaSeries').where('resources_id', '=', resources_id).whereLike('src', likeText).getList() as Array<IresDramaSeries>;
+    },
     getDataListByLikeSrc: async function (likeText: string, inFilesBases = []) {
         const CDB = CoreDb().table('resourcesDramaSeries').fields(['*', 'r.title', 'r.issueNumber']).leftJoin('resources as r', 't.resources_id = r.id');
         if (inFilesBases.length > 0) {

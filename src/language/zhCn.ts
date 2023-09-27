@@ -431,6 +431,22 @@ export default {
             pleaseEnterReplaceContent: '请先输入替换内容.',
         }
     },
+    batchDeletionTool: {
+        title: '数据批量删除器',
+        allDataBases: '全部数据库',
+        optDataBases: '操作数据库',
+        search: '检索',
+        delete: '删除',
+        addTime: '录入时间',
+        dramaSeriesPath: '剧集路径',
+        startDate: '开始时间',
+        endDate: '结束时间',
+        resultMessage: {
+            searchSuccess: '检索到数据 {count} 条.',
+            deletePrompt: '确定要删除 {count} 条资源记录？.',
+            deleteComplete: '删除数据完成',
+        }
+    },
     system: {
         tags: {
             softConfig: '软件配置',

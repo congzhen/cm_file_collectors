@@ -8,6 +8,8 @@
                     <div>
                         <el-button @click="openDramaSeriesPathReplacer">{{ $t('dramaSeriesPathReplacer.title')
                         }}</el-button>
+                        <el-button @click="openBatchDeletionTool">{{ $t('batchDeletionTool.title')
+                        }}</el-button>
                     </div>
                     <div>
                         <el-button @click="dialogVisible = false">{{ $t('filesDatabases.cancel') }}</el-button>
@@ -21,15 +23,18 @@
     </div>
     <filesDatabasesAdminAdd ref="filesDatabasesAdminAddRef"></filesDatabasesAdminAdd>
     <dramaSeriesPathReplacer ref="dramaSeriesPathReplacerRef"></dramaSeriesPathReplacer>
+    <batchDeletionTool ref="batchDeletionToolRef"></batchDeletionTool>
 </template>
 <script setup lang="ts">
 import setupConfig from "@/setup/config"
 import filesDatabasesAdminMain from './filesDatabasesAdminMain.vue';
 import filesDatabasesAdminAdd from './filesDatabasesAdminAdd.vue';
 import dramaSeriesPathReplacer from '../pageCom/dramaSeriesPathReplacer.vue';
+import batchDeletionTool from "../pageCom/batchDeletionTool.vue";
 import { ref } from 'vue'
 const filesDatabasesAdminAddRef = ref<InstanceType<typeof filesDatabasesAdminAdd>>();
 const dramaSeriesPathReplacerRef = ref<InstanceType<typeof dramaSeriesPathReplacer>>();
+const batchDeletionToolRef = ref<InstanceType<typeof batchDeletionTool>>();
 const dialogVisible = ref(false);
 const open = () => {
     dialogVisible.value = true;
@@ -40,6 +45,10 @@ const handleAddFilesDatabases = () => {
 
 const openDramaSeriesPathReplacer = () => {
     dramaSeriesPathReplacerRef.value?.open();
+}
+
+const openBatchDeletionTool = () => {
+    batchDeletionToolRef.value?.open();
 }
 
 const fullscreen = () => {

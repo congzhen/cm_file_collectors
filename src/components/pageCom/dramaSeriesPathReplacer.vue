@@ -38,7 +38,8 @@
             <div class="dsprResult">
                 <el-scrollbar height="100%">
                     <div class="dataInfo" v-for="item, key in dataList" :key="key">
-                        <div class="title">[{{ item.issueNumber }}] {{ item.title }}</div>
+                        <div class="title"><label v-if="item.issueNumber != ''">[{{ item.issueNumber }}]</label> {{
+                            item.title }}</div>
                         <div class="dataDramaSeries" v-html="searchContentShowRed(item.src)"> </div>
                     </div>
 
