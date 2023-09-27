@@ -71,6 +71,7 @@ interface IfilesBasesConfig {
 interface IfilesBasesNofConfig {
     autoConverSeries: boolean,
     importCheckTitleAlready: boolean,
+    coverPosterUsesPreSetDimensions: boolean,
     suffix: string,
     root: string,
     title: string,
@@ -91,10 +92,11 @@ interface IfilesBasesNofConfig {
 
 interface IfilesBasesSimpleConfig {
     importCheckTitleAlready: boolean,
+    coverPosterUsesPreSetDimensions: boolean,
     suffix: string,
     title: string,
     cover: string,
     coverSuffix: string,
 }
 
-export { IfilesBasesSetting, IfilesBasesConfig, IfilesBasesNofConfig, IfilesBasesSimpleConfig };
+export { IfilesBasesSetting, IfilesBasesConfig, IcoverPosterData, IfilesBasesNofConfig, IfilesBasesSimpleConfig };

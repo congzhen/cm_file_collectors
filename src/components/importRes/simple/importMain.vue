@@ -43,6 +43,9 @@
                         <el-checkbox v-model="nofConfig.importCheckTitleAlready">
                             {{ $t('import.importCheckTitleAlready') }}
                         </el-checkbox>
+                        <el-checkbox v-model="nofConfig.coverPosterUsesPreSetDimensions">
+                            {{ $t('import.coverPosterUsesPreSetDimensions') }}
+                        </el-checkbox>
                     </div>
                 </div>
                 <div class="rowTwo">
@@ -89,6 +92,7 @@ const retrieveFolderPath = ref('');
 const coverPosterMode = ref(0);
 const defaultNofConfig: IfilesBasesSimpleConfig = {
     importCheckTitleAlready: true,
+    coverPosterUsesPreSetDimensions: false,
     suffix: '.mp4|.avi|.rmvb|.wmv|.mov|.mkv|.flv|.ts|.webm|.iso|.mpg|.m4v',
     title: 'file|folder',
     cover: 'poster|thumb|fanart',

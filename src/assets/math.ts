@@ -18,4 +18,21 @@ const calculateAge = function (_birthday: string) {
     return Math.abs(ageDate.getUTCFullYear() - 1970);
 }
 
-export { ratio, toFixedRemore0, calculateAge }
+/*
+*给定给定的纵横比计算图像的新尺寸：
+*/
+const calculateResizedDimensions = function (originalWidth: number, originalHeight: number, desiredWidth: number, desiredHeight: number) {
+    const aspectRatio = originalWidth / originalHeight;
+    const desiredAspectRatio = desiredWidth / desiredHeight;
+    let resizingFactor;
+    if (aspectRatio > desiredAspectRatio) {
+        resizingFactor = desiredWidth / originalWidth;
+    } else {
+        resizingFactor = desiredHeight / originalHeight;
+    }
+    const newWidth = originalWidth * resizingFactor;
+    const newHeight = originalHeight * resizingFactor;
+    return { width: Math.floor(newWidth), height: Math.floor(newHeight) };
+}
+
+export { ratio, toFixedRemore0, calculateAge, calculateResizedDimensions }

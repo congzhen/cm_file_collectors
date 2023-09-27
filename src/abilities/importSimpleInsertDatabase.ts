@@ -1,6 +1,7 @@
 import path from "path"
 import fs from "fs"
 import { filesBasesStore } from "@/store/filesBases.store";
+import { filesBasesSettingStore } from "@/store/filesBasesSetting.store";
 import { ISimpleData } from "./importSimple";
 import setupConfig from "@/setup/config"
 
@@ -10,10 +11,11 @@ import { coreCreateGuid } from "@/core/coreGuid";
 import { IresDramaSeries, IresourcesBase } from "@/dataInterface/resources.interface";
 import { EresDramaSeriesType } from "@/dataInterface/common.enum";
 import timer from "@/assets/timer";
-import { fileCopy } from "@/assets/file";
+import { fileCopy, fileMove } from "@/assets/file";
 import sharp from "sharp";
 import { IConditions } from "@/core/coreDBS";
-import { IfilesBasesSimpleConfig } from "@/dataInterface/filesBasesSetting.interface";
+import { IcoverPosterData, IfilesBasesSimpleConfig } from "@/dataInterface/filesBasesSetting.interface";
+import { calculateResizedDimensions } from "@/assets/math";
 export interface IimportSimpleInsertDatabase {
     count: {
         already: number,
@@ -37,8 +39,10 @@ export const dataCopyDatabase = async function (dataList: Array<ISimpleData>, co
     };
     const store = {
         filesBasesStore: filesBasesStore(),
+        filesBasesSettingStore: filesBasesSettingStore(),
     }
     const filesBases_id = store.filesBasesStore.currentFilesBases.id;
+    const coverPosterDataConfig: IcoverPosterData | undefined = config.coverPosterUsesPreSetDimensions ? store.filesBasesSettingStore.config.coverPosterData[coverPosterMode] : undefined;
 
     const tID = await dbs.beginTrans();
     for (const smData of dataList) {
@@ -52,7 +56,7 @@ export const dataCopyDatabase = async function (dataList: Array<ISimpleData>, co
         }
         try {
             //资源
-            const resourcesObj = await createResourceData(smData, filesBases_id, coverPosterMode);
+            const resourcesObj = await createResourceData(smData, filesBases_id, coverPosterMode, coverPosterDataConfig);
             await dbs.table('resources').createTime().create(resourcesObj as unknown as IConditions);
             resultData.data.push({
                 data: smData,
@@ -82,9 +86,9 @@ async function checkResExist(filesBases_id: string, title: string) {
     }).getCount() as number;
 }
 
-async function createResourceData(smData: ISimpleData, filesBases_id: string, coverPosterMode = 0) {
+async function createResourceData(smData: ISimpleData, filesBases_id: string, coverPosterMode = 0, coverPosterDataConfig: IcoverPosterData | undefined) {
 
-    const coverPosterInfo = await createCoverPoster(smData, filesBases_id);
+    const coverPosterInfo = await createCoverPoster(smData, filesBases_id, coverPosterDataConfig);
     const data: IresourcesBase = {
         id: coreCreateGuid(),
         filesBases_id: filesBases_id,
@@ -109,7 +113,7 @@ async function createResourceData(smData: ISimpleData, filesBases_id: string, co
     return data;
 }
 
-async function createCoverPoster(smData: ISimpleData, filesBases_id: string) {
+async function createCoverPoster(smData: ISimpleData, filesBases_id: string, coverPosterDataConfig: IcoverPosterData | undefined) {
     const coverPath = smData.cover;
     const coverPosterName = coreCreateGuid() + '.jpg';
     const coverPosterPath = path.join(setupConfig.resCoverPosterPath, '/', filesBases_id, '/', coverPosterName);
@@ -119,12 +123,28 @@ async function createCoverPoster(smData: ISimpleData, filesBases_id: string) {
         return undefined;
     }
     const metadata = await sharp(coverPosterPath).metadata();
-    return {
-        name: coverPosterName,
-        width: metadata.width,
-        height: metadata.height,
-
+    if (coverPosterDataConfig == undefined || !metadata.width || !metadata.height || coverPosterDataConfig.width == 0 || coverPosterDataConfig.height == 0) {
+        return {
+            name: coverPosterName,
+            width: metadata.width,
+            height: metadata.height,
+        }
+    } else {
+        const newDimensionsObj = calculateResizedDimensions(metadata.width, metadata.height, coverPosterDataConfig.width, coverPosterDataConfig.height);
+        try {
+            const tmpCoverPosterPath = coverPosterPath + 'tmp';
+            await sharp(coverPosterPath).resize(newDimensionsObj.width, newDimensionsObj.height).toFile(tmpCoverPosterPath);
+            fileMove(tmpCoverPosterPath, coverPosterPath)
+        } catch (e: unknown) {
+            console.log(e);
+        }
+        return {
+            name: coverPosterName,
+            width: newDimensionsObj.width,
+            height: newDimensionsObj.height,
+        }
     }
+
 }
 
 function definitionConvert(videoHeight: string) {

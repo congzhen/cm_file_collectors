@@ -7,6 +7,7 @@ import { CoreDb } from '@/core/core';
 import { coreCreateGuid } from "@/core/coreGuid";
 import { InofData } from "./importNfo";
 import { filesBasesStore } from "@/store/filesBases.store";
+import { filesBasesSettingStore } from '@/store/filesBasesSetting.store';
 import { IresDramaSeries, IresPerformers, IresTags, IresourcesBase } from "@/dataInterface/resources.interface";
 import { EresDramaSeriesType } from "@/dataInterface/common.enum";
 import { Iperformer } from '@/dataInterface/performer.interface';
@@ -14,9 +15,10 @@ import { IConditions } from '@/core/coreDBS';
 import { ItagClass, ItagClassInfo, ItagInfo } from '@/dataInterface/tag.interface';
 import timer from '@/assets/timer';
 import downloadFile from '@/assets/downloadFile';
-import { fileCopy } from "@/assets/file"
+import { fileCopy, fileMove } from "@/assets/file"
 import { tagServerData } from '@/serverData/tag.serverData';
-import { IfilesBasesNofConfig } from '@/dataInterface/filesBasesSetting.interface';
+import { IfilesBasesNofConfig, IcoverPosterData } from '@/dataInterface/filesBasesSetting.interface';
+import { calculateResizedDimensions } from '@/assets/math';
 
 
 const dbs = CoreDb();
@@ -45,6 +47,7 @@ export const dataCopyDatabase = async function (dataList: Array<InofData>, cover
     };
     const store = {
         filesBasesStore: filesBasesStore(),
+        filesBasesSettingStore: filesBasesSettingStore(),
     }
     const filesBases_id = store.filesBasesStore.currentFilesBases.id;
     console.log('导入当前库', filesBases_id);
@@ -53,6 +56,9 @@ export const dataCopyDatabase = async function (dataList: Array<InofData>, cover
         throw new Error('No default performerBases found');
         return;
     }
+
+    const coverPosterDataConfig: IcoverPosterData | undefined = config.coverPosterUsesPreSetDimensions ? store.filesBasesSettingStore.config.coverPosterData[coverPosterMode] : undefined;
+
     const tagClass_id = await getDefaultTagClassId(filesBases_id);
     const tID = await dbs.beginTrans();
     for (const nofData of dataList) {
@@ -66,7 +72,7 @@ export const dataCopyDatabase = async function (dataList: Array<InofData>, cover
         }
         try {
             //资源
-            const resourcesObj = await createResourceData(nofData, filesBases_id, coverPosterMode);
+            const resourcesObj = await createResourceData(nofData, filesBases_id, coverPosterMode, coverPosterDataConfig);
             await dbs.table('resources').createTime().create(resourcesObj as unknown as IConditions);
             //演员
             const performerObj = await craetePerformerData(nofData, performerBases_id, resourcesObj.id);
@@ -133,9 +139,9 @@ async function checkResExist(filesBases_id: string, title: string, issueNumber: 
     return await _dbs.getCount() as number;
 }
 
-async function createResourceData(nofData: InofData, filesBases_id: string, coverPosterMode = 0) {
+async function createResourceData(nofData: InofData, filesBases_id: string, coverPosterMode = 0, coverPosterDataConfig: IcoverPosterData | undefined) {
 
-    const coverPosterInfo = await createCoverPoster(nofData, filesBases_id);
+    const coverPosterInfo = await createCoverPoster(nofData, filesBases_id, coverPosterDataConfig);
     const data: IresourcesBase = {
         id: coreCreateGuid(),
         filesBases_id: filesBases_id,
@@ -160,7 +166,7 @@ async function createResourceData(nofData: InofData, filesBases_id: string, cove
     return data;
 }
 
-async function createCoverPoster(nofData: InofData, filesBases_id: string) {
+async function createCoverPoster(nofData: InofData, filesBases_id: string, coverPosterDataConfig: IcoverPosterData | undefined) {
     const coverPath = path.join(nofData.folder, '/', nofData.cover);
     const coverPosterName = coreCreateGuid() + '.jpg';
     const coverPosterPath = path.join(setupConfig.resCoverPosterPath, '/', filesBases_id, '/', coverPosterName);
@@ -179,13 +185,32 @@ async function createCoverPoster(nofData: InofData, filesBases_id: string) {
         return undefined;
     }
     const metadata = await sharp(coverPosterPath).metadata();
-    return {
-        name: coverPosterName,
-        width: metadata.width,
-        height: metadata.height,
 
+    if (coverPosterDataConfig == undefined || !metadata.width || !metadata.height || coverPosterDataConfig.width == 0 || coverPosterDataConfig.height == 0) {
+        return {
+            name: coverPosterName,
+            width: metadata.width,
+            height: metadata.height,
+        }
+    } else {
+        const newDimensionsObj = calculateResizedDimensions(metadata.width, metadata.height, coverPosterDataConfig.width, coverPosterDataConfig.height);
+        try {
+            const tmpCoverPosterPath = coverPosterPath + 'tmp';
+            await sharp(coverPosterPath).resize(newDimensionsObj.width, newDimensionsObj.height).toFile(tmpCoverPosterPath);
+            fileMove(tmpCoverPosterPath, coverPosterPath)
+        } catch (e: unknown) {
+            console.log(e);
+        }
+        return {
+            name: coverPosterName,
+            width: newDimensionsObj.width,
+            height: newDimensionsObj.height,
+        }
     }
+
 }
+
+
 
 /**未处理 */
 function countryConvert(country: string) {

@@ -226,6 +226,7 @@ export default {
         nfoConfigTitle: 'nfo文件配置',
         autoConverSeries: '文件夹多视频自动转剧集',
         importCheckTitleAlready: '导入时检测标题是否存在',
+        coverPosterUsesPreSetDimensions: '封面海报使用预设尺寸',
         submit: '导入',
         cancel: '取消',
         restoreDefaultValues: '恢复默认值',
