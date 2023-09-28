@@ -6,6 +6,29 @@
         <div class="updataLogsBody">
             <el-timeline>
                 <el-scrollbar height="500px">
+                    <el-timeline-item timestamp="2023/9/29" placement="top">
+                        <h4>{{ $t('system.updateLogs.version') }}：v 2.0.7</h4>
+                        <div class="rawContent">
+                            <h5>新特性</h5>
+                            <p class="logContent">添加功能，批量删除器</p>
+                            <p class="logContent">增加标签，演员与演员集的真实删除功能，演员集需要先停用，并解除所有关联才可以删除</p>
+                            <p class="logContent">增加文件库删除功能</p>
+                            <p class="logContent">添加功能，随机海报封面</p>
+                            <p class="logContent">导入增加封面海报使用预设尺寸，可以用来减小导入时海报过大</p>
+                            <p class="logContent">导入时增加检测标题配置项</p>
+                            <p class="logContent">优化小屏幕添加资源时，全屏效果</p>
+                            <p class="logContent">优化添加或修改资源时，从新渲染改为从新渲染多选组件</p>
+                            <p class="logContent">切换数据库，将切换右侧详情显示</p>
+                        </div>
+                        <div class="rawContent">
+                            <h5>BUG修复</h5>
+                            <p class="logContent">修复因窗口变化，导致浮动模式的左边栏溢出情况</p>
+                            <p class="logContent">修改导检索已存在记录的sql错误</p>
+                            <p class="logContent">修复关联演员集与导入演员集数据没有刷新</p>
+                            <p class="logContent">修复可删除标签的数据混乱与文字显示</p>
+                            <p class="logContent">修复nfo导入时，因为tag名称在其他库中存在而未导入的情况</p>
+                        </div>
+                    </el-timeline-item>
                     <el-timeline-item timestamp="2023/9/20" placement="top">
                         <h4>{{ $t('system.updateLogs.version') }}：v 2.0.6</h4>
                         <div class="rawContent">
