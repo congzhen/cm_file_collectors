@@ -1,8 +1,9 @@
 <template>
     <div class="tagBlock">
-        <tagHeaderVue :title="props.title" @updataCondition="updataCondition" :conditionItem="props.conditionItem">
+        <tagHeaderVue :title="props.title" @updataCondition="updataCondition" @updateDeployableState="updateDeployableState"
+            :conditionItem="props.conditionItem">
         </tagHeaderVue>
-        <div class="tagList fixedWidth">
+        <div v-if="tagDeployableState" class="tagList fixedWidth">
             <tagSpan :text="$t('tag.all')" @click="selectHandle('all' as never)" :select="selectStatus('all')"></tagSpan>
             <tagSpan v-for="item, key in props.dataList" :key="key" :text="item.name"
                 @click="selectHandle(item.value as never)" :select="selectStatus(item.value)">
@@ -43,6 +44,7 @@ const emits = defineEmits(['updateData']);
 
 const selectValArr = ref([]);
 const searchLogic = ref(EsearchLogic.single);
+const tagDeployableState = ref(true);
 
 const updateData = () => {
     emits('updateData', props.mode, searchLogic.value, selectValArr.value)
@@ -54,6 +56,10 @@ const updataCondition = (searchLogicValue: EsearchLogic) => {
     }
     searchLogic.value = searchLogicValue;
     updateData();
+}
+
+const updateDeployableState = (deployableState: boolean) => {
+    tagDeployableState.value = deployableState;
 }
 
 const selectHandle = (val: never) => {

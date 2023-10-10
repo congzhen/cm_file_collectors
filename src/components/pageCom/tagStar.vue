@@ -1,8 +1,8 @@
 <template>
     <div>
         <tagHeaderVue :title="$t('defaultTag.starRating')" @updataCondition="updataCondition"
-            :conditionItem="props.conditionItem"></tagHeaderVue>
-        <div class="tagStar">
+            @updateDeployableState="updateDeployableState" :conditionItem="props.conditionItem"></tagHeaderVue>
+        <div class="tagStar" v-if="tagDeployableState">
             <div class="tagStarLeft fixedWidth">
                 <tagSpan :text="$t('tag.all')" @click="selectHandle('all' as never)" :select="selectStatus('all')">
                 </tagSpan>
@@ -40,6 +40,7 @@ const starData = ref([1, 2, 3, 4, 5]);
 
 const selectValArr = ref([]);
 const searchLogic = ref(EsearchLogic.single);
+const tagDeployableState = ref(true);
 
 const updateData = () => {
     emits('updateData', 'starRating', searchLogic.value, selectValArr.value)
@@ -51,6 +52,9 @@ const updataCondition = (searchLogicValue: EsearchLogic) => {
     }
     searchLogic.value = searchLogicValue;
     updateData()
+}
+const updateDeployableState = (deployableState: boolean) => {
+    tagDeployableState.value = deployableState;
 }
 
 const selectHandle = (val: never) => {

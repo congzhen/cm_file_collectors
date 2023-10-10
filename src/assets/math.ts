@@ -14,8 +14,6 @@ const toFixedRemore0 = function (num: number, fixed = 2) {
 const calculateAge = function (_birthday: string, specifyDate: string | undefined = undefined) {
     const birthday = new Date(_birthday);
     const baseDate = specifyDate && specifyDate != '' ? new Date(specifyDate).getTime() : Date.now();
-    console.log('specifyDate', specifyDate);
-    console.log('baseDate', baseDate);
     const ageDifMs = baseDate - birthday.getTime();
     const ageDate = new Date(ageDifMs);
     return Math.abs(ageDate.getUTCFullYear() - 1970);

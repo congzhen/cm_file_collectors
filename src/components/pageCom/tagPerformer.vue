@@ -1,20 +1,23 @@
 <template>
     <div class="tagPerformer">
         <tagHeaderVue :title="store.filesBasesSettingStore.getPerformerText" @updataCondition="updataCondition"
-            :conditionItem="props.conditionItem">
+            @updateDeployableState="updateDeployableState" :conditionItem="props.conditionItem">
         </tagHeaderVue>
-        <div class="tagList">
-            <tagSpan :text="$t('tag.all')" @click="selectHandle('all' as never)" :select="selectStatus('all')"></tagSpan>
-            <tagSpan :text="$t('tag.noPerformer', { performer: store.filesBasesSettingStore.getPerformerText })"
-                @click="selectHandle('noPerformer' as never)" :select="selectStatus('noPerformer')"></tagSpan>
-        </div>
-        <div class="performerList" v-if="store.filesBasesSettingStore.config.performerPhoto">
-            <performerCom v-for="item, key in getDataList()" :key="key" :performerInfo="item"
-                @click="selectHandle(item.id as never)" :select="selectStatus(item.id)"></performerCom>
-        </div>
-        <div class="performerList" v-else>
-            <tagSpan v-for="item, key in getDataList()" :key="key" :text="item.name" @click="selectHandle(item.id as never)"
-                :select="selectStatus(item.id)"></tagSpan>
+        <div v-if="tagDeployableState">
+            <div class="tagList">
+                <tagSpan :text="$t('tag.all')" @click="selectHandle('all' as never)" :select="selectStatus('all')">
+                </tagSpan>
+                <tagSpan :text="$t('tag.noPerformer', { performer: store.filesBasesSettingStore.getPerformerText })"
+                    @click="selectHandle('noPerformer' as never)" :select="selectStatus('noPerformer')"></tagSpan>
+            </div>
+            <div class="performerList" v-if="store.filesBasesSettingStore.config.performerPhoto">
+                <performerCom v-for="item, key in getDataList()" :key="key" :performerInfo="item"
+                    @click="selectHandle(item.id as never)" :select="selectStatus(item.id)"></performerCom>
+            </div>
+            <div class="performerList" v-else>
+                <tagSpan v-for="item, key in getDataList()" :key="key" :text="item.name"
+                    @click="selectHandle(item.id as never)" :select="selectStatus(item.id)"></tagSpan>
+            </div>
         </div>
     </div>
 </template>
@@ -45,7 +48,7 @@ const store = {
 }
 const selectValArr = ref([]);
 const searchLogic = ref(EsearchLogic.single);
-
+const tagDeployableState = ref(true);
 const getDataList = () => {
     const performerArr: Array<Iperformer> = [];
     store.filesBasesSettingStore.config.performerPreferred.forEach((perId: string) => {
@@ -83,6 +86,9 @@ const updataCondition = (searchLogicValue: EsearchLogic) => {
     }
     searchLogic.value = searchLogicValue;
     updateData();
+}
+const updateDeployableState = (deployableState: boolean) => {
+    tagDeployableState.value = deployableState;
 }
 
 const selectHandle = (val: never) => {

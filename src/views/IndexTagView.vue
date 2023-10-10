@@ -9,11 +9,11 @@
                         <tagPerformer :conditionItem="logic0" @updateData="updateDataCondition"></tagPerformer>
                         <tagBlock v-if="store.filesBasesSettingStore.config.plugInUnit_Cup"
                             :title="store.filesBasesSettingStore.getPlugInUnit_Cup_Text" :dataList="getDataList('cup')"
-                            :conditionItem="logic0" @updateData="updateDataCondition" mode="cup">
+                            :conditionItem="logic0" @updateData="updateDataCondition" mode="cup" style="margin-top: 10px;">
                         </tagBlock>
                     </div>
                     <div v-else-if="item == 'diyTag'">
-                        <tagBlock
+                        <tagBlock class="tagCom"
                             v-for="item, key in store.tagClassStore.getTagClassListByCurrentFilesBases.filter(item => item.leftShow)"
                             :key="key" :title="item.name" :dataList="getTagDataList(item.id)"
                             @updateData="updateDataCondition" :mode="item.id"></tagBlock>
@@ -118,6 +118,6 @@ const updateDataCondition = (mode: string, logic: EsearchLogic, selectVal: strin
 }
 
 .tagCom {
-    padding-bottom: 20px;
+    padding-bottom: 10px;
 }
 </style>
