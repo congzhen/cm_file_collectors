@@ -3,7 +3,7 @@ import { IConditions, coreDBS } from "@/core/coreDBS";
 import { IresDirectors } from "@/dataInterface/resources.interface";
 const resourcesDirectorsServerData = {
     getDataListByResources_id: async function (resources_id: string) {
-        return await CoreDb().table('resourcesDirectors').where('resources_id', '=', resources_id).getList() as Array<IresDirectors>;
+        return await CoreDb().table('resourcesDirectors').where('resources_id', '=', resources_id).order('sort', 'asc').getList() as Array<IresDirectors>;
     },
     setResourcesDirectors: async function (resources_id: string, directorsArr: Array<IresDirectors>) {
         const tID = await CoreDb().beginTrans();
@@ -13,7 +13,7 @@ const resourcesDirectorsServerData = {
             return false;
         }
         for (let i = 0; i < directorsArr.length; i++) {
-            const addStatus = await this.addDirectors(directorsArr[i]);
+            const addStatus = await this.addDirectors(directorsArr[i], i);
             if (!addStatus) {
                 await CoreDb().rollback();
                 return false;
@@ -22,8 +22,9 @@ const resourcesDirectorsServerData = {
         await CoreDb().commit(tID);
         return true;
     },
-    addDirectors: async function (obj: IresDirectors) {
-        const addResult = await CoreDb().table('resourcesDirectors').create(obj as unknown as IConditions);
+    addDirectors: async function (obj: IresDirectors, sort = 0) {
+        const insterObj: IConditions = { ...obj, sort }
+        const addResult = await CoreDb().table('resourcesDirectors').create(insterObj);
         return (addResult && addResult.status == true)
     },
     deleteDirectorsByResourcesId: async function (resources_id: string, _dbs: coreDBS | undefined = undefined) {

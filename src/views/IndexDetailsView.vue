@@ -60,7 +60,8 @@
                     <div class="performerList">
                         <performerCom mode="popover"
                             v-for="item, key in resDataInfo.performers.filter(item => store.performerStore.performerExist(item.performer_id))"
-                            :key="key" :performerInfo="store.performerStore.getPerformerInfoById(item.performer_id)">
+                            :key="key" :performerInfo="store.performerStore.getPerformerInfoById(item.performer_id)"
+                            :shootingDate="resDataInfo.issuingDate == '' ? undefined : resDataInfo.issuingDate">
                         </performerCom>
                     </div>
                 </div>

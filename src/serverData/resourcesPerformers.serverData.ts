@@ -3,7 +3,7 @@ import { IConditions, coreDBS } from "@/core/coreDBS";
 import { IresPerformers } from "@/dataInterface/resources.interface";
 const resourcesPerformersServerData = {
     getDataListByResources_id: async function (resources_id: string) {
-        return await CoreDb().table('resourcesPerformers').where('resources_id', '=', resources_id).getList() as Array<IresPerformers>;
+        return await CoreDb().table('resourcesPerformers').where('resources_id', '=', resources_id).order('sort', 'asc').getList() as Array<IresPerformers>;
     },
     setResourcesPerformers: async function (resources_id: string, PerformersArr: Array<IresPerformers>) {
         const tID = await CoreDb().beginTrans();
@@ -13,7 +13,7 @@ const resourcesPerformersServerData = {
             return false;
         }
         for (let i = 0; i < PerformersArr.length; i++) {
-            const addStatus = await this.addPerformers(PerformersArr[i]);
+            const addStatus = await this.addPerformers(PerformersArr[i], i);
             if (!addStatus) {
                 await CoreDb().rollback();
                 return false;
@@ -22,8 +22,9 @@ const resourcesPerformersServerData = {
         await CoreDb().commit(tID);
         return true;
     },
-    addPerformers: async function (obj: IresPerformers) {
-        const addResult = await CoreDb().table('resourcesPerformers').create(obj as unknown as IConditions);
+    addPerformers: async function (obj: IresPerformers, sort = 0) {
+        const insterObj: IConditions = { ...obj, sort }
+        const addResult = await CoreDb().table('resourcesPerformers').create(insterObj);
         return (addResult && addResult.status == true)
     },
     deletePerformersByResourcesId: async function (resources_id: string, _dbs: coreDBS | undefined = undefined) {

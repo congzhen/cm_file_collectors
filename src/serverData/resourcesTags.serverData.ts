@@ -3,7 +3,7 @@ import { IConditions, coreDBS } from "@/core/coreDBS";
 import { IresTags, IresTagsInfo } from "@/dataInterface/resources.interface";
 const resourcesTagsServerData = {
     getDataListByResources_id: async function (resources_id: string) {
-        return await CoreDb().table('resourcesTags').fields(['t.*', 'tag.tagClass_id']).leftJoin('tag', 't.tag_id = tag.id').where('resources_id', '=', resources_id).getList() as Array<IresTagsInfo>;
+        return await CoreDb().table('resourcesTags').fields(['t.*', 'tag.tagClass_id']).leftJoin('tag', 't.tag_id = tag.id').where('resources_id', '=', resources_id).order('sort', 'asc').getList() as Array<IresTagsInfo>;
     },
     setResourcesTags: async function (resources_id: string, tagsArr: Array<IresTags>) {
         const tID = await CoreDb().beginTrans();
@@ -13,7 +13,7 @@ const resourcesTagsServerData = {
             return false;
         }
         for (let i = 0; i < tagsArr.length; i++) {
-            const addStatus = await this.addTags(tagsArr[i]);
+            const addStatus = await this.addTags(tagsArr[i], i);
             if (!addStatus) {
                 await CoreDb().rollback();
                 return false;
@@ -22,8 +22,9 @@ const resourcesTagsServerData = {
         await CoreDb().commit(tID);
         return true;
     },
-    addTags: async function (obj: IresTags) {
-        const addResult = await CoreDb().table('resourcesTags').create(obj as unknown as IConditions);
+    addTags: async function (obj: IresTags, sort = 0) {
+        const insterObj: IConditions = { ...obj, sort }
+        const addResult = await CoreDb().table('resourcesTags').create(insterObj);
         return (addResult && addResult.status == true)
     },
     deleteTagsByResourcesId: async function (resources_id: string, _dbs: coreDBS | undefined = undefined) {

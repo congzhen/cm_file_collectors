@@ -6,7 +6,7 @@ const resourcesDramaSeriesServerData = {
         return await CoreDb().table('resourcesDramaSeries').getInfo(id) as IresDramaSeries;
     },
     getDataListByResources_id: async function (resources_id: string) {
-        return await CoreDb().table('resourcesDramaSeries').where('resources_id', '=', resources_id).getList() as Array<IresDramaSeries>;
+        return await CoreDb().table('resourcesDramaSeries').where('resources_id', '=', resources_id).order('sort', 'asc').getList() as Array<IresDramaSeries>;
     },
     getDataListByLikeSrcAndResources_id: async function (likeText: string, resources_id: string) {
         return await CoreDb().table('resourcesDramaSeries').where('resources_id', '=', resources_id).whereLike('src', likeText).getList() as Array<IresDramaSeries>;
@@ -26,7 +26,7 @@ const resourcesDramaSeriesServerData = {
             return false;
         }
         for (let i = 0; i < DramaSeriesArr.length; i++) {
-            const addStatus = await this.addDramaSeries(DramaSeriesArr[i]);
+            const addStatus = await this.addDramaSeries(DramaSeriesArr[i], i);
             if (!addStatus) {
                 await CoreDb().rollback();
                 return false;
@@ -35,8 +35,9 @@ const resourcesDramaSeriesServerData = {
         await CoreDb().commit(tID);
         return true;
     },
-    addDramaSeries: async function (obj: IresDramaSeries) {
-        const addResult = await CoreDb().table('resourcesDramaSeries').create(obj as unknown as IConditions);
+    addDramaSeries: async function (obj: IresDramaSeries, sort = 0) {
+        const insterObj: IConditions = { ...obj, sort }
+        const addResult = await CoreDb().table('resourcesDramaSeries').create(insterObj);
         return (addResult && addResult.status == true)
     },
     deleteDramaSeriesByResourcesId: async function (resources_id: string, _dbs: coreDBS | undefined = undefined) {

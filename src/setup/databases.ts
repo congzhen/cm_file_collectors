@@ -53,6 +53,10 @@ const performerBasesDefaultId = coreCreateGuid();
 const initFieldData = [
     { table: 'filesBasesSetting', field: 'nfo_json_data', sql: 'ALTER TABLE filesBasesSetting ADD nfo_json_data TEXT;' },
     { table: 'filesBasesSetting', field: 'simple_json_data', sql: 'ALTER TABLE filesBasesSetting ADD simple_json_data TEXT;' },
+    { table: 'resourcesPerformers', field: 'sort', sql: 'ALTER TABLE resourcesPerformers ADD sort INT DEFAULT (0);' },
+    { table: 'resourcesDirectors', field: 'sort', sql: 'ALTER TABLE resourcesDirectors ADD sort INT DEFAULT (0);' },
+    { table: 'resourcesTags', field: 'sort', sql: 'ALTER TABLE resourcesTags ADD sort INT DEFAULT (0);' },
+    { table: 'resourcesDramaSeries', field: 'sort', sql: 'ALTER TABLE resourcesDramaSeries ADD sort INT DEFAULT (0);' },
 ]
 
 const initTableData: ItableData = {

@@ -9,7 +9,7 @@
     <div v-else :class="['performerCom', props.select !== false ? 'select' : 'noSelect']">
         <el-popover placement="left" width="380" trigger="click">
             <div v-if="props.performerInfo">
-                <performerComSubB :performerInfo="props.performerInfo"></performerComSubB>
+                <performerComSubB :performerInfo="props.performerInfo" :shootingDate="shootingDate"></performerComSubB>
             </div>
             <template #reference>
                 <performerComSubA :performerInfo="props.performerInfo" @showPerRes="showPerRes"></performerComSubA>
@@ -25,6 +25,10 @@ import performerComSubB from "./performerComSubB.vue"
 const props = defineProps({
     performerInfo: {
         type: Object as () => Iperformer
+    },
+    shootingDate: {
+        type: String,
+        default: undefined,
     },
     mode: {
         type: String,

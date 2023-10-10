@@ -34,7 +34,7 @@
                 </div>
                 <div class="item" v-if="props.performerInfo.birthday != ''">
                     {{ $t('performer.shootingAge') }}:
-                    {{ $t('performer.yearsOld', { age: calculateAge(props.performerInfo.birthday) }) }}
+                    {{ $t('performer.yearsOld', { age: calculateAge(props.performerInfo.birthday, props.shootingDate) }) }}
                 </div>
                 <div class="item">{{ performerInfo.introduction }}</div>
             </div>
@@ -61,6 +61,10 @@ const props = defineProps({
     performerInfo: {
         type: Object as () => Iperformer,
         required: true
+    },
+    shootingDate: {
+        type: String,
+        default: undefined,
     },
 });
 const store = {
