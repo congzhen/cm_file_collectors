@@ -1,5 +1,5 @@
 <template>
-    <div class="performerSubB">
+    <div :class="['performerSubB', props.performerInfo.retreatStatus ? 'retreat' : '']">
         <div class="performerCup" v-if="store.filesBasesSettingStore.config.plugInUnit_Cup && performerInfo.cup != ''">
             {{ performerInfo.cup }}-{{ store.filesBasesSettingStore.config.plugInUnit_Cup_Text }}
         </div>

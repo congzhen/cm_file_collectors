@@ -57,6 +57,7 @@ const initFieldData = [
     { table: 'resourcesDirectors', field: 'sort', sql: 'ALTER TABLE resourcesDirectors ADD sort INT DEFAULT (0);' },
     { table: 'resourcesTags', field: 'sort', sql: 'ALTER TABLE resourcesTags ADD sort INT DEFAULT (0);' },
     { table: 'resourcesDramaSeries', field: 'sort', sql: 'ALTER TABLE resourcesDramaSeries ADD sort INT DEFAULT (0);' },
+    { table: 'performer', field: 'retreatStatus', sql: 'ALTER TABLE performer ADD retreatStatus INT DEFAULT (0);' },
 ]
 
 const initTableData: ItableData = {

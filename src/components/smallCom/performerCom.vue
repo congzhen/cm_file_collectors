@@ -1,12 +1,11 @@
 <template>
-    <div :class="['performerCom', props.select !== false ? 'select' : 'noSelect']" v-if="props.mode == 'simple'">
-
+    <div :class="Class_C" v-if="props.mode == 'simple'">
         <performerComSubA :performerInfo="props.performerInfo" @showPerRes="showPerRes"></performerComSubA>
     </div>
-    <div :class="['performerCom', props.select !== false ? 'select' : 'noSelect']" v-else-if="props.mode == 'brief'">
+    <div :class="Class_C" v-else-if="props.mode == 'brief'">
         <performerComSubA mode="brief" :performerInfo="props.performerInfo" @showPerRes="showPerRes"></performerComSubA>
     </div>
-    <div v-else :class="['performerCom', props.select !== false ? 'select' : 'noSelect']">
+    <div v-else :class="Class_C">
         <el-popover placement="left" width="380" trigger="click">
             <div v-if="props.performerInfo">
                 <performerComSubB :performerInfo="props.performerInfo" :shootingDate="shootingDate"></performerComSubB>
@@ -21,6 +20,7 @@
 import { Iperformer } from "@/dataInterface/performer.interface";
 import performerComSubA from "./performerComSubA.vue"
 import performerComSubB from "./performerComSubB.vue"
+import { computed } from "vue";
 // eslint-disable-next-line no-undef
 const props = defineProps({
     performerInfo: {
@@ -46,6 +46,10 @@ const showPerRes = () => {
     emits('showPerRes', props.performerInfo);
 }
 
+const Class_C = computed(() => {
+    return ['performerCom', props.select !== false ? 'select' : 'noSelect', props.performerInfo?.retreatStatus ? 'retreat' : ''];
+})
+
 </script>
 <style scoped>
 .performerCom {
@@ -63,5 +67,9 @@ const showPerRes = () => {
 .select {
     color: #FFFFFF;
     background-color: #FFAA47;
+}
+
+.retreat {
+    filter: grayscale(70%);
 }
 </style>

@@ -15,6 +15,7 @@ interface Iperformer {
     waist: string;
     hip: string;
     stars: number;
+    retreatStatus: boolean;
     addTime: string;
     status: boolean;
 }

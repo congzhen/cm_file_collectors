@@ -135,6 +135,7 @@ export default {
         name: '姓名',
         aliasName: '别名',
         starRating: '评分',
+        retreatStatus: '隐退',
         nationality: '国籍',
         career: '职业',
         careerMode: {

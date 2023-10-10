@@ -282,7 +282,8 @@ async function craetePerformerData(nofData: InofData, performerBases_id: string,
                 hip: '',
                 stars: 0,
                 addTime: timer.getTodayFormat(),
-                status: true
+                status: true,
+                retreatStatus: false,
             }
             await createPerformer(perInfo);
             performer_id = perInfo.id;

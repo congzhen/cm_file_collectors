@@ -38,6 +38,9 @@
                             <el-form-item :label="$t('performer.starRating')">
                                 <el-rate v-model="formData.stars" clearable />
                             </el-form-item>
+                            <el-form-item :label="$t('performer.retreatStatus')">
+                                <el-checkbox v-model="formData.retreatStatus">{{ ' ' }}</el-checkbox>
+                            </el-form-item>
                         </div>
                         <div class="block2">
                             <el-form-item :label="$t('performer.career')" prop="career">
@@ -168,9 +171,11 @@ const init = async (id: string | undefined = undefined) => {
         formData.birthday = '';
         formData.introduction = '';
         formData.stars = 0;
+        formData.retreatStatus = false;
     } else {
         formData_id.value = id;
         const performerInfo = await performerServerData.getInfoById(id);
+        console.log(performerInfo);
         photoSrc.value = setupConfig.performerFacePath + performerInfo.performerBases_id + '/' + performerInfo.photo;
         formData.performerBases_id = performerInfo.performerBases_id;
         formData.name = performerInfo.name;
@@ -193,6 +198,7 @@ const init = async (id: string | undefined = undefined) => {
         formData.birthday = performerInfo.birthday;
         formData.introduction = performerInfo.introduction;
         formData.stars = performerInfo.stars;
+        formData.retreatStatus = performerInfo.retreatStatus ? true : false;
     }
 }
 const formData_id = ref();
@@ -212,6 +218,7 @@ const formData = reactive({
     birthday: '',
     introduction: '',
     stars: 0,
+    retreatStatus: false,
 })
 const formRules = reactive<FormRules>({
     name: [{ required: true, trigger: 'blur', message: t('performer.form.ruleName') }],

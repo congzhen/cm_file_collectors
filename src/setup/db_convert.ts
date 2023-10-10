@@ -264,7 +264,8 @@ const getPerformerData = (objDb: IdbFiles) => {
             hip: '',
             stars: item.stars == undefined ? 0 : item.stars,
             addTime: timer.dateFormat(item.addTime, 'Y-m-d H:i:s'),
-            status: true
+            status: true,
+            retreatStatus: false,
         });
     })
     return performerAddData;
