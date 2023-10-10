@@ -45,9 +45,9 @@
                         <div class="block2">
                             <el-form-item :label="$t('performer.career')" prop="career">
                                 <el-checkbox-group v-model="formData.career">
-                                    <el-checkbox label="performer" border>{{ $t('performer.careerMode.performer')
+                                    <el-checkbox label="performer" border>{{ store.filesBasesSettingStore.getPerformerText
                                     }}</el-checkbox>
-                                    <el-checkbox label="director" border>{{ $t('performer.careerMode.director')
+                                    <el-checkbox label="director" border>{{ store.filesBasesSettingStore.getDirectorText
                                     }}</el-checkbox>
                                 </el-checkbox-group>
                             </el-form-item>
@@ -146,9 +146,9 @@ const mode = ref('add');
 
 const formTitle = computed(() => {
     if (mode.value == 'add') {
-        return t('performer.form.add')
+        return t('performer.form.add', { performer: store.filesBasesSettingStore.getPerformerText, director: store.filesBasesSettingStore.getDirectorText })
     } else {
-        return t('performer.form.edit')
+        return t('performer.form.edit', { performer: store.filesBasesSettingStore.getPerformerText, director: store.filesBasesSettingStore.getDirectorText })
     }
 })
 
@@ -221,7 +221,7 @@ const formData = reactive({
     retreatStatus: false,
 })
 const formRules = reactive<FormRules>({
-    name: [{ required: true, trigger: 'blur', message: t('performer.form.ruleName') }],
+    name: [{ required: true, trigger: 'blur', message: t('performer.form.ruleName', { performer: store.filesBasesSettingStore.getPerformerText, director: store.filesBasesSettingStore.getDirectorText }) }],
     performerBases_id: [{ required: true, trigger: 'change', message: t('performer.form.rulePerformerBases_id') }],
     career: [{ type: 'array', required: true, trigger: 'change', message: t('performer.form.ruleCareer') }],
 })
@@ -278,13 +278,13 @@ const submitForm = async (mode: string) => {
         await store.performerStore.init();
         if (updatePerformerAdminMainData) updatePerformerAdminMainData();
         close();
-        comFormRef.value?.success(t('performer.form.message.' + mode + 'Success'));
+        comFormRef.value?.success(t('performer.form.message.' + mode + 'Success', { performer: store.filesBasesSettingStore.getPerformerText, director: store.filesBasesSettingStore.getDirectorText }));
 
     } else {
         if (photoData.value != '') {
             deleteFile(setupConfig.performerFacePath + formData.performerBases_id + '/', formData.photo);
         }
-        comFormRef.value?.fail(t('performer.form.message.' + mode + 'Fail'));
+        comFormRef.value?.fail(t('performer.form.message.' + mode + 'Fail', { performer: store.filesBasesSettingStore.getPerformerText, director: store.filesBasesSettingStore.getDirectorText }));
     }
     await loading.closeSync();
 }

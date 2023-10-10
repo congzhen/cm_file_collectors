@@ -1,13 +1,15 @@
 <template>
     <div :class="[props.class]">
         <el-image v-if="imageStatus" :src="props.src" fit="cover" @error="errorImage"></el-image>
-        <el-image v-else :src="photoSrc" fit="cover"></el-image>
+        <el-image v-else :src="store.filesBasesSettingStore.getAvatar" fit="cover"></el-image>
     </div>
 </template>
 <script setup lang="ts">
 import { ref, watch } from "vue"
-const photoSrc = ref('')
-photoSrc.value = require('@/assets/emptyPhoto.jpg');
+import { filesBasesSettingStore } from '@/store/filesBasesSetting.store'
+const store = {
+    filesBasesSettingStore: filesBasesSettingStore(),
+}
 const imageStatus = ref(true);
 // eslint-disable-next-line no-undef
 const props = defineProps({

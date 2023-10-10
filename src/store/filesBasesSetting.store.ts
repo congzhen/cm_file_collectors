@@ -1,6 +1,8 @@
 import { defineStore } from "pinia";
 import { filesBasesSettingServerData } from "@/serverData/filesBasesSetting.serverData"
 import { IfilesBasesConfig } from "@/dataInterface/filesBasesSetting.interface"
+import i18n from "@/setup/language"
+import emptyPhoto from "@/assets/emptyPhoto.jpg"
 
 const defaultConfig = {
     leftDisplay: ['country', 'definition', 'year', 'starRating', 'performer', 'diyTag'],
@@ -56,6 +58,9 @@ const defaultConfig = {
     randomPosterAutoSize: false,
     randomPosterWidth: 156,
     randomPosterHeight: 218,
+    performer_Text: '',
+    director_Text: '',
+    performer_photo: '',
 
 } as IfilesBasesConfig
 
@@ -69,7 +74,27 @@ export const filesBasesSettingStore = defineStore('filesBasesSetting', {
                 return 'Cup';
             }
             return state.config.plugInUnit_Cup_Text;
-        }
+        },
+        getPerformerText: function (state) {
+            const t = i18n.global.t;
+            if (state.config.performer_Text == '') {
+                return t('performer.careerMode.performer');
+            }
+            return state.config.performer_Text;
+        },
+        getDirectorText: function (state) {
+            const t = i18n.global.t;
+            if (state.config.director_Text == '') {
+                return t('performer.careerMode.director');
+            }
+            return state.config.director_Text;
+        },
+        getAvatar: function (state) {
+            if (state.config.performer_photo == '') {
+                return emptyPhoto;
+            }
+            return state.config.performer_photo;
+        },
     },
     actions: {
         init: async function (filesBases_id: string) {

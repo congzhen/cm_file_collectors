@@ -46,7 +46,7 @@
                 <detailsPreviewImage class="detailsPreviewImage" ref="detailsPreviewImageRef" :dataInfo="resDataInfo">
                 </detailsPreviewImage>
                 <div class="detailsItem" v-if="resDataInfo.directors.length > 0">
-                    <el-alert class="tagAlert" :title="$t('performer.careerMode.director')" :closable="false" />
+                    <el-alert class="tagAlert" :title="store.filesBasesSettingStore.getDirectorText" :closable="false" />
                     <div class="performerList">
                         <performerCom mode="popover"
                             v-for="item, key in resDataInfo.directors.filter(item => store.performerStore.performerExist(item.performer_id))"
@@ -55,7 +55,7 @@
                     </div>
                 </div>
                 <div class="detailsItem">
-                    <el-alert class="tagAlert" :title="$t('performer.careerMode.performer')" type="success"
+                    <el-alert class="tagAlert" :title="store.filesBasesSettingStore.getPerformerText" type="success"
                         :closable="false" />
                     <div class="performerList">
                         <performerCom mode="popover"
@@ -105,6 +105,7 @@ import { IresourcesBase, Iresources, IresDramaSeries, IresTagsInfo } from '@/dat
 import { resourcesServerData } from "@/serverData/resources.serverData"
 import { tagStore } from '@/store/tag.store';
 import { performerStore } from '@/store/performer.store';
+import { filesBasesSettingStore } from '@/store/filesBasesSetting.store'
 import { searchStore } from '@/store/search.store';
 import { EresUpdate } from "@/dataInterface/common.enum"
 import { ElMessage } from 'element-plus'
@@ -127,6 +128,7 @@ const store = {
     tagStore: tagStore(),
     performerStore: performerStore(),
     searchStore: searchStore(),
+    filesBasesSettingStore: filesBasesSettingStore(),
 }
 const detailsPreviewImageRef = ref<InstanceType<typeof detailsPreviewImage>>();
 const resourcesDialogRef = ref<InstanceType<typeof resourcesDialog>>();

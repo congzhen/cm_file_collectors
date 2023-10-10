@@ -82,13 +82,13 @@
 
                             </div>
                             <div class="formBlock">
-                                <el-form-item :label="$t('resources.form.director')">
+                                <el-form-item :label="store.filesBasesSettingStore.getDirectorText">
                                     <comMultipleSearchSelect :key="keyNum" v-model="formData.directors"
                                         :dataList="store.performerStore.getPerformerListByFilesBasesId.filter(item => item.careerDirector)"
                                         :selectField="['name', 'aliasName']" :showSelectField="['name', 'aliasName']">
                                     </comMultipleSearchSelect>
                                 </el-form-item>
-                                <el-form-item :label="$t('resources.form.performer')">
+                                <el-form-item :label="store.filesBasesSettingStore.getPerformerText">
                                     <comMultipleSearchSelect :key="keyNum" v-model="formData.performers"
                                         :dataList="store.performerStore.getPerformerListByFilesBasesId.filter(item => item.careerPerformer)"
                                         :selectField="['name', 'aliasName']" :showSelectField="['name', 'aliasName']">

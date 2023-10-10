@@ -268,6 +268,43 @@
 
                 </div>
 
+                <div class="settingMainBlock">
+                    <div class="blockTitle">
+                        <el-alert :title="$t('settings.customSettings.title')" type="success" :closable="false" />
+                    </div>
+                    <div class="settingMainItem">
+                        <h5>{{ $t('settings.customSettings.showText.performer') }}</h5>
+                        <div class="select-full">
+                            <el-input v-model="store.filesBasesSettingStore.config.performer_Text"
+                                :placeholder="$t('performer.careerMode.performer')" />
+                        </div>
+                    </div>
+                    <div class="settingMainItem">
+                        <h5>{{ $t('settings.customSettings.showText.director') }}</h5>
+                        <div class="select-full">
+                            <el-input v-model="store.filesBasesSettingStore.config.director_Text"
+                                :placeholder="$t('performer.careerMode.director')" />
+                        </div>
+                    </div>
+                    <div class="settingMainItem">
+                        <h5>{{ $t('settings.customSettings.customAvatar') }}</h5>
+                        <div class="select-full">
+                            <div class="customAvatarK">
+                                <el-upload action="/" :on-change="handleUploadPhotos" :show-file-list="false"
+                                    :auto-upload="false" drag>
+                                    <el-avatar class="customAvatar" :size="80"
+                                        :src="store.filesBasesSettingStore.getAvatar" />
+                                </el-upload>
+
+                                <el-icon class="customAvatarDelete" :size="20" @click="customAvatarDelete">
+                                    <Delete />
+                                </el-icon>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+
 
                 <div class="settingMainBlock">
                     <div class="blockTitle">
@@ -280,7 +317,7 @@
                     <div class="settingMainItem">
                         <h5>{{ $t('plugin.cup.showText') }}</h5>
                         <div class="select-full">
-                            <el-input v-model="plugInUnit_Cup_TextData" />
+                            <el-input v-model="plugInUnit_Cup_TextData" placeholder="Cup" />
                         </div>
                     </div>
                 </div>
@@ -388,6 +425,7 @@
             </div>
         </el-scrollbar>
     </div>
+    <comCropperDialog ref="comCropperDialogRef" @sumbit="cropperSubmit"></comCropperDialog>
 </template>
 <script setup lang="ts">
 import dataset from "@/assets/dataset"
@@ -402,10 +440,13 @@ import { filesBasesSettingStore } from "@/store/filesBasesSetting.store"
 import { filesBasesSettingServerData } from "@/serverData/filesBasesSetting.serverData"
 import { tagServerData } from '@/serverData/tag.serverData';
 import { computed, ref, inject } from 'vue';
+import type { UploadFile } from 'element-plus'
 import { Itag } from "@/dataInterface/tag.interface"
 import { EresUpdate } from "@/dataInterface/common.enum"
+import comCropperDialog from "@/components/common/comCropper.vue/comCropperDialog.vue";
 import { ipcRendererSend } from "@/electronCommon"
 const indexUpdateResourcesDataInject = inject<(_up: Array<EresUpdate>) => void>('indexUpdateResourcesData');
+const comCropperDialogRef = ref<InstanceType<typeof comCropperDialog>>();
 const store = {
     filesBasesStore: filesBasesStore(),
     filesBasesSettingStore: filesBasesSettingStore(),
@@ -630,6 +671,17 @@ const deleteRoute = (index: number) => {
     store.filesBasesSettingStore.config.routeConversion.splice(index, 1);
 }
 
+
+const handleUploadPhotos = (_uploadFile: UploadFile) => {
+    comCropperDialogRef.value?.open(_uploadFile.raw, '50%', 280, 280);
+}
+const cropperSubmit = (fileData: string) => {
+    store.filesBasesSettingStore.config.performer_photo = fileData;
+}
+const customAvatarDelete = () => {
+    store.filesBasesSettingStore.config.performer_photo = '';
+}
+
 const openSettings = async () => {
     await getYouLikeNowWord();
 }
@@ -680,6 +732,24 @@ defineExpose({ openSettings, saveSettings });
 
 .settingMainItem .select-full {
     width: 80%;
+}
+
+.settingMainItem .select-full .customAvatarK {
+    display: flex;
+}
+
+.customAvatarK :deep(.el-upload-dragger) {
+    padding: 10px;
+}
+
+
+.settingMainItem .select-full .customAvatarDelete {
+    cursor: pointer;
+    margin: 86px 0px 0px 20px;
+}
+
+.settingMainItem .select-full .customAvatarDelete :hover {
+    color: #409EFF;
 }
 
 .settingMainItem .flexDiv {

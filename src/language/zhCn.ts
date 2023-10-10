@@ -92,7 +92,7 @@ export default {
         all: '全部',
         noStar: '未评分',
         star: '{star}星',
-        noPerformer: '无演员',
+        noPerformer: '无{performer}',
         admin: '标签管理',
         leftColumnDisplay: '左边栏显示',
         addClass: '添加标签分类',
@@ -147,8 +147,8 @@ export default {
         inPerformerDatabases: '所属数据集',
         shootingAge: '拍摄年龄',
         viewingPerformerMovies: '查看【{name}】的影片',
-        admin: '演员管理',
-        pleaseEnterPerformerNameOrAlias: '请输入演员姓名、别名、首字母',
+        admin: '{title}管理',
+        pleaseEnterPerformerNameOrAlias: '请输入{title}姓名、别名、首字母',
         pleaseSelectPerformerStars: '请选择星级',
         starsAll: '全部',
         noStars: '未评星',
@@ -159,22 +159,22 @@ export default {
             restore: '恢复',
         },
         form: {
-            add: '添加演员/导演',
-            edit: '编辑演员/导演',
+            add: '添加{performer}/{director}',
+            edit: '编辑{performer}/{director}',
             clickUploadPhotos: '点击或拖拽上传照片',
             uploadPhotos: '上传照片',
-            ruleName: '请输入演员/导演姓名',
+            ruleName: '请输入{performer}/{director}姓名',
             ruleCareer: '请至少选择一项职业',
             rulePerformerBases_id: '请选择数据集',
             message: {
-                addSuccess: '添加演员/导演成功',
-                addFail: '添加演员/导演失败',
-                editSuccess: '修改演员/导演成功',
-                editFail: '修改演员/导演失败',
+                addSuccess: '添加{performer}/{director}成功',
+                addFail: '添加{performer}/{director}失败',
+                editSuccess: '修改{performer}/{director}成功',
+                editFail: '修改{performer}/{director}失败',
             }
         },
         yearsOld: '{age}岁',
-        recycle: '演员回收站',
+        recycle: '{title}回收站',
 
     },
     performerDatabases: {
@@ -334,6 +334,14 @@ export default {
             showPreviewImage: '显示预览图',
             previewImageFolder: '预览图文件夹，多个文件夹用,分割',
         },
+        customSettings: {
+            title: '自定义设置',
+            showText: {
+                performer: '演员显示文字',
+                director: '导演显示文字',
+            },
+            customAvatar: '自定义头像',
+        },
         plugin: {
             title: '插件管理',
         },
@@ -477,7 +485,7 @@ export default {
     },
     plugin: {
         cup: {
-            name: '演员CupC插件',
+            name: '演员Cup插件',
             describe: '该插件在演员资料中添加Cup选项，并在左边栏出现Cup标签选择。',
             title: '罩杯',
             pleaseSelectCup: '请选择 {cup}',

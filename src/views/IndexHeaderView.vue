@@ -3,7 +3,9 @@
         <div class="btnList">
             <el-button type="primary" @click="openResources">{{ $t('column.add') }}</el-button>
             <el-button type="primary" @click="openTagAdmin">{{ $t('column.tag') }}</el-button>
-            <el-button type="primary" @click="openPerformerAdmin">{{ $t('column.performer') }}</el-button>
+            <el-button type="primary" @click="openPerformerAdmin">
+                {{ store.filesBasesSettingStore.getPerformerText }}
+            </el-button>
             <el-dropdown>
                 <el-button type="primary">
                     {{ $t('column.import') }}<el-icon class="el-icon--right"><arrow-down /></el-icon>
@@ -54,12 +56,14 @@ import settingsDialog from "@/components/settings/settingsDialog.vue";
 import importNfoDialog from "@/components/importRes/nfo/importDialog.vue"
 import importSimpleDialog from "@/components/importRes/simple/importDialog.vue";
 import { searchStore } from '@/store/search.store'
+import { filesBasesSettingStore } from '@/store/filesBasesSetting.store'
 import { ref, inject } from "vue";
 import { EresUpdate } from "@/dataInterface/common.enum";
 
 const indexUpdateResourcesDataInject = inject<(_up: Array<EresUpdate>) => void>('indexUpdateResourcesData');
 const store = {
     searchStore: searchStore(),
+    filesBasesSettingStore: filesBasesSettingStore(),
 }
 
 const resourcesDialogRef = ref<InstanceType<typeof resourcesDialog>>();

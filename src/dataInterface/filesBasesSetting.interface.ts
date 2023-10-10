@@ -66,6 +66,9 @@ interface IfilesBasesConfig {
     randomPosterAutoSize: boolean;
     randomPosterWidth: number;
     randomPosterHeight: number;
+    performer_Text: string;
+    director_Text: string;
+    performer_photo: string;
 }
 
 interface IfilesBasesNofConfig {

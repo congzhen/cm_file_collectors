@@ -1,5 +1,6 @@
 <template>
-    <el-dialog class="mainDialog" v-model="dialogVisible" :title="$t('performer.recycle')" width="900px"
+    <el-dialog class="mainDialog" v-model="dialogVisible"
+        :title="$t('performer.recycle', { title: store.filesBasesSettingStore.getPerformerText })" width="900px"
         :close-on-click-modal="false" append-to-body>
         <el-table :data="dataList" height="500px" size="small" :border="true" :show-header="false" style="width: 100%">
             <el-table-column prop="id" width="160" :show-overflow-tooltip="true" />
@@ -21,6 +22,7 @@ import loading from '@/assets/loading'
 import setupConfig from "@/setup/config";
 import { Iperformer } from '@/dataInterface/performer.interface';
 import { performerStore } from '@/store/performer.store';
+import { filesBasesSettingStore } from "@/store/filesBasesSetting.store";
 import restoreConfirm from "@/components/common/funRestoreConfirm"
 import deleteConfirm from "@/components/common/funDeleteConfirm"
 import { performerServerData } from '@/serverData/performer.serverData';
@@ -29,6 +31,7 @@ import { deleteFile } from '@/assets/file';
 const updatePerformerAdminMainData = inject<() => void>('updatePerformerAdminMainData');
 const store = {
     performerStore: performerStore(),
+    filesBasesSettingStore: filesBasesSettingStore(),
 }
 const dialogVisible = ref(false);
 const nowPerformerBasesId = ref('');

@@ -1,7 +1,8 @@
 <template>
     <div class="paSearch">
         <div class="performerSearch item">
-            <el-input v-model="queryCondition.search" :placeholder="$t('performer.pleaseEnterPerformerNameOrAlias')"
+            <el-input v-model="queryCondition.search"
+                :placeholder="$t('performer.pleaseEnterPerformerNameOrAlias', { title: store.filesBasesSettingStore.getPerformerText })"
                 @input="throttleSearchHandle" @clear="searchHandle" clearable>
                 <template #append>
                     <el-button icon="Search" @click="searchHandle" />

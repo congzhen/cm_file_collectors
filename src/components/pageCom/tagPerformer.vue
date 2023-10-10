@@ -1,12 +1,12 @@
 <template>
     <div class="tagPerformer">
-        <tagHeaderVue :title="$t('defaultTag.performer')" @updataCondition="updataCondition"
+        <tagHeaderVue :title="store.filesBasesSettingStore.getPerformerText" @updataCondition="updataCondition"
             :conditionItem="props.conditionItem">
         </tagHeaderVue>
         <div class="tagList">
             <tagSpan :text="$t('tag.all')" @click="selectHandle('all' as never)" :select="selectStatus('all')"></tagSpan>
-            <tagSpan :text="$t('tag.noPerformer')" @click="selectHandle('noPerformer' as never)"
-                :select="selectStatus('noPerformer')"></tagSpan>
+            <tagSpan :text="$t('tag.noPerformer', { performer: store.filesBasesSettingStore.getPerformerText })"
+                @click="selectHandle('noPerformer' as never)" :select="selectStatus('noPerformer')"></tagSpan>
         </div>
         <div class="performerList" v-if="store.filesBasesSettingStore.config.performerPhoto">
             <performerCom v-for="item, key in getDataList()" :key="key" :performerInfo="item"
