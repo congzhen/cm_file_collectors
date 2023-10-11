@@ -19,6 +19,9 @@
             <div class="performerList">
                 {{ dataInfoTag_C }}
             </div>
+            <div class="performerList">
+                {{ props.dataInfo.lastPlayFile }}
+            </div>
         </div>
     </div>
 </template>

@@ -3,6 +3,7 @@ import path from 'path'
 import sharp from 'sharp'
 import dataset from '@/assets/dataset'
 import { coreCreateGuid } from '@/core/coreGuid';
+import { calculateResizedDimensions } from './math';
 
 
 const suffixNameArrayConversion = (arr: Array<string>) => {
@@ -160,12 +161,13 @@ interface EfileImageInfo {
     density: number;
     width: number;
     height: number;
+    thumbnail?: string;
 }
 
-const readfileImageInfo = async function (folderPath: string, fileName: string) {
+const readfileImageInfo = async function (folderPath: string, fileName: string, thumbnail = false, thumbnailWidth = 100, thumbnailHeight = 100) {
     const src = path.join(folderPath, fileName);
     const metadata = await sharp(src).metadata();
-    return {
+    const obj = {
         src,
         name: fileName,
         format: metadata.format,
@@ -173,6 +175,12 @@ const readfileImageInfo = async function (folderPath: string, fileName: string) 
         width: metadata.width,
         height: metadata.height,
     } as EfileImageInfo
+    if (thumbnail && obj.width > thumbnailWidth && obj.height > thumbnailHeight) {
+        const { width, height } = calculateResizedDimensions(obj.width, obj.height, thumbnailWidth, thumbnailHeight);
+        const buffer = await sharp(src).resize(width, height).toBuffer();
+        obj.thumbnail = `data:image/jpeg;base64,${buffer.toString('base64')}`;
+    }
+    return obj;
 }
 
 const readDirImage = async function (folderPath: string) {

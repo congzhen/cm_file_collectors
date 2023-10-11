@@ -323,6 +323,7 @@ export default {
                 flex: '固定',
             },
             playAtlasPageLimit: '图集分批读取数量',
+            openAtlasThumbnail: '开启图集生成缩率图显示',
         },
         details: {
             showModeTitle: '详情显示模式',

@@ -54,6 +54,7 @@ interface IfilesBasesConfig {
     playAtlasImageWidth: number;
     playAtlasMode: string;
     playAtlasPageLimit: number;
+    playAtlasThumbnail: boolean;
     playComicMode: string;
     playComicrReadingMode: boolean;
     routeConversion: Array<IrouteConversion>;

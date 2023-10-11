@@ -46,6 +46,7 @@ const defaultConfig = {
     playAtlasImageWidth: 150,
     playAtlasMode: 'waterfall',
     playAtlasPageLimit: 100,
+    playAtlasThumbnail: true,
     playComicMode: 'fullScreen',
     playComicrReadingMode: false,
     routeConversion: [],

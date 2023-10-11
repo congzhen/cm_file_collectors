@@ -6,20 +6,20 @@
                 <div class="item" v-for="fileImageInfo, key in filesList" :key="key" :title="fileImageInfo.name"
                     :style="{ width: store.filesBasesSettingStore.config.playAtlasImageWidth + 'px', height: getImageHeight(fileImageInfo) + 'px' }">
                     <div class="photo">
-                        <el-image :src="fileImageInfo.src" fit="cover" loading="lazy" :preview-src-list="filesList_C"
-                            :initial-index="key" />
+                        <el-image :src="fileImageInfo.thumbnail ? fileImageInfo.thumbnail : fileImageInfo.src" fit="cover"
+                            loading="lazy" :preview-src-list="filesList_C" :initial-index="key" />
                     </div>
                     <div class="title">{{ fileImageInfo.name }}</div>
                 </div>
             </div>
             <!--<div ref="listRef" class="list" :style="getWaterfallStyle()">-->
-            <div v-else class="masonry-container list" :key="masonryKey" v-masonry transition-duration="0.3s"
-                item-selector=".item">
+            <div ref="masonryContainerRef" v-else class="masonry-container list" :key="masonryKey" v-masonry
+                transition-duration="0.3s" item-selector=".item">
                 <div class="item" v-for="fileImageInfo, key in filesList" :key="key" :title="fileImageInfo.name"
                     :style="{ width: store.filesBasesSettingStore.config.playAtlasImageWidth + 'px', height: getImageHeight(fileImageInfo) + 'px' }">
                     <div class="photo">
-                        <el-image :src="fileImageInfo.src" fit="cover" loading="lazy" :preview-src-list="filesList_C"
-                            :initial-index="key" />
+                        <el-image :src="fileImageInfo.thumbnail ? fileImageInfo.thumbnail : fileImageInfo.src" fit="cover"
+                            loading="lazy" :preview-src-list="filesList_C" :initial-index="key" />
                     </div>
                     <div class="title">{{ fileImageInfo.name }}</div>
                 </div>
@@ -28,14 +28,22 @@
         <template #footer>
             <div class="slider-block">
                 <span class="demonstration">{{ $t('settings.play.playAtlasImageWidth') }}</span>
-                <el-slider v-model="store.filesBasesSettingStore.config.playAtlasImageWidth" :min="150" :max="1000"
-                    @change="saveFilesBasesSettingStore" />
+                <div style="width: 280px;">
+                    <el-slider v-model="store.filesBasesSettingStore.config.playAtlasImageWidth" :min="150" :max="1000"
+                        @change="saveFilesBasesSettingStore" />
+                </div>
                 <span class="demonstration">{{ $t('settings.play.playAtlasMode') }}</span>
-                <el-select v-model="store.filesBasesSettingStore.config.playAtlasMode" @change="saveFilesBasesSettingStore">
-                    <el-option v-for="item in dataset.playAtlasMode" :key="item"
-                        :label="$t('settings.play.playAtlasModeData.' + item)" :value="item" />
-                </el-select>
+                <div style="width: 120px;">
+                    <el-select v-model="store.filesBasesSettingStore.config.playAtlasMode"
+                        @change="saveFilesBasesSettingStore">
+                        <el-option v-for="item in dataset.playAtlasMode" :key="item"
+                            :label="$t('settings.play.playAtlasModeData.' + item)" :value="item" />
+                    </el-select>
+                </div>
+
                 <span class="total">Total : {{ originalDataList.length }}</span>
+                <span class="total"><el-checkbox v-model="store.filesBasesSettingStore.config.playAtlasThumbnail"
+                        :label="$t('settings.play.openAtlasThumbnail')" @change="saveFilesBasesSettingStore" /></span>
             </div>
         </template>
     </el-dialog>
@@ -56,6 +64,7 @@ const store = {
     filesBasesStore: filesBasesStore(),
     filesBasesSettingStore: filesBasesSettingStore(),
 }
+const masonryContainerRef = ref();
 
 let originalDataList: Array<string> = [];
 const page = ref(1);
@@ -99,7 +108,7 @@ const setFilesList = async () => {
     for (const imageName of originalDataList) {
         if (i >= star && i < end) {
             try {
-                const imageInfo = await readfileImageInfo(folder.value, imageName);
+                const imageInfo = await readfileImageInfo(folder.value, imageName, true, store.filesBasesSettingStore.config.playAtlasImageWidth * 2, store.filesBasesSettingStore.config.playAtlasImageWidth * 2);
                 temFilseArr.push(imageInfo);
             } catch (e) {
                 temFilseArr.push({
@@ -120,7 +129,7 @@ const setFilesList = async () => {
         }
         i++;
     }
-    filesList.value = [...filesList.value, ...temFilseArr];
+    filesList.value.push(...temFilseArr);
     masonryKey.value = masonryKey.value + 1;
     await loading.closeSync();
 }
@@ -143,7 +152,7 @@ const scrollBottom = (e: any) => {
         ThrottleClassScroll.throttleTimeout(async () => {
             page.value++;
             await setFilesList();
-            Scroll.scrollTo(0, scrollTop);
+            Scroll.scrollTo(0, scrollTop + (scrollHeight - scrollTop - clientHeight));
         }, 1000);
 
     }
@@ -237,7 +246,6 @@ defineExpose({ show });
 }
 
 .slider-block {
-    width: 660px;
     padding: 0px 10px;
     display: flex;
 }
@@ -249,6 +257,7 @@ defineExpose({ show });
     white-space: nowrap;
     margin-bottom: 0;
     padding: 0px 20px;
+    display: block;
 }
 
 .total {
@@ -258,5 +267,6 @@ defineExpose({ show });
     white-space: nowrap;
     margin-bottom: 0;
     padding: 0px 20px;
+    display: block;
 }
 </style>
