@@ -47,6 +47,7 @@ const defaultConfig = {
     playAtlasMode: 'waterfall',
     playAtlasPageLimit: 100,
     playComicMode: 'fullScreen',
+    playComicrReadingMode: false,
     routeConversion: [],
     definitionRgba: 'rgba(155, 88, 182,0.5)',
     definitionFontColor: '#F3F3F3',

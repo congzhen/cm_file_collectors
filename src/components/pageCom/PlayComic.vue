@@ -1,11 +1,11 @@
 <template>
     <el-dialog class="mainDialog" v-model="dialogVisible" :title="dialogTitle" width="1280" top="5vh"
-        :fullscreen="fullscreen()" :append-to-body="true" :close-on-click-modal="false">
+        :fullscreen="fullscreen()" @close="close" :append-to-body="true" :close-on-click-modal="false">
         <div class="playComicBody" :style="{ height: getHeihgt() }">
             <div class="left">
                 <el-scrollbar ref="previewScrollbarRef" height="100%">
                     <ul class="thumbnail">
-                        <li v-for="file, key in     filesList    " :key="key">
+                        <li ref="thumbnailLiRef" v-for="file, key in     filesList    " :key="key">
                             <div :class="['imgDiv', isSelect(key) ? 'select' : '']" @click="selectNowPage(key)">
                                 <el-image :src="folder + '/' + file" fit="scale-down" />
                             </div>
@@ -16,7 +16,7 @@
             </div>
             <div class="right" v-if="filesList">
                 <div class="showContent" v-if="store.filesBasesSettingStore.config.playComicMode == 'scaleToOriginal'">
-                    <el-scrollbar height="100%">
+                    <el-scrollbar ref="contentScrollbarRef" height="100%">
                         <div class="showContentImage">
                             <el-image :src="folder + '/' + filesList[nowPage]" fit="cover" />
                         </div>
@@ -27,6 +27,11 @@
                         style="width: 100%; height: 100%;" />
                 </div>
                 <div class="btnGroup">
+                    <div class="showMode">
+                        <el-icon size="24" @click="changeReadingMode">
+                            <Reading />
+                        </el-icon>
+                    </div>
                     <el-button plain size="small" @click="changeNowPage('per')" :disabled="nowPage <= 0">{{
                         $t('play.comic.perPage') }}</el-button>
                     <label class="nowPageLabel">{{ $t('play.comic.nowPage', { page: (nowPage + 1) }) }}</label>
@@ -50,7 +55,7 @@ import loading from '@/assets/loading'
 import { readDir, existsFile } from "@/assets/file"
 import { filesBasesStore } from '@/store/filesBases.store';
 import { filesBasesSettingStore } from '@/store/filesBasesSetting.store';
-import { ref } from "vue"
+import { ref, nextTick } from "vue"
 
 const store = {
     filesBasesStore: filesBasesStore(),
@@ -58,14 +63,22 @@ const store = {
 }
 
 const previewScrollbarRef = ref();
+const contentScrollbarRef = ref();
+const thumbnailLiRef = ref<Array<HTMLLIElement>>();
 const dialogVisible = ref(false);
 const dialogTitle = ref('');
 const folder = ref('');
 const filesList = ref<Array<string>>();
 const nowPage = ref(0);
+const readingMode = ref(false);
+
+enum EsetContentScrollbarMode {
+    init,
+    add,
+}
 
 const getHeihgt = () => {
-    if (window.innerWidth < setupConfig.isFullscreen.width || window.innerHeight < setupConfig.isFullscreen.height) {
+    if (readingMode.value || window.innerWidth < setupConfig.isFullscreen.width || window.innerHeight < setupConfig.isFullscreen.height) {
         return (window.innerHeight - 90) + 'px';
     }
     return (window.innerHeight - 200) + 'px';
@@ -83,6 +96,12 @@ const changeShowMode = () => {
     store.filesBasesSettingStore.save(store.filesBasesStore.currentFilesBases.id);
 }
 
+const changeReadingMode = () => {
+    readingMode.value = !readingMode.value;
+    store.filesBasesSettingStore.config.playComicrReadingMode = readingMode.value;
+    store.filesBasesSettingStore.save(store.filesBasesStore.currentFilesBases.id);
+}
+
 const changeNowPage = (mode: string) => {
     if (filesList.value) {
         if (mode == 'per' && nowPage.value > 0) {
@@ -90,25 +109,105 @@ const changeNowPage = (mode: string) => {
         } else if (mode == 'last' && nowPage.value < filesList.value.length - 1) {
             nowPage.value = nowPage.value + 1;
         }
+        nextTick(() => {
+            try {
+                setContentScrollbar();
+                setPreviewScrollbar();
+            } catch (e) {
+                console.log(e);
+            }
+
+        })
     }
 }
 
+const setPreviewScrollbar = () => {
+    previewScrollbarRef.value?.setScrollTop(getPreviewScrollbarNum(nowPage.value));
+}
+
+const setContentScrollbar = (num = 0, mode: EsetContentScrollbarMode = EsetContentScrollbarMode.init) => {
+    if (store.filesBasesSettingStore.config.playComicMode == 'scaleToOriginal' && contentScrollbarRef.value) {
+        let top = num;
+        if (EsetContentScrollbarMode.init !== mode) {
+            top = contentScrollbarRef.value.wrapRef.scrollTop + num;
+            if (top < 0) {
+                top = 0;
+            } else if (top > contentScrollbarRef.value.wrapRef.scrollHeight) {
+                top = contentScrollbarRef.value.wrapRef.scrollHeight;
+            }
+        }
+        contentScrollbarRef.value.setScrollTop(top);
+    }
+}
+
+
+const getPreviewScrollbarNum = (pageNum: number) => {
+    let scrollbarNum = 0;
+    if (thumbnailLiRef.value) {
+        for (let i = 0; i < thumbnailLiRef.value.length; i++) {
+            if (pageNum > i) {
+                const item = thumbnailLiRef.value[i];
+                scrollbarNum += item.offsetHeight;
+            } else {
+                break;
+            }
+        }
+    }
+    return scrollbarNum;
+}
+
+const addEventListeners = () => {
+    document.addEventListener('keydown', handleKeyDown);
+}
+const removeEventListeners = () => {
+    document.removeEventListener('keydown', handleKeyDown);
+}
+
+const handleKeyDown = (event: KeyboardEvent) => {
+    if (event.key === 'ArrowUp') {
+        setContentScrollbar(-200, EsetContentScrollbarMode.add)
+    } else if (event.key === 'ArrowDown') {
+        setContentScrollbar(200, EsetContentScrollbarMode.add)
+    } else if (event.key === 'ArrowLeft') {
+        changeNowPage('per')
+    } else if (event.key === 'ArrowRight') {
+        changeNowPage('last')
+    }
+}
 
 const show = async (path: string, title = '', _nowPage = 0) => {
     if (!existsFile(path)) {
         return undefined;
     }
     loading.open();
-    filesList.value = readDir(path);
+    readingMode.value = store.filesBasesSettingStore.config.playComicrReadingMode;
+    filesList.value = readDir(path, ['jpg', 'jpeg', 'png', 'gif']);
     folder.value = path;
     dialogTitle.value = title;
     nowPage.value = _nowPage;
     dialogVisible.value = true;
+
+    addEventListeners();
     await loading.closeSync();
+    nextTick(() => {
+        try {
+            setPreviewScrollbar();
+            setContentScrollbar();
+        } catch (e) {
+            console.log(e);
+        }
+    })
     return true;
 }
 
+const close = () => {
+    removeEventListeners();
+}
+
 const fullscreen = () => {
+    if (readingMode.value) {
+        return true;
+    }
     if (window.innerWidth < setupConfig.isFullscreen.width || window.innerHeight < setupConfig.isFullscreen.height) {
         return true;
     }
