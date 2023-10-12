@@ -105,34 +105,39 @@ const setFilesList = async () => {
     const end = star + limit;
     let i = 0;
     const temFilseArr: Array<EfileImageInfo> = [];
+    const promises = [];
     for (const imageName of originalDataList) {
         if (i >= star && i < end) {
-            try {
-                const imageInfo = await readfileImageInfo(folder.value, imageName, true, store.filesBasesSettingStore.config.playAtlasImageWidth * 2, store.filesBasesSettingStore.config.playAtlasImageWidth * 2);
-                temFilseArr.push(imageInfo);
-            } catch (e) {
-                temFilseArr.push({
-                    src: "",
-                    name: "",
-                    format: "",
-                    density: 0,
-                    width: 100,
-                    height: 100,
+            const promise = readfileImageInfo(folder.value, imageName, true, store.filesBasesSettingStore.config.playAtlasImageWidth * 2, store.filesBasesSettingStore.config.playAtlasImageWidth * 2)
+                .then((imageInfo) => {
+                    temFilseArr.push(imageInfo);
+                })
+                .catch((e) => {
+                    temFilseArr.push({
+                        src: "",
+                        name: "",
+                        format: "",
+                        density: 0,
+                        width: 100,
+                        height: 100,
+                    });
+                    console.log(imageName + e as string);
+                    ElMessage({ message: imageName + e as string, type: 'error' });
                 });
-                console.log(imageName + e as string);
-                ElMessage({ message: imageName + e as string, type: 'error' })
-            }
 
-
+            promises.push(promise);
         } else if (i >= end) {
             break;
         }
         i++;
     }
+    await Promise.all(promises);
     filesList.value.push(...temFilseArr);
     masonryKey.value = masonryKey.value + 1;
     await loading.closeSync();
 }
+
+
 
 const isLastPage = () => {
     return filesList.value?.length >= originalDataList.length;
