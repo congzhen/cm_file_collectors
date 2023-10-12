@@ -104,23 +104,17 @@ const setFilesList = async () => {
     const star = (page.value - 1) * limit;
     const end = star + limit;
     let i = 0;
+    const temFilseNameArr: Array<string> = [];
     const temFilseArr: Array<EfileImageInfo> = [];
     const promises = [];
     for (const imageName of originalDataList) {
         if (i >= star && i < end) {
+            temFilseNameArr.push(imageName);
             const promise = readfileImageInfo(folder.value, imageName, true, store.filesBasesSettingStore.config.playAtlasImageWidth * 2, store.filesBasesSettingStore.config.playAtlasImageWidth * 2)
                 .then((imageInfo) => {
                     temFilseArr.push(imageInfo);
                 })
                 .catch((e) => {
-                    temFilseArr.push({
-                        src: "",
-                        name: "",
-                        format: "",
-                        density: 0,
-                        width: 100,
-                        height: 100,
-                    });
                     console.log(imageName + e as string);
                     ElMessage({ message: imageName + e as string, type: 'error' });
                 });
@@ -132,7 +126,22 @@ const setFilesList = async () => {
         i++;
     }
     await Promise.all(promises);
-    filesList.value.push(...temFilseArr);
+    const sortedFiles = temFilseNameArr.map((name) => {
+        const imageInfo = temFilseArr.find((item) => item.name === name);
+        if (imageInfo) {
+            return imageInfo;
+        } else {
+            return {
+                src: "",
+                name: name,
+                format: "",
+                density: 0,
+                width: 100,
+                height: 100,
+            } as EfileImageInfo
+        }
+    });
+    filesList.value.push(...sortedFiles);
     masonryKey.value = masonryKey.value + 1;
     await loading.closeSync();
 }
@@ -158,7 +167,7 @@ const scrollBottom = (e: any) => {
             page.value++;
             await setFilesList();
             Scroll.scrollTo(0, scrollTop + (scrollHeight - scrollTop - clientHeight));
-        }, 1000);
+        }, 500);
 
     }
 }
