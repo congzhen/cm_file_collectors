@@ -14,9 +14,11 @@
         <div class="indexBodyMain" :style="mainStype_C">
             <div class="content">
                 <div :class="[gerResDataListClass()]">
-                    <IndexDataListTableModeView v-if="store.filesBasesSettingStore.config.resourcesShowMode == 'table'"
-                        :dataList="resDataList" @clickHandle="clickDataHandle"></IndexDataListTableModeView>
-                    <IndexDataListView v-else :dataList="resDataList" @clickHandle="clickDataHandle"></IndexDataListView>
+                    <IndexDataListTableModeView ref="IndexDataListTableRef"
+                        v-if="store.filesBasesSettingStore.config.resourcesShowMode == 'table'" :dataList="resDataList"
+                        @clickHandle="clickDataHandle"></IndexDataListTableModeView>
+                    <IndexDataListView ref="IndexDataListRef" v-else :dataList="resDataList" @clickHandle="clickDataHandle">
+                    </IndexDataListView>
                 </div>
                 <div class="details" v-if="store.filesBasesSettingStore.config.resourceDetailsShowMode == 'right'">
                     <IndexDetailsView ref="IndexDetailsViewRef"></IndexDetailsView>
@@ -52,6 +54,8 @@ const store = {
 }
 
 const indexBodyRef = ref<HTMLDivElement>();
+const IndexDataListRef = ref<InstanceType<typeof IndexDataListView>>();
+const IndexDataListTableRef = ref<InstanceType<typeof IndexDataListTableModeView>>();
 const indexBodyElementData = reactive({
     height: indexBodyRef.value?.offsetHeight,
 });
@@ -104,6 +108,14 @@ const mainStype_C = computed(() => {
     }
 })
 
+const intiDatalist = () => {
+    if (store.filesBasesSettingStore.config.resourcesShowMode == 'table') {
+        IndexDataListTableRef.value?.init();
+    } else {
+        IndexDataListRef.value?.init();
+    }
+}
+
 
 const openIndexBodyTag = () => {
     if (store.filesBasesSettingStore.config.leftColumnMode == 'float' && indexBodyTagRef.value && arrowRef.value) {
@@ -139,6 +151,7 @@ const getDataList = async (filesBases_id: string, _resWhereObj: IresWhereObj) =>
 }
 const currentChange = async (currentPage: number) => {
     resWhereObj.page = currentPage;
+    intiDatalist();
     await updateData();
 }
 

@@ -1,6 +1,7 @@
 <template>
     <div class="dataListTableModeMain">
-        <el-table :data="props.dataList" height="100%" style="width: 100%" size="small" @row-click="clickHandle" border>
+        <el-table ref="dataListTableRef" :data="props.dataList" height="100%" style="width: 100%" size="small"
+            @row-click="clickHandle" border>
             <el-table-column label="-" width="40">
                 <template #default="scope">
                     <div class="playDiv" v-if="scope.row.coverPoster != ''"
@@ -65,6 +66,7 @@
 import setupConfig from "@/setup/config"
 import { EresDetatilsType } from "@/dataInterface/common.enum";
 import { IresourcesBase } from "@/dataInterface/resources.interface";
+import { ref } from "vue";
 // eslint-disable-next-line no-undef
 const props = defineProps({
     dataList: {
@@ -75,6 +77,17 @@ const props = defineProps({
 // eslint-disable-next-line no-undef
 const emits = defineEmits(['clickHandle']);
 
+const dataListTableRef = ref();
+
+const init = () => {
+    try {
+        dataListTableRef.value?.setScrollTop(0);
+    } catch (e) {
+        console.log(e);
+    }
+}
+
+
 const clickHandle = (row: IresourcesBase) => {
     emits('clickHandle', EresDetatilsType.show, row);
 }
@@ -83,6 +96,8 @@ const clickPlayHandle = (type: EresDetatilsType, row: IresourcesBase) => {
     emits('clickHandle', type, row);
 }
 
+// eslint-disable-next-line no-undef
+defineExpose({ init });
 
 </script>
 <style scoped>

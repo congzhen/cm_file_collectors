@@ -1,6 +1,6 @@
 <template>
     <div class="dataListMain">
-        <el-scrollbar height="100%">
+        <el-scrollbar ref="elScrollbarRef" height="100%">
             <div class="content">
                 <dataListItemVue v-for="item, key in props.dataList" :key="key" :dataInfo="item" @clickHandle="clickHandle">
                 </dataListItemVue>
@@ -12,6 +12,7 @@
 import dataListItemVue from '@/components/pageCom/dataListItem.vue';
 import { EresDetatilsType } from '@/dataInterface/common.enum';
 import { IresourcesBase } from "@/dataInterface/resources.interface";
+import { ref } from "vue";
 // eslint-disable-next-line no-undef
 const props = defineProps({
     dataList: {
@@ -21,10 +22,24 @@ const props = defineProps({
 })
 // eslint-disable-next-line no-undef
 const emits = defineEmits(['clickHandle']);
+const elScrollbarRef = ref();
+
+const init = () => {
+    try {
+        elScrollbarRef.value?.setScrollTop(0);
+    } catch (e) {
+        console.log(e);
+    }
+}
+
 
 const clickHandle = (type: EresDetatilsType, dataInfo: IresourcesBase) => {
     emits('clickHandle', type, dataInfo);
 }
+
+
+// eslint-disable-next-line no-undef
+defineExpose({ init });
 
 </script>
 <style scoped>

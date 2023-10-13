@@ -6,6 +6,29 @@
         <div class="updataLogsBody">
             <el-timeline>
                 <el-scrollbar height="500px">
+                    <el-timeline-item timestamp="2023/10/13" placement="top">
+                        <h4>{{ $t('system.updateLogs.version') }}：v 2.0.8</h4>
+                        <div class="rawContent">
+                            <h5>新特性</h5>
+                            <p class="logContent">添加演员隐退选项，隐退后会变为灰色</p>
+                            <p class="logContent">添加演员与导演的自定义文字显示，例如将演员改为声优</p>
+                            <p class="logContent">添加默认演员头像的自定义</p>
+                            <p class="logContent">添加左侧标签栏折叠功能</p>
+                            <p class="logContent">漫画模式中增加阅读模式(全屏),增加方向按键翻页和滚动，优化左侧预览</p>
+                            <p class="logContent">历史记录中添加最后观看数据</p>
+                        </div>
+                        <div class="rawContent">
+                            <h5>优化</h5>
+                            <p class="logContent">
+                                图集模式，当文件夹下有大量图片或图片尺寸过大时的加载效率（当图片原尺寸大于显示宽度两倍时，如果开启缩略图，将生成缩略图显示，用以优化显示效率，但是会增加读取速度）</p>
+                        </div>
+                        <div class="rawContent">
+                            <h5>BUG修复</h5>
+                            <p class="logContent">修复详情中，拍摄年龄计算错误以及演员选择后未按选择顺序排序</p>
+                            <p class="logContent">修复资源显示时，有滚动条翻页后，滚动条未回到顶部</p>
+                            <p class="logContent">修复漫画模式全屏显示时，有滚动条翻页后，滚动条未回到顶部</p>
+                        </div>
+                    </el-timeline-item>
                     <el-timeline-item timestamp="2023/9/29" placement="top">
                         <h4>{{ $t('system.updateLogs.version') }}：v 2.0.7</h4>
                         <div class="rawContent">
