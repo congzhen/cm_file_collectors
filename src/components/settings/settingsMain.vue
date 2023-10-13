@@ -144,8 +144,8 @@
                         <h5>{{ $t('settings.displaySettings.showTag.title') }}</h5>
                         <div class="select-full">
                             <comMultipleSearchSelect v-model="coverDisplayTagData"
-                                :dataList="store.tagStore.tagList.filter(item => item.status)" :selectField="['name']"
-                                :showSelectField="['name']">
+                                :dataList="store.tagStore.getTagListByCurrentFilesBases.filter(item => item.status)"
+                                :selectField="['name']" :showSelectField="['name']">
                             </comMultipleSearchSelect>
                         </div>
                         <div style="display: flex;">

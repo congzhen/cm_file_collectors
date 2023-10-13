@@ -8,6 +8,15 @@ export const tagStore = defineStore('tag', {
         tagList: [] as Array<Itag>,
     }),
     getters: {
+        getTagListByCurrentFilesBases: function (state) {
+            const CurrentFilesBasesTagClassIdArr = tagClassStore().getTagClassListByCurrentFilesBases.map(tagClassItem => tagClassItem.id);
+            return state.tagList.filter(tagItem => {
+                if (CurrentFilesBasesTagClassIdArr.includes(tagItem.tagClass_id)) {
+                    return true;
+                }
+                return false;
+            })
+        },
         getTagListByTagClassId: function (state) {
             return (tagClass_id: string, statusMode: 'ALL' | 1 = 1): Array<Itag> => {
                 return state.tagList.filter(item => {
