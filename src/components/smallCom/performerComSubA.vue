@@ -18,11 +18,11 @@
     </div>
 </template>
 <script setup lang="ts">
-import setupConfig from "@/setup/config"
 import photoImageCom from '@/components/smallCom/photoImageCom.vue'
 import { calculateAge } from '@/assets/math'
 import { Iperformer } from '@/dataInterface/performer.interface';
 import { computed } from 'vue';
+import { performerFaceImageSrc } from "@/assets/fileDbFolder";
 // eslint-disable-next-line no-undef
 const props = defineProps({
     performerInfo: {
@@ -45,7 +45,7 @@ const name = computed(() => {
 })
 const src = computed(() => {
     if (props.performerInfo != undefined && props.performerInfo.photo != '') {
-        return setupConfig.performerFacePath + props.performerInfo.performerBases_id + '/' + props.performerInfo.photo;
+        return performerFaceImageSrc(props.performerInfo.performerBases_id, props.performerInfo.photo);
     }
     return '';
 })

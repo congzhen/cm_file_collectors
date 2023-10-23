@@ -113,7 +113,6 @@ import loading from '@/assets/loading'
 import comForm from "@/components/common/comForm.vue"
 import comCropperDialog from "@/components/common/comCropper.vue/comCropperDialog.vue";
 import dataset from "@/assets/dataset"
-import setupConfig from "@/setup/config"
 import { saveBase64Picture, deleteFile, fileMove } from "@/assets/file"
 import { filesBasesSettingStore } from "@/store/filesBasesSetting.store";
 import { filesRelatedPerformerBasesStore } from "@/store/filesRelatedPerformerBases.store";
@@ -126,6 +125,7 @@ import { ref, reactive, computed, inject, nextTick } from 'vue'
 import type { FormRules, UploadFile } from 'element-plus'
 import { useI18n } from 'vue-i18n';
 import { Iperformer } from '@/dataInterface/performer.interface';
+import { performerFaceFolderPath, performerFaceImageSrc } from '@/assets/fileDbFolder';
 const { t } = useI18n();
 const updatePerformerAdminMainData = inject<() => void>('updatePerformerAdminMainData');
 
@@ -176,7 +176,7 @@ const init = async (id: string | undefined = undefined) => {
         formData_id.value = id;
         const performerInfo = await performerServerData.getInfoById(id);
         console.log(performerInfo);
-        photoSrc.value = setupConfig.performerFacePath + performerInfo.performerBases_id + '/' + performerInfo.photo;
+        photoSrc.value = performerFaceImageSrc(performerInfo.performerBases_id, performerInfo.photo);
         formData.performerBases_id = performerInfo.performerBases_id;
         formData.name = performerInfo.name;
         formData.aliasName = performerInfo.aliasName;
@@ -253,7 +253,7 @@ const submitForm = async (mode: string) => {
     let oldPhoto = formData.photo;
     let status = false;
     if (photoData.value != '') {
-        const { fileName } = saveBase64Picture(photoData.value, setupConfig.performerFacePath + formData.performerBases_id + '/', undefined, 'jpg');
+        const { fileName } = saveBase64Picture(photoData.value, performerFaceFolderPath(formData.performerBases_id), undefined, 'jpg');
         formData.photo = fileName;
     }
     let oldPerformerInfo: Iperformer | undefined = undefined;
@@ -266,12 +266,12 @@ const submitForm = async (mode: string) => {
 
     if (status) {
         if (photoData.value != '') {
-            deleteFile(setupConfig.performerFacePath + formData.performerBases_id + '/', oldPhoto);
+            deleteFile(performerFaceFolderPath(formData.performerBases_id), oldPhoto);
         } else {
             if (mode != 'add' && oldPerformerInfo && oldPerformerInfo.photo != '' && oldPerformerInfo.performerBases_id != formData.performerBases_id) {
                 fileMove(
-                    setupConfig.performerFacePath + oldPerformerInfo.performerBases_id + '/' + oldPerformerInfo.photo,
-                    setupConfig.performerFacePath + formData.performerBases_id + '/' + oldPerformerInfo.photo
+                    performerFaceImageSrc(oldPerformerInfo.performerBases_id, oldPerformerInfo.photo),
+                    performerFaceImageSrc(formData.performerBases_id, oldPerformerInfo.photo),
                 );
             }
         }
@@ -282,7 +282,7 @@ const submitForm = async (mode: string) => {
 
     } else {
         if (photoData.value != '') {
-            deleteFile(setupConfig.performerFacePath + formData.performerBases_id + '/', formData.photo);
+            deleteFile(performerFaceFolderPath(formData.performerBases_id), formData.photo);
         }
         comFormRef.value?.fail(t('performer.form.message.' + mode + 'Fail', { performer: store.filesBasesSettingStore.getPerformerText, director: store.filesBasesSettingStore.getDirectorText }));
     }

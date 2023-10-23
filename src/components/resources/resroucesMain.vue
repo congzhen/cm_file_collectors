@@ -180,8 +180,7 @@ import { ipcRendererSend } from "@/electronCommon"
 import loading from '@/assets/loading'
 import { coreCreateGuid } from '@/core/coreGuid'
 import dataset from '@/assets/dataset';
-import setupConfig from "@/setup/config"
-import { saveBase64Picture, deleteFile, isDirectory, isVideo, getFileName } from "@/assets/file"
+import { saveBase64Picture, deleteFile, isVideo, getFileName } from "@/assets/file"
 import comForm from '../common/comForm.vue';
 import comCropperDialog from "@/components/common/comCropper.vue/comCropperDialog.vue";
 import { filesBasesStore } from "@/store/filesBases.store";
@@ -198,6 +197,7 @@ import { IresDramaSeries, Iresources } from "@/dataInterface/resources.interface
 import { EresDramaSeriesType, EresUpdate } from "@/dataInterface/common.enum";
 import { ffprobeTool } from "@/webServer/m3u8FFmpeg";
 import { definitionConvert } from "@/abilities/definitionConvert";
+import { resCoverFolderPath, resCoverImageSrc } from "@/assets/fileDbFolder";
 const { t } = useI18n();
 const indexUpdateResourcesDataInjectAdd = inject<(_up: Array<EresUpdate>) => void>('indexUpdateResourcesData');
 const indexUpdateResourcesDataInjectEdit = inject<() => void>('indexUpdateResourcesData');
@@ -314,7 +314,7 @@ const init = async (id: string | undefined = undefined, resInfo: Iresources | un
 
         formData.dramaSeries = resInfo.dramaSeries;
 
-        coverPosterSrc.value = setupConfig.resCoverPosterPath + resInfo.filesBases_id + '/' + resInfo.coverPoster;
+        coverPosterSrc.value = resCoverImageSrc(resInfo.filesBases_id, resInfo.coverPoster);
         coverPosterData.value = '';
     }
     //changeCoverPosterMode();
@@ -418,7 +418,7 @@ const submitForm = async (mode: string) => {
     let oldCoverPoster = formData.coverPoster;
     let status = false;
     if (coverPosterData.value != '') {
-        const { fileName } = saveBase64Picture(coverPosterData.value, setupConfig.resCoverPosterPath + formData.filesBases_id + '/', undefined, 'jpg');
+        const { fileName } = saveBase64Picture(coverPosterData.value, resCoverFolderPath(formData.filesBases_id), undefined, 'jpg');
         formData.coverPoster = fileName;
     }
     if (mode == 'add') {
@@ -428,7 +428,7 @@ const submitForm = async (mode: string) => {
     }
     if (status) {
         if (coverPosterData.value != '') {
-            deleteFile(setupConfig.resCoverPosterPath + formData.filesBases_id + '/', oldCoverPoster);
+            deleteFile(resCoverFolderPath(formData.filesBases_id), oldCoverPoster);
         }
         comFormRef.value?.success(t('resources.form.message.' + mode + 'Success'));
         close();
@@ -439,7 +439,7 @@ const submitForm = async (mode: string) => {
         }
     } else {
         if (coverPosterData.value != '') {
-            deleteFile(setupConfig.resCoverPosterPath + formData.filesBases_id + '/', formData.coverPoster);
+            deleteFile(resCoverFolderPath(formData.filesBases_id), formData.coverPoster);
         }
         comFormRef.value?.fail(t('performer.form.message.' + mode + 'Fail'));
     }

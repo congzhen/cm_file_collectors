@@ -10,7 +10,7 @@
                             :width="(scope.row.coverPosterWidth + 26) + 'px'">
                             <el-image
                                 :style="{ width: scope.row.coverPosterWidth + 'px', height: scope.row.coverPosterHeight + 'px' }"
-                                :src="setupConfig.resCoverPosterPath + scope.row.filesBases_id + '/' + scope.row.coverPoster" />
+                                :src="resCoverImageSrc(scope.row.filesBases_id, scope.row.coverPoster)" />
                             <template #reference>
                                 <el-icon>
                                     <VideoPlay />
@@ -63,7 +63,7 @@
     </div>
 </template>
 <script setup lang="ts">
-import setupConfig from "@/setup/config"
+import { resCoverImageSrc } from "@/assets/fileDbFolder";
 import { EresDetatilsType } from "@/dataInterface/common.enum";
 import { IresourcesBase } from "@/dataInterface/resources.interface";
 import { ref } from "vue";

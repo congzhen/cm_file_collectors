@@ -5,7 +5,7 @@
         </div>
         <div class="performerPhoto">
             <photoImageCom class="photo"
-                :src="setupConfig.performerFacePath + performerInfo.performerBases_id + '/' + performerInfo.photo">
+                :src="performerFaceImageSrc(performerInfo.performerBases_id, performerInfo.photo)">
             </photoImageCom>
         </div>
         <div class="performerInfo">
@@ -49,7 +49,7 @@
 <script setup lang="ts">
 import { searchStore } from '@/store/search.store'
 import photoImageCom from '@/components/smallCom/photoImageCom.vue'
-import setupConfig from "@/setup/config"
+import { performerFaceImageSrc } from "@/assets/fileDbFolder";
 import { filesBasesSettingStore } from '@/store/filesBasesSetting.store';
 import { calculateAge } from '@/assets/math'
 import { Iperformer } from '@/dataInterface/performer.interface';

@@ -59,7 +59,6 @@
 <script setup lang="ts">
 import { ElMessage } from 'element-plus'
 import loading from '@/assets/loading'
-import setupConfig from '@/setup/config'
 import { Debounce } from '@/assets/tool'
 import { filesBasesStore } from "@/store/filesBases.store"
 import { ref, nextTick, inject } from 'vue';
@@ -68,6 +67,7 @@ import { IresSimpleAnddramaSeries } from '@/dataInterface/resources.interface';
 import { resourcesServerData } from '@/serverData/resources.serverData'
 import deleteConfirm from '../common/funDeleteConfirm';
 import { deleteFile } from '@/assets/file';
+import { resCoverFolderPath } from '@/assets/fileDbFolder'
 const { t } = useI18n();
 const indexUpdateResourcesDataInject = inject<() => void>('indexUpdateResourcesData');
 const store = {
@@ -112,7 +112,7 @@ const clickDelete = async () => {
                     for (const resDataInfo of dataList.value) {
                         await resourcesServerData.delete(resDataInfo.id);
                         if (resDataInfo.coverPoster != '') {
-                            deleteFile(setupConfig.resCoverPosterPath + resDataInfo.filesBases_id, resDataInfo.coverPoster);
+                            deleteFile(resCoverFolderPath(resDataInfo.filesBases_id), resDataInfo.coverPoster);
                         }
                     }
                 } catch (e) {

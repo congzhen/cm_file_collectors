@@ -54,6 +54,7 @@ import { ref, inject } from 'vue'
 import { deleteFolderRecursive } from '@/assets/file';
 import { useI18n } from 'vue-i18n'
 import { EresUpdate } from '@/dataInterface/common.enum';
+import { resCoverFolderPath } from '@/assets/fileDbFolder';
 const AppInitInject = inject<(_filesBases_id: string, _callBack: () => void) => void>('AppInit');
 const indexUpdateResourcesDataInject = inject<(_up: Array<EresUpdate>) => void>('indexUpdateResourcesData');
 const { t } = useI18n();
@@ -143,7 +144,7 @@ const deleteFilesDatabases = async (filesBases: IfilesBases) => {
         loading.open();
         const rd = await filesBasesServerData.delete(filesBases.id);
         if (rd) {
-            deleteFolderRecursive(setupConfig.resCoverPosterPath + '/' + filesBases.id);
+            deleteFolderRecursive(resCoverFolderPath(filesBases.id));
             let showFilesBasesId = store.filesBasesStore.currentFilesBases.id == filesBases.id ? store.filesBasesStore.filesBasesList[0].id : store.filesBasesStore.currentFilesBases.id;
             if (showFilesBasesId == filesBases.id && store.filesBasesStore.filesBasesList[1]) {
                 showFilesBasesId = store.filesBasesStore.filesBasesList[1].id;

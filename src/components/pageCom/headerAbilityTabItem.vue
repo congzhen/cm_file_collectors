@@ -26,12 +26,12 @@
     </div>
 </template>
 <script setup lang="ts">
-import setupConfig from "@/setup/config"
 import { Iresources, IresourcesBase } from '@/dataInterface/resources.interface';
 import { performerStore } from "@/store/performer.store";
 import { tagStore } from "@/store/tag.store";
 import { computed, inject } from 'vue'
 import randomPoster from "@/abilities/randomPoster";
+import { resCoverImageSrc } from "@/assets/fileDbFolder";
 const indexPlayResourcesDataInject = inject<(_resourcesBase: IresourcesBase) => void>('indexPlayResourcesData');
 const store = {
     performerStore: performerStore(),
@@ -47,7 +47,7 @@ const props = defineProps({
 });
 const getCoverSrc = () => {
     if (props.dataInfo.coverPoster != '') {
-        return setupConfig.resCoverPosterPath + props.dataInfo.filesBases_id + '/' + props.dataInfo.coverPoster;
+        return resCoverImageSrc(props.dataInfo.filesBases_id, props.dataInfo.coverPoster);
     } else {
         return randomPoster(props.dataInfo.addTime);
     }

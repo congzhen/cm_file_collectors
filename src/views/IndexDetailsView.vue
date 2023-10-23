@@ -92,7 +92,6 @@
 import { elShell } from "@/electronCommon"
 import virtualRouteConverter from "@/abilities/virtualRouteConverter"
 import loading from '@/assets/loading'
-import setupConfig from '@/setup/config'
 import deleteConfirm from "@/components/common/funDeleteConfirm"
 import { deleteFile } from "@/assets/file"
 import detailsPreviewImage from "@/components/pageCom/detailsPreviewImage.vue";
@@ -113,6 +112,7 @@ import { ref, inject } from 'vue'
 import { useI18n } from 'vue-i18n';
 import randomPoster from "@/abilities/randomPoster"
 import { IresUpdateDetailsView } from "@/dataInterface/common.interface"
+import { resCoverFolderPath, resCoverImageSrc } from "@/assets/fileDbFolder"
 const { t } = useI18n()
 
 // eslint-disable-next-line no-undef
@@ -147,7 +147,7 @@ const errorImage = () => {
 const getCoverSrc = () => {
     if (resDataInfo.value) {
         if (resDataInfo.value.coverPoster != '') {
-            return setupConfig.resCoverPosterPath + resDataInfo.value.filesBases_id + '/' + resDataInfo.value.coverPoster;
+            return resCoverImageSrc(resDataInfo.value.filesBases_id, resDataInfo.value.coverPoster);
         } else {
             return randomPoster(resDataInfo.value?.addTime);
         }
@@ -220,7 +220,7 @@ const deleteResources = async () => {
             if (resDataInfo.value) {
                 loading.open();
                 if (resDataInfo.value.coverPoster != '') {
-                    deleteFile(setupConfig.resCoverPosterPath + resDataInfo.value.filesBases_id, resDataInfo.value.coverPoster);
+                    deleteFile(resCoverFolderPath(resDataInfo.value.filesBases_id), resDataInfo.value.coverPoster);
                 }
                 const rd = await resourcesServerData.delete(resDataInfo.value.id);
                 if (rd) {

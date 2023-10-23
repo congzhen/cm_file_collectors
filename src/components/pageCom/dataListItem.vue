@@ -27,6 +27,7 @@
 <script setup lang="ts">
 import setupConfig from "@/setup/config"
 import randomPoster from "@/abilities/randomPoster"
+import { resCoverImageSrc } from "@/assets/fileDbFolder"
 import { EresDetatilsType } from "@/dataInterface/common.enum"
 import { IresourcesBase } from '@/dataInterface/resources.interface';
 import { filesBasesSettingStore } from "@/store/filesBasesSetting.store";
@@ -62,7 +63,7 @@ const clickHandle = (type: EresDetatilsType) => {
 
 const getCoverSrc = () => {
     if (props.dataInfo.coverPoster != '') {
-        return setupConfig.resCoverPosterPath + props.dataInfo.filesBases_id + '/' + props.dataInfo.coverPoster;
+        return resCoverImageSrc(props.dataInfo.filesBases_id, props.dataInfo.coverPoster);
     } else {
         return randomPoster(props.dataInfo.addTime);
     }

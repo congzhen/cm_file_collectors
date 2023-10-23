@@ -28,9 +28,9 @@ const isVideo = (filePath: string) => {
     return dataset.videoSuffixName.includes(path.extname(filePath).toLowerCase());
 }
 
-const filePath = function (path: string, name: string) {
-    checkFolderAndMkdir(path);
-    return path + name;
+const filePath = function (_path: string, name: string) {
+    checkFolderAndMkdir(_path);
+    return path.join(_path, name);
 }
 
 const getFileName = function (filePath: string) {

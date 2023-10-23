@@ -12,7 +12,7 @@
         </div>
         <div class="performerInfoPhoto">
             <photoImageCom class="photo" v-if="performerInfo"
-                :src="setupConfig.performerFacePath + performerInfo.performerBases_id + '/' + performerInfo.photo">
+                :src="performerFaceImageSrc(performerInfo.performerBases_id, performerInfo.photo)">
             </photoImageCom>
         </div>
         <div class="performerInfoStars" v-if="performerInfo">
@@ -65,7 +65,7 @@
 <script setup lang="ts">
 import loading from '@/assets/loading'
 import { calculateAge } from '@/assets/math'
-import setupConfig from "@/setup/config"
+import { performerFaceImageSrc } from "@/assets/fileDbFolder"
 import deleteConfirm from "@/components/common/funDeleteConfirm"
 import performerAdminAdd from "./performerAdminAdd.vue";
 import starsCom from "@/components/smallCom/starsCom.vue";

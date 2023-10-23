@@ -28,6 +28,7 @@ import deleteConfirm from "@/components/common/funDeleteConfirm"
 import { performerServerData } from '@/serverData/performer.serverData';
 import { ref, computed, inject } from 'vue'
 import { deleteFile } from '@/assets/file';
+import { performerFaceFolderPath } from '@/assets/fileDbFolder';
 const updatePerformerAdminMainData = inject<() => void>('updatePerformerAdminMainData');
 const store = {
     performerStore: performerStore(),
@@ -60,7 +61,7 @@ const handleDelete = (per: Iperformer) => {
         if (rd) {
             store.performerStore.delete(per.id);
             if (per.photo != '') {
-                deleteFile(setupConfig.performerFacePath + per.performerBases_id, per.photo)
+                deleteFile(performerFaceFolderPath(per.performerBases_id), per.photo)
             }
         }
         await loading.closeSync();

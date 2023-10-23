@@ -56,6 +56,7 @@ import { IfilesBases, IperformerBases } from "@/dataInterface/databases.interfac
 import { ref, inject } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { deleteFolderRecursive } from '@/assets/file';
+import { performerFaceFolderPath } from '@/assets/fileDbFolder';
 const AppInitInject = inject<(_filesBases_id: string) => void>('AppInit');
 const { t } = useI18n();
 const store = {
@@ -164,7 +165,7 @@ const deletePerformerDatabases = async (performerDatabases: IperformerBases) => 
                 type: 'error',
             })
         } else if (rd.status) {
-            deleteFolderRecursive(setupConfig.performerFacePath + '/' + performerDatabases.id);
+            deleteFolderRecursive(performerFaceFolderPath(performerDatabases.id));
             if (AppInitInject) AppInitInject(store.filesBasesStore.currentFilesBases.id);
         }
         await loading.closeSync();

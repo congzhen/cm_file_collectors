@@ -17,7 +17,7 @@ const basePath = path.resolve('./');
 const configFolderPath = path.join(basePath, '/config/');
 const softwareConfigPath = path.join(configFolderPath, '/softwareConfig.json');
 const dbFolderPath = path.join(basePath, '/db/');
-const dbPath = path.join(dbFolderPath, '/' + getDataBasesName(dbFolderPath));
+const dbPath = path.join(dbFolderPath, '/', getDataBasesName(dbFolderPath));
 const performerFacePath = path.join(basePath, '/db/performerFace/');
 const resCoverPosterPath = path.join(basePath, '/db/resCoverPoster/');
 
@@ -37,7 +37,7 @@ const config = {
 
 export const setDbPath = (FPath: string) => {
     config.dbFolderPath = FPath;
-    config.dbPath = path.join(config.dbFolderPath, '/' + getDataBasesName(config.dbFolderPath));
+    config.dbPath = path.join(config.dbFolderPath, '/', getDataBasesName(config.dbFolderPath));
     config.performerFacePath = path.join(config.dbFolderPath, '/performerFace/');
     config.resCoverPosterPath = path.join(config.dbFolderPath, '/resCoverPoster/');
 
