@@ -26,7 +26,8 @@
                 <IndexDetailsPopupView ref="IndexDetailsPopupViewRef" v-else></IndexDetailsPopupView>
             </div>
             <div class="footer">
-                <IndexFooterView :dataCount="resDataCount" :dataLimit="resWhereObj.limit" @currentChange="currentChange">
+                <IndexFooterView ref="IndexFooterViewRef" :dataCount="resDataCount" :dataLimit="resWhereObj.limit"
+                    @currentChange="currentChange">
                 </IndexFooterView>
             </div>
         </div>
@@ -56,6 +57,7 @@ const store = {
 const indexBodyRef = ref<HTMLDivElement>();
 const IndexDataListRef = ref<InstanceType<typeof IndexDataListView>>();
 const IndexDataListTableRef = ref<InstanceType<typeof IndexDataListTableModeView>>();
+const IndexFooterViewRef = ref<InstanceType<typeof IndexFooterView>>();
 const indexBodyElementData = reactive({
     height: indexBodyRef.value?.offsetHeight,
 });
@@ -116,6 +118,11 @@ const intiDatalist = () => {
     }
 }
 
+const setNowPageAndUpdateData = async (page = 1) => {
+    resWhereObj.page = page;
+    IndexFooterViewRef.value?.setCurrentPage(page);
+    return await updateData();
+}
 
 const openIndexBodyTag = () => {
     if (store.filesBasesSettingStore.config.leftColumnMode == 'float' && indexBodyTagRef.value && arrowRef.value) {
@@ -133,6 +140,9 @@ const openIndexBodyTag = () => {
 const updateData = async () => {
     return await getDataList(store.filesBasesStore.currentFilesBases.id, resWhereObj);
 }
+
+
+
 const updataDetailsView = async (resUpdateDetailsView: IresUpdateDetailsView | undefined = undefined) => {
     if (store.filesBasesSettingStore.config.resourceDetailsShowMode == 'right') {
         await IndexDetailsViewRef.value?.updateData(resUpdateDetailsView);
@@ -152,7 +162,7 @@ const getDataList = async (filesBases_id: string, _resWhereObj: IresWhereObj) =>
 const currentChange = async (currentPage: number) => {
     resWhereObj.page = currentPage;
     intiDatalist();
-    await updateData();
+    return await updateData();
 }
 
 const clickDataHandle = (type: EresDetatilsType, dataInfo: IresourcesBase) => {
@@ -188,7 +198,7 @@ const resize = () => {
 }
 
 // eslint-disable-next-line no-undef
-defineExpose({ updateData, updataDetailsView, playRes, resize });
+defineExpose({ updateData, updataDetailsView, setNowPageAndUpdateData, playRes, resize });
 
 </script>
 <style scoped>

@@ -19,7 +19,7 @@ const IndexBodyViewRef = ref<InstanceType<typeof IndexBodyView>>();
 const indexUpdateResourcesData = async (_up: Array<EresUpdate> = [EresUpdate.updateData, EresUpdate.updataDetailsView]) => {
     let updateDataObj;
     if (_up.includes(EresUpdate.updateData)) {
-        updateDataObj = await IndexBodyViewRef.value?.updateData();
+        updateDataObj = await IndexBodyViewRef.value?.setNowPageAndUpdateData(1);
     }
     if (_up.includes(EresUpdate.updataDetailsView)) {
         await IndexBodyViewRef.value?.updataDetailsView();

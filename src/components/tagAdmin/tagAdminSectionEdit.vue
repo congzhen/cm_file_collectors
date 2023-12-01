@@ -56,6 +56,9 @@ const submit = async (_mode: string) => {
         const rd = await tagServerData.edit(formData.id, formData.name, formData.tagClassId);
         if (rd) {
             store.tagStore.edit(formData.id, formData.name, formData.tagClassId);
+            comFormRef.value?.success(t('tag.message.editSuccess'));
+        } else {
+            comFormRef.value?.fail(t('tag.message.editFail'));
         }
         await loading.closeSync();
     }

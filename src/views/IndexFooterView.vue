@@ -79,6 +79,10 @@ const currentChange = () => {
     emits('currentChange', currentPage.value);
 }
 
+const setCurrentPage = (nowPage = 1) => {
+    currentPage.value = nowPage;
+}
+
 const changeFilesBases = async (filesBases_id: string) => {
     if (AppInitInject) AppInitInject(filesBases_id, async () => {
         if (indexUpdateResourcesDataInject) indexUpdateResourcesDataInject([EresUpdate.updateData, EresUpdate.updataDetailsViewByUpdateDataFirstRecord]);
@@ -121,6 +125,9 @@ onMounted(() => {
         changeVideoStreamingServer(true);
     }
 })
+
+// eslint-disable-next-line no-undef
+defineExpose({ setCurrentPage });
 
 </script>
 <style scoped>
