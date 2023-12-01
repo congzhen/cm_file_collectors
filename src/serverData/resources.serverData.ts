@@ -277,6 +277,7 @@ const resourcesSearchCondition = {
             CDB.whereSql('((resources.title LIKE @likeText) or (resources.issueNumber  LIKE @likeText ) )', { likeText: searchLikeText });
             //CDB.whereLike('title', searchCondition.text);
         }
+        CDB = this.setCDBGroup(CDB, 'mode', searchCondition.resMode.logic, searchCondition.resMode.value);
         CDB = this.setCDBGroup(CDB, 'country', searchCondition.country.logic, searchCondition.country.value);
         CDB = this.setCDBGroup(CDB, 'definition', searchCondition.definition.logic, searchCondition.definition.value);
         CDB = this.setCDBGroupIssuingDate(CDB, 'issuingDate', searchCondition.year.logic, searchCondition.year.value);

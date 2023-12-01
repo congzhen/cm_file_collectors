@@ -30,6 +30,10 @@ export const searchStore = defineStore('search', {
                 logic: EsearchLogic.single,
                 value: [],
             },
+            resMode: {
+                logic: EsearchLogic.single,
+                value: [],
+            },
             diyTag: {
 
             },
@@ -45,6 +49,7 @@ export const searchStore = defineStore('search', {
             this.searchCondition.starRating.value.splice(0);
             this.searchCondition.performer.value.splice(0);
             this.searchCondition.cup.value.splice(0);
+            this.searchCondition.resMode.value.splice(0);
             for (const key in this.searchCondition.diyTag) {
                 this.searchCondition.diyTag[key].value.splice(0);
             }
@@ -73,6 +78,10 @@ export const searchStore = defineStore('search', {
                 case 'cup':
                     this.searchCondition.cup.logic = logic;
                     this.searchCondition.cup.value = dataVal;
+                    break;
+                case 'resMode':
+                    this.searchCondition.resMode.logic = logic;
+                    this.searchCondition.resMode.value = dataVal;
                     break;
                 case 'performer':
                     this.searchCondition.performer.logic = logic;

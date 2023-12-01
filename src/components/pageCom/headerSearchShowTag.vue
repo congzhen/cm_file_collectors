@@ -1,5 +1,10 @@
 <template>
     <div class="tagList">
+        <el-tag v-for="item, key in store.searchStore.searchCondition.resMode.value" :key="key"
+            :type="tagType(store.searchStore.searchCondition.resMode.logic)" size="large"
+            @close="closeTag(store.searchStore.searchCondition.resMode.value, key)" closable>
+            {{ $t('resources.form.modeType.' + item) }}
+        </el-tag>
         <el-tag v-for="item, key in store.searchStore.searchCondition.country.value" :key="key"
             :type="tagType(store.searchStore.searchCondition.country.logic)" size="large"
             @close="closeTag(store.searchStore.searchCondition.country.value, key)" closable>

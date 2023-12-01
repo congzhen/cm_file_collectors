@@ -18,6 +18,7 @@ export interface IsearchCondition {
     starRating: IsearchConditionItem,
     performer: IsearchConditionItem,
     cup: IsearchConditionItem,
+    resMode: IsearchConditionItem,
     diyTag: { [key: string]: IsearchConditionItem },
 }
 

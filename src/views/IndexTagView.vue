@@ -89,6 +89,15 @@ const getDataList = (item: string) => {
             })
         })
         return cupArr;
+    } else if (item == 'resMode') {
+        const resModeArr: Array<ItagBlockItem> = [];
+        dataset.resMode.forEach(item => {
+            resModeArr.push({
+                name: t('resources.form.modeType.' + item),
+                value: item,
+            })
+        })
+        return resModeArr;
     }
     return [];
 }

@@ -400,6 +400,7 @@ export default {
         starRating: '评分',
         performer: '演员',
         diyTag: '自定义标签',
+        resMode: '资源类型',
     },
     tagYear: {
         year: '{year}年',
