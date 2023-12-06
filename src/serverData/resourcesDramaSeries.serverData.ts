@@ -1,6 +1,6 @@
 import { CoreDb } from "@/core/core";
 import { IConditions, coreDBS, linkMode } from "@/core/coreDBS";
-import { IresDramaSeries, IresDramaSeriesParhReplaceerInfo } from "@/dataInterface/resources.interface";
+import { IresDramaSeries, IresDramaSeriesM3u8Builder, IresDramaSeriesParhReplaceerInfo } from "@/dataInterface/resources.interface";
 const resourcesDramaSeriesServerData = {
     getDramaSeriesInfoById: async function (id: string) {
         return await CoreDb().table('resourcesDramaSeries').getInfo(id) as IresDramaSeries;
@@ -36,7 +36,7 @@ const resourcesDramaSeriesServerData = {
         return true;
     },
     addDramaSeries: async function (obj: IresDramaSeries, sort = 0) {
-        const insterObj: IConditions = { ...obj, sort }
+        const insterObj: IConditions = { ...obj, sort, m3u8BuilderTime: null }
         const addResult = await CoreDb().table('resourcesDramaSeries').create(insterObj);
         return (addResult && addResult.status == true)
     },
@@ -50,7 +50,13 @@ const resourcesDramaSeriesServerData = {
             'src': [`REPLACE(src, '${_search}', '${_replace}')`, 'sql']
         });
         return (result && result.status == true)
-    }
+    },
+    getDramaSeriesNeedM3u8BuilderInfo: async function () {
+        return await CoreDb().table('resourcesDramaSeries').fields(['t.*', 'r.title as resources_name']).leftJoin('resources as r', 't.resources_id = r.id').where('type', '=', 'movies').where('m3u8BuilderStatus', '=', '0').order('m3u8BuilderTime', 'ASC').order('addTime', 'DESC', 'r').order('m3u8BuilderTime', 'NULLS FIRST').getFind() as IresDramaSeriesM3u8Builder;
+    },
+    updateM3u8BuilderInfo: async function (id: string, builderTime: string, builderStatus: number) {
+        await CoreDb().table('resourcesDramaSeries').update(id, { m3u8BuilderTime: builderTime, m3u8BuilderStatus: builderStatus });
+    },
 }
 
 export { resourcesDramaSeriesServerData }

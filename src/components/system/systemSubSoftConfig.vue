@@ -20,6 +20,13 @@
                 <div class="row">
                     <div class="illustrate">{{ $t('system.softConfig.passwordIllustrate') }}</div>
                 </div>
+                <div class="row">
+                    <span class="rowTitle">④ {{ $t('system.softConfig.automaticallyCreateVideoM3u8File') }}</span>
+                    <el-checkbox v-model="data.automaticallyCreateVideoM3u8File" />
+                </div>
+                <div class="row">
+                    <div class="illustrate">{{ $t('system.softConfig.automaticallyCreateVideoM3u8FileIllustrate') }}</div>
+                </div>
             </div>
         </div>
         <div class="block">
@@ -66,6 +73,7 @@ const data = reactive({
     serverPort: softWareConfigData.serverPort,
     autoOpenServer: softWareConfigData.autoOpenServer,
     serverPassword: softWareConfigData.serverPassword,
+    automaticallyCreateVideoM3u8File: softWareConfigData.automaticallyCreateVideoM3u8File,
     language: softWareConfigData.language,
     dbPath: softWareConfigData.dbPath,
 })

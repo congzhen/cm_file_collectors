@@ -21,6 +21,12 @@
                     <Coin />
                 </el-icon>
             </div>
+            <div class="sItem btnI" v-if="softWareConfigData.automaticallyCreateVideoM3u8File === true"
+                @click="openM3u8Builder">
+                <el-icon :size="24">
+                    <Film />
+                </el-icon>
+            </div>
             <div class="sItem btnI" @click="openSystem">
                 <el-icon :size="24">
                     <Setting />
@@ -30,12 +36,14 @@
     </div>
     <systemDialog ref="systemDialogRef"></systemDialog>
     <filesDatabasesAdminDialog ref="filesDatabasesAdminDialogRef"></filesDatabasesAdminDialog>
+    <m3u8BuilderDialog ref="m3u8BuilderDialogRef"></m3u8BuilderDialog>
 </template>
 <script setup lang="ts">
 import { softWareConfigData } from '@/setup/softwareConfig';
 import { ElMessage } from 'element-plus'
 import filesDatabasesAdminDialog from '@/components/filesDatabasesAdmin/filesDatabasesAdminDialog.vue';
 import systemDialog from '@/components/system/systemDialog.vue';
+import m3u8BuilderDialog from '@/components/m3u8Builder/m3u8BuilderDialog.vue';
 import { EresUpdate } from '@/dataInterface/common.enum';
 import { filesBasesStore } from "@/store/filesBases.store";
 
@@ -69,6 +77,7 @@ const currentPage = ref(1);
 const pageSize = ref(props.dataLimit);
 const streamingServerStatus = ref(false);
 const filesDatabasesAdminDialogRef = ref<InstanceType<typeof filesDatabasesAdminDialog>>();
+const m3u8BuilderDialogRef = ref<InstanceType<typeof m3u8BuilderDialog>>();
 const systemDialogRef = ref<InstanceType<typeof systemDialog>>();
 const currentFilesBases = ref(store.filesBasesStore.currentFilesBases.id);
 
@@ -96,7 +105,9 @@ const openSystem = () => {
 const openDatabasesAdmin = () => {
     filesDatabasesAdminDialogRef.value?.open();
 }
-
+const openM3u8Builder = () => {
+    m3u8BuilderDialogRef.value?.open();
+}
 
 const changeVideoStreamingServer = async (v: boolean) => {
     if (v) {

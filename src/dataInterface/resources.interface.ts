@@ -33,6 +33,12 @@ interface IresDramaSeries {
     type: string;
     src: string;
 }
+
+interface IresDramaSeriesM3u8Builder extends IresDramaSeries {
+    resources_name: string;
+    m3u8BuilderTime: string;
+}
+
 interface IresDramaSeriesParhReplaceerInfo extends IresDramaSeries {
     title: string;
     issueNumber: string;
@@ -73,4 +79,4 @@ interface IresWhereObj {
     sortMode: string;
 }
 
-export { IresourcesBase, Iresources, IresDramaSeries, IresSimpleAnddramaSeries, IresDramaSeriesParhReplaceerInfo, IresTags, IresTagsInfo, IresDirectors, IresPerformers, IresWhereObj }
+export { IresourcesBase, Iresources, IresDramaSeries, IresDramaSeriesM3u8Builder, IresSimpleAnddramaSeries, IresDramaSeriesParhReplaceerInfo, IresTags, IresTagsInfo, IresDirectors, IresPerformers, IresWhereObj }

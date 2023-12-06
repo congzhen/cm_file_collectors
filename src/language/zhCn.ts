@@ -458,6 +458,9 @@ export default {
             deleteComplete: '删除数据完成',
         }
     },
+    m3u8Builder: {
+        title: 'm3u8文件构建器',
+    },
     system: {
         tags: {
             softConfig: '软件配置',
@@ -470,6 +473,8 @@ export default {
             selfStartingDescribe: '软件启动时，自动启动视频流服务器',
             passwordDescribe: 'Web访问视频流服务器口令密码',
             passwordIllustrate: '口令密码为空，则访问web视频流服务器不需要密码',
+            automaticallyCreateVideoM3u8File: '自动创建视频m3u8文件',
+            automaticallyCreateVideoM3u8FileIllustrate: '自动创建m3u8功能需要设置后重启软件',
             language: '语言包',
             databasesPath: '数据库路径',
             databasesPathPlaceholder: '软件根目录',

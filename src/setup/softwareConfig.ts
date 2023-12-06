@@ -9,6 +9,7 @@ const softWareConfigData: IsoftWareConfigData = {
     serverPort: 12345,
     autoOpenServer: false,
     serverPassword: '',
+    automaticallyCreateVideoM3u8File: false,
     language: 'zhCn',
     dbPath: '',
     theme: 'dark',

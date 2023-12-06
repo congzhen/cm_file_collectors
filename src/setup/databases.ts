@@ -58,6 +58,8 @@ const initFieldData = [
     { table: 'resourcesTags', field: 'sort', sql: 'ALTER TABLE resourcesTags ADD sort INT DEFAULT (0);' },
     { table: 'resourcesDramaSeries', field: 'sort', sql: 'ALTER TABLE resourcesDramaSeries ADD sort INT DEFAULT (0);' },
     { table: 'performer', field: 'retreatStatus', sql: 'ALTER TABLE performer ADD retreatStatus INT DEFAULT (0);' },
+    { table: 'resourcesDramaSeries', field: 'm3u8BuilderTime', sql: 'ALTER TABLE resourcesDramaSeries ADD m3u8BuilderTime DATETIME;' },
+    { table: 'resourcesDramaSeries', field: 'm3u8BuilderStatus', sql: 'ALTER TABLE resourcesDramaSeries ADD m3u8BuilderStatus int DEFAULT (0);' },
 ]
 
 const initTableData: ItableData = {
