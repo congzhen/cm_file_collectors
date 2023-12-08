@@ -4,6 +4,7 @@ import { Response } from 'express'
 import setupConfig from '@/setup/config';
 import { existsFile } from '@/assets/file';
 import { spawn, exec } from 'child_process';
+import { cache } from 'sharp';
 
 const ffmpegPath = path.join(setupConfig.basePath, '/static/ffmpeg/ffmpeg.exe')
 const ffprobePath = path.join(setupConfig.basePath, '/static/ffmpeg/ffprobe.exe')
@@ -113,39 +114,54 @@ export const m3u8 = {
     getM3u8File: async function (dramaSeriesId: string, videoFile: string) {
         const m3u8File = videoFile + '.m3u8';
         if (!existsFile(m3u8File)) {
-            await this.createM3u8Files(dramaSeriesId, videoFile, m3u8File);
+            const createStatus = await this.createM3u8Files(dramaSeriesId, videoFile, m3u8File);
+            if (!createStatus) {
+                return;
+            }
         }
-        return fs.readFileSync(m3u8File);
+        try {
+            return fs.readFileSync(m3u8File);
+        } catch (e) {
+            console.log(e);
+            return;
+        }
     },
     createM3u8Files: async function (dramaSeriesId: string, videoFile: string, m3u8File: string) {
-        const execStr = `${ffprobePath} -v error -skip_frame nokey -select_streams v:0 -show_entries frame=pkt_pts_time -of csv=print_section=0 ${pathSpaceConversion(videoFile)}`;
-        const cmdReadKeyframeExec = await execPromise(execStr);
+        try {
+            const execStr = `${ffprobePath} -v error -skip_frame nokey -select_streams v:0 -show_entries frame=pkt_pts_time -of csv=print_section=0 ${pathSpaceConversion(videoFile)}`;
+            const cmdReadKeyframeExec = await execPromise(execStr);
 
-        const _keyframes = cmdReadKeyframeExec.split('\n').map((d) => {
-            const trimmed = d.trim();
-            if (/^\d+(\.\d+)?$/.test(trimmed)) {
-                return +trimmed;
-            }
-            return NaN;
-        }).filter((d) => !isNaN(d));
-        //        console.log(cmdReadKeyframeExec.split('\n'));
-        //        console.log(_keyframes);
-        const { keyframes, maxDuration, addDuration } = this.keyframesFusion(_keyframes);
-        const cmdReadMeta = `${ffprobePath} -v quiet -print_format json -show_format -show_streams ${pathSpaceConversion(videoFile)}`;
-        const resMeta = JSON.parse(await execPromise(cmdReadMeta));
-        const { format: { duration } } = resMeta;
-        const fragments = keyframes.map((k, i) => ({
-            duration: i === keyframes.length - 1 ? this.numberDecimail(duration - k + addDuration) : this.numberDecimail(keyframes[i + 1] - k + addDuration),
-            start: k,
-        }));
-        const m3u8Data = '#EXTM3U\n' +
-            '#EXT-X-PLAYLIST-TYPE:VOD\n' +
-            `#EXT-X-TARGETDURATION:${maxDuration + addDuration}\n` +
-            `${fragments.map(
-                (f) => `#EXTINF:${f.duration},\n/api/hls_video/${dramaSeriesId}/${f.start}/${f.duration}`
-            ).join('\n')}\n` +
-            '#EXT-X-ENDLIST';
-        fs.writeFileSync(m3u8File, m3u8Data);
+            const _keyframes = cmdReadKeyframeExec.split('\n').map((d) => {
+                const trimmed = d.trim();
+                if (/^\d+(\.\d+)?$/.test(trimmed)) {
+                    return +trimmed;
+                }
+                return NaN;
+            }).filter((d) => !isNaN(d));
+            //        console.log(cmdReadKeyframeExec.split('\n'));
+            //        console.log(_keyframes);
+            const { keyframes, maxDuration, addDuration } = this.keyframesFusion(_keyframes);
+            const cmdReadMeta = `${ffprobePath} -v quiet -print_format json -show_format -show_streams ${pathSpaceConversion(videoFile)}`;
+            const resMeta = JSON.parse(await execPromise(cmdReadMeta));
+            const { format: { duration } } = resMeta;
+            const fragments = keyframes.map((k, i) => ({
+                duration: i === keyframes.length - 1 ? this.numberDecimail(duration - k + addDuration) : this.numberDecimail(keyframes[i + 1] - k + addDuration),
+                start: k,
+            }));
+            const m3u8Data = '#EXTM3U\n' +
+                '#EXT-X-PLAYLIST-TYPE:VOD\n' +
+                `#EXT-X-TARGETDURATION:${maxDuration + addDuration}\n` +
+                `${fragments.map(
+                    (f) => `#EXTINF:${f.duration},\n/api/hls_video/${dramaSeriesId}/${f.start}/${f.duration}`
+                ).join('\n')}\n` +
+                '#EXT-X-ENDLIST';
+            fs.writeFileSync(m3u8File, m3u8Data);
+            return true;
+        } catch (e) {
+            console.log(e);
+            return false;
+        }
+
     },
     keyframesFusion: function (_keyframes: number[], sectionDuration = 30, addDuration = 0) {
         const newFrames = [];
