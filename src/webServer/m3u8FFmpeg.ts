@@ -10,7 +10,9 @@ const ffmpegPath = path.join(setupConfig.basePath, '/static/ffmpeg/ffmpeg.exe')
 const ffprobePath = path.join(setupConfig.basePath, '/static/ffmpeg/ffprobe.exe')
 
 function pathSpaceConversion(src: string) {
-    return src.replace(/(\s+)/g, '" "');
+    return `"${src}"`;
+    //return src.replace(/([^a-zA-Z0-9\s])/g, '"$1"');
+    //return src.replace(/(\s+)/g, '" "');
 }
 function execPromise(arg: string): Promise<string> {
     return new Promise((r, j) => {

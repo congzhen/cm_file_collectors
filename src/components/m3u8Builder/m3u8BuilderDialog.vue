@@ -116,6 +116,10 @@ const builderData = async () => {
                 }, 5000);
 
             }, 2000);
+        } else {
+            setTimeout(async () => {
+                await builderData();
+            }, 10000);
         }
     } catch (e) {
         console.error(e);
