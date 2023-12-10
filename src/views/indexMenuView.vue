@@ -7,9 +7,11 @@
         </div>
         <div class="menuTool">
             <div class="switchTheme" @click="switchTheme">{{ $t('menu.switchTheme') }}</div>
+            <!--
             <div class="switchTheme">|</div>
             <div class="switchTheme" @click.stop="cl_friendlyRewards">{{ $t('menu.friendlyRewards')
             }}</div>
+        -->
             <div class="mItem">
                 <el-button-group size="small">
                     <el-button icon="Minus" @click.stop="changeWindowSize('min')" />
@@ -68,7 +70,8 @@ const switchTheme = () => {
 }
 
 .indexMenu .title {
-    width: calc(100% - 280px);
+    /*width: calc(100% - 280px);*/
+    width: calc(100% - 200px);
     display: flex;
     padding: 4px 0px 0px 5px;
     /**该属性可以拖动app，需要在创建窗口是，设置movable: true */

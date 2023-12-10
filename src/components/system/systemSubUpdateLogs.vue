@@ -6,6 +6,23 @@
         <div class="updataLogsBody">
             <el-timeline>
                 <el-scrollbar height="500px">
+                    <el-timeline-item timestamp="2023/12/10" placement="top">
+                        <h4>{{ $t('system.updateLogs.version') }}：v 2.0.9</h4>
+                        <div class="rawContent">
+                            <h5>新特性</h5>
+                            <p class="logContent">添加按资源类型检索的tag标签，需要在设置中开启</p>
+                            <p class="logContent">添加排序标签功能，需要在设置中开启</p>
+                            <p class="logContent">m3u8自动构建器，需要在系统设置中开启自动构建功能</p>
+                            <p class="logContent">更新移动端页面功能，添加资源类型筛选，以及封面上显示清晰度</p>
+                        </div>
+                        <div class="rawContent">
+                            <h5>BUG修复</h5>
+                            <p class="logContent">修复设置中，封面标签会读取其他库得标签问题</p>
+                            <p class="logContent">修改资源和头像图片使用函数连接</p>
+                            <p class="logContent">修复筛选条件解除后，没有回到第一页</p>
+                            <p class="logContent">修复更改标签成功后没有关闭弹窗bug</p>
+                        </div>
+                    </el-timeline-item>
                     <el-timeline-item timestamp="2023/10/13" placement="top">
                         <h4>{{ $t('system.updateLogs.version') }}：v 2.0.8</h4>
                         <div class="rawContent">
