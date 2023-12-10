@@ -5,6 +5,7 @@
                 <div class="tagCom" v-for="item, key in store.filesBasesSettingStore.config.leftDisplay" :key="key">
                     <tagStar v-if="item == 'starRating'" :conditionItem="logic1" @updateData="updateDataCondition">
                     </tagStar>
+                    <tagSort v-else-if="item == 'sort'"></tagSort>
                     <div v-else-if="item == 'performer'">
                         <tagPerformer :conditionItem="logic0" @updateData="updateDataCondition"></tagPerformer>
                         <tagBlock v-if="store.filesBasesSettingStore.config.plugInUnit_Cup"
@@ -30,6 +31,7 @@ import dataset from '@/assets/dataset';
 import tagBlock from '@/components/pageCom/tagBlock.vue';
 import tagStar from '@/components/pageCom/tagStar.vue'
 import tagPerformer from '@/components/pageCom/tagPerformer.vue';
+import tagSort from '@/components/pageCom/tagSort.vue';
 import { filesBasesSettingStore } from '@/store/filesBasesSetting.store';
 import { tagClassStore } from '@/store/tagClass.store';
 import { tagStore } from '@/store/tag.store';

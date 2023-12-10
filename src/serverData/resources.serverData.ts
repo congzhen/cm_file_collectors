@@ -431,16 +431,17 @@ const resourcesSearchCondition = {
                 _CDB.order('addTime', 'asc');
                 break;
             case 'issuingDateAsc':
-                _CDB.order('issuingDate', 'asc');
+                _CDB.order('CASE WHEN issuingDate = "" THEN 1  ELSE 0 END,issuingDate', 'asc');
                 break;
             case 'issuingDateDesc':
-                _CDB.order('issuingDate', 'desc');
+                _CDB.order('CASE WHEN issuingDate = "" THEN 1  ELSE 0 END,issuingDate', 'desc');
                 break;
             default:
                 _CDB.order('addTime', 'desc');
         }
         return _CDB;
-    }
+    },
+
 }
 
 export { resourcesServerData, EnumResExecMode }

@@ -54,6 +54,7 @@ const store = {
     line-height: 25px;
     border-radius: 2px;
     cursor: pointer;
+    user-select: none;
 }
 
 .tagSpan label {

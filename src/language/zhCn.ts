@@ -401,6 +401,13 @@ export default {
         performer: '演员',
         diyTag: '自定义标签',
         resMode: '资源类型',
+        sort: '排序',
+        sortMode: {
+            asc: '时间正序',
+            desc: '时间倒序',
+            issuingDateAsc: '发行正序',
+            issuingDateDesc: '发行倒叙',
+        },
     },
     tagYear: {
         year: '{year}年',

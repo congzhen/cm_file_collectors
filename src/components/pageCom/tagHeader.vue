@@ -9,7 +9,7 @@
             </el-icon>
             <span>{{ props.title }}</span>
         </div>
-        <div>
+        <div v-if="props.conditionItem.length != 0">
             <tagBlockCondition @updataSelect="updataCondition" :showItem="props.conditionItem"></tagBlockCondition>
         </div>
     </div>
