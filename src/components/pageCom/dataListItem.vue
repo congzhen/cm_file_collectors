@@ -17,10 +17,15 @@
         </el-image>
         <div class="videoNameGB"></div>
         <div class="videoName">{{ props.dataInfo.title }}</div>
-        <div class="videoPlayBtn" @click.stop="clickHandle(EresDetatilsType.play)">
+        <div v-if="!store.baseStore.batchEditStatus" class="videoPlayBtn" @click.stop="clickHandle(EresDetatilsType.play)">
             <el-icon>
                 <VideoPlay />
             </el-icon>
+        </div>
+        <div v-else class="videoMultipleChoice" @click.stop="clickMultipleChoice()">
+            <div class="checkmark" v-if="checkmarkStatus()">
+                <el-icon color="#FFFFFF"><Select /></el-icon>
+            </div>
         </div>
     </div>
 </template>
@@ -32,6 +37,7 @@ import { EresDetatilsType } from "@/dataInterface/common.enum"
 import { IresourcesBase } from '@/dataInterface/resources.interface';
 import { filesBasesSettingStore } from "@/store/filesBasesSetting.store";
 import { tagStore } from "@/store/tag.store";
+import { baseStore } from "@/store/base.store"
 import { resourcesTagsServerData } from "@/serverData/resourcesTags.serverData"
 import { onMounted, nextTick, ref, watch } from 'vue'
 import { Itag } from "@/dataInterface/tag.interface";
@@ -46,6 +52,7 @@ const props = defineProps({
 const emits = defineEmits(['clickHandle']);
 
 const store = {
+    baseStore: baseStore(),
     filesBasesSettingStore: filesBasesSettingStore(),
     tagStore: tagStore(),
 }
@@ -59,6 +66,18 @@ const showTag = ref<Array<Itag>>([]);
 
 const clickHandle = (type: EresDetatilsType) => {
     emits('clickHandle', type, props.dataInfo);
+}
+
+const clickMultipleChoice = () => {
+    if (store.baseStore.checkBatchEditDataStatus(props.dataInfo)) {
+        store.baseStore.deleteBatchEditData(props.dataInfo)
+    } else {
+        store.baseStore.addBatchEditData(props.dataInfo)
+    }
+}
+
+const checkmarkStatus = () => {
+    return store.baseStore.checkBatchEditDataStatus(props.dataInfo);
 }
 
 const getCoverSrc = () => {
@@ -210,5 +229,30 @@ onMounted(() => {
     color: #F3F3F3;
     opacity: 0.9;
     display: none;
+}
+
+
+.videoItem .videoMultipleChoice {
+    position: absolute;
+    z-index: 10;
+    margin-left: 2px;
+    margin-top: -60px;
+    width: 20px;
+    height: 20px;
+    border: 1px solid #c7cad1;
+    background-color: #F2F2F5;
+    border-radius: 5px;
+}
+
+/* 定义对号的样式 */
+.videoItem .videoMultipleChoice .checkmark {
+    width: 20px;
+    height: 20px;
+    background-color: #409EFF;
+    border-radius: 50%;
+}
+
+.videoItem .videoMultipleChoice .checkmark .el-icon {
+    padding: 2px 0px 0px 2px;
 }
 </style>

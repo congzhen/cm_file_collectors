@@ -27,6 +27,11 @@
                     <Film />
                 </el-icon>
             </div>
+            <div class="sItem btnI" @click="openBatchEdit">
+                <el-icon :size="24" :color="store.baseStore.batchEditStatus ? '#FF5A5D' : ''">
+                    <Edit />
+                </el-icon>
+            </div>
             <div class="sItem btnI" @click="openSystem">
                 <el-icon :size="24">
                     <Setting />
@@ -37,6 +42,7 @@
     <systemDialog ref="systemDialogRef"></systemDialog>
     <filesDatabasesAdminDialog ref="filesDatabasesAdminDialogRef"></filesDatabasesAdminDialog>
     <m3u8BuilderDialog ref="m3u8BuilderDialogRef"></m3u8BuilderDialog>
+    <batchEdit ref="batchEditRef"></batchEdit>
 </template>
 <script setup lang="ts">
 import { softWareConfigData } from '@/setup/softwareConfig';
@@ -44,9 +50,10 @@ import { ElMessage } from 'element-plus'
 import filesDatabasesAdminDialog from '@/components/filesDatabasesAdmin/filesDatabasesAdminDialog.vue';
 import systemDialog from '@/components/system/systemDialog.vue';
 import m3u8BuilderDialog from '@/components/m3u8Builder/m3u8BuilderDialog.vue';
+import batchEdit from '@/components/pageCom/batchEdit.vue';
 import { EresUpdate } from '@/dataInterface/common.enum';
 import { filesBasesStore } from "@/store/filesBases.store";
-
+import { baseStore } from "@/store/base.store"
 import { createServer, closeServer } from '@/webServer/index.webServer';
 import { ref, inject, watch, onMounted } from 'vue'
 import { useI18n } from 'vue-i18n';
@@ -71,6 +78,7 @@ const props = defineProps({
 // eslint-disable-next-line no-undef
 const emits = defineEmits(['currentChange']);
 const store = {
+    baseStore: baseStore(),
     filesBasesStore: filesBasesStore(),
 }
 const currentPage = ref(1);
@@ -79,6 +87,7 @@ const streamingServerStatus = ref(false);
 const filesDatabasesAdminDialogRef = ref<InstanceType<typeof filesDatabasesAdminDialog>>();
 const m3u8BuilderDialogRef = ref<InstanceType<typeof m3u8BuilderDialog>>();
 const systemDialogRef = ref<InstanceType<typeof systemDialog>>();
+const batchEditRef = ref<InstanceType<typeof batchEdit>>();
 const currentFilesBases = ref(store.filesBasesStore.currentFilesBases.id);
 
 watch(() => props.dataLimit, (newValue) => pageSize.value = newValue);
@@ -107,6 +116,9 @@ const openDatabasesAdmin = () => {
 }
 const openM3u8Builder = () => {
     m3u8BuilderDialogRef.value?.open();
+}
+const openBatchEdit = () => {
+    batchEditRef.value?.open();
 }
 
 const changeVideoStreamingServer = async (v: boolean) => {

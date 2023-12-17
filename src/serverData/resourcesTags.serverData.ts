@@ -22,6 +22,17 @@ const resourcesTagsServerData = {
         await CoreDb().commit(tID);
         return true;
     },
+    gerResourcesTagInfo: async function (resources_id: string, tag_id: string) {
+        return await CoreDb().table('resourcesTags').where('resources_id', '=', resources_id).where('tag_id', '=', tag_id).getFind();
+    },
+    addResourcesTags: async function (resources_id: string, tag_id: string) {
+        const info = await this.gerResourcesTagInfo(resources_id, tag_id);
+        if (info) {
+            return;
+        }
+        const addResult = await CoreDb().table('resourcesTags').createGuid().create({ resources_id, tag_id, sort: 0 });
+        return (addResult && addResult.status == true);
+    },
     addTags: async function (obj: IresTags, sort = 0) {
         const insterObj: IConditions = { ...obj, sort }
         const addResult = await CoreDb().table('resourcesTags').create(insterObj);

@@ -465,6 +465,18 @@ export default {
             deleteComplete: '删除数据完成',
         }
     },
+    batchEdit: {
+        pleaseSelectResource: '请选择资源',
+        pleaseSetTagsFirst: '请先设置标签',
+        batchAddTagsSuccessfully: '批量添加标签成功',
+        batchDeleteSuccessfully: '批量删除成功',
+        selectedResources: '已选中的资源',
+        edit: '编辑',
+        delete: '删除',
+        batchAddTags: '批量添加标签',
+        confirm: '确定',
+        cancel: '取消',
+    },
     m3u8Builder: {
         title: 'm3u8文件构建器',
     },
