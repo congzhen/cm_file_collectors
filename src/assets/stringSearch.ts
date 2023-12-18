@@ -31,6 +31,8 @@ export default function stringSearch(searchVal: string, searchContent: string): 
         return (searchContent.indexOf(searchVal) > -1);
     }
    */
+    searchContent = searchContent.toLowerCase();
+    searchVal = searchVal.toLocaleLowerCase();
     if (searchContent.indexOf(searchVal) > -1) {
         return true;
     }
