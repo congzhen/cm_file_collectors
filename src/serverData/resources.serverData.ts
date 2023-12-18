@@ -436,6 +436,12 @@ const resourcesSearchCondition = {
             case 'issuingDateDesc':
                 _CDB.order('CASE WHEN issuingDate = "" THEN 1  ELSE 0 END,issuingDate', 'desc');
                 break;
+            case 'titleAsc':
+                _CDB.order('title', 'asc');
+                break;
+            case 'titleDesc':
+                _CDB.order('title', 'desc');
+                break;
             default:
                 _CDB.order('addTime', 'desc');
         }

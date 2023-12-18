@@ -11,7 +11,7 @@ export default {
     leftDisplay: ['sort', 'country', 'definition', 'year', 'starRating', 'performer', 'diyTag', 'resMode'],
     leftColumnMode: ['fixed', 'float'],
     tagMode: ['fixed', 'auto'],
-    sortMode: ['desc', 'asc', 'issuingDateDesc', 'issuingDateAsc'],
+    sortMode: ['desc', 'asc', 'issuingDateDesc', 'issuingDateAsc', 'titleDesc', 'titleAsc'],
     cup: ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'Max'],
     resMode: ['movies', 'comic', 'atlas', 'files', 'videoLink'],
     resourcesShowMode: ['coverPoster', 'table'],

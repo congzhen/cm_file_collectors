@@ -291,6 +291,8 @@ export default {
                 desc: '添加时间倒序',
                 issuingDateAsc: '发行时间正序',
                 issuingDateDesc: '发行时间倒叙',
+                titleDesc: '标题倒叙',
+                titleAsc: '标题正序',
             },
             resourcesShowMode: '显示模式',
             resourcesShowModeData: {
@@ -407,6 +409,8 @@ export default {
             desc: '时间倒序',
             issuingDateAsc: '发行正序',
             issuingDateDesc: '发行倒叙',
+            titleAsc: '标题正序',
+            titleDesc: '标题倒叙',
         },
     },
     tagYear: {
