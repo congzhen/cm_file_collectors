@@ -85,6 +85,24 @@
         color: #CCCCCC;
     }
 
+
+    .batchEdit{
+        background-color: #404040;
+        border-color: #525457;
+        .sizeBtn{
+            background-color:#404040;
+            border-color:  #525457;
+        }
+        .sizeBtn:hover {
+            background-color: #646464;
+            color: #d7d7d8;
+        }
+        .title{
+            border-bottom-color:  #525457;
+        }
+    }
+
+
     /* 滚动条样式 */
     ::-webkit-scrollbar {
         width: 6px;
