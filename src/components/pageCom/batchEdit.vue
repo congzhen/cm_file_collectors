@@ -24,7 +24,8 @@
     </div>
     <el-dialog v-model="dialogTableVisible" :title="$t('batchEdit.batchAddTags')" :close-on-click-modal="false">
         <div style="height: 300px;">
-            <comMultipleSearchSelect v-model="tagList" :dataList="store.tagStore.tagList.filter(tag => tag.status)">
+            <comMultipleSearchSelect v-model="tagList"
+                :dataList="store.tagStore.getTagListByCurrentFilesBases.filter(tag => tag.status)">
             </comMultipleSearchSelect>
         </div>
         <template #footer>
