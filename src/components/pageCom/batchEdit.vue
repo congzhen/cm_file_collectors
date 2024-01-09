@@ -16,6 +16,7 @@
             <li v-for="data, key in store.baseStore.batchEditDataList" :key="key">{{ data.title }}</li>
         </ul>
         <div class="btn">
+            <el-checkbox class="ckbox" @change="selectAll" />
             <el-button-group size="small">
                 <el-button @click="showDialog"> {{ $t('batchEdit.edit') }}</el-button>
                 <el-button @click="submitDeleteRes"> {{ $t('batchEdit.delete') }}</el-button>
@@ -42,6 +43,7 @@ import { tagStore } from "@/store/tag.store"
 import comMultipleSearchSelect from "@/components/common/comMultipleSearchSelect.vue"
 import { ref, inject } from 'vue'
 import { resourcesTagsServerData } from '@/serverData/resourcesTags.serverData'
+import { footerFnType } from '@/dataInterface/common.enum';
 import { resourcesServerData } from '@/serverData/resources.serverData'
 import { deleteFile } from '@/assets/file'
 import { resCoverFolderPath } from '@/assets/fileDbFolder'
@@ -58,6 +60,9 @@ const batchEditShowStatus = ref(true);
 const dialogTableVisible = ref(false);
 
 const tagList = ref<Array<string>>([]);
+
+// eslint-disable-next-line no-undef
+const emits = defineEmits(['fnExec']);
 
 const showDialog = () => {
     if (store.baseStore.batchEditDataList.length > 0) {
@@ -113,6 +118,15 @@ const submitDeleteRes = async () => {
         }
     });
 
+}
+
+const selectAll = (v: boolean) => {
+    if (v) {
+        emits('fnExec', footerFnType.selectAllRes);
+    } else {
+        emits('fnExec', footerFnType.clearSelectAllRes);
+    }
+    console.log(v);
 }
 
 const show = () => {
@@ -232,6 +246,10 @@ defineExpose({ open });
         height: 27px;
         padding-top: 3px;
         text-align: center;
+
+        .ckbox {
+            padding-right: 20px;
+        }
     }
 }
 </style>

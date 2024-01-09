@@ -23,3 +23,8 @@ export enum EsearchLogic {
     and,
     not
 }
+
+export enum footerFnType {
+    selectAllRes,
+    clearSelectAllRes
+}

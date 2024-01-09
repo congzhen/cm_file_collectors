@@ -47,7 +47,7 @@
     <systemDialog ref="systemDialogRef"></systemDialog>
     <filesDatabasesAdminDialog ref="filesDatabasesAdminDialogRef"></filesDatabasesAdminDialog>
     <m3u8BuilderDialog ref="m3u8BuilderDialogRef"></m3u8BuilderDialog>
-    <batchEdit ref="batchEditRef"></batchEdit>
+    <batchEdit ref="batchEditRef" @fnExec="fnExec"></batchEdit>
     <plugInadminDialog ref="plugInadminDialogRef"></plugInadminDialog>
 </template>
 <script setup lang="ts">
@@ -58,7 +58,7 @@ import plugInadminDialog from '@/components/plugIn/plugInAdminDialog.vue';
 import systemDialog from '@/components/system/systemDialog.vue';
 import m3u8BuilderDialog from '@/components/m3u8Builder/m3u8BuilderDialog.vue';
 import batchEdit from '@/components/pageCom/batchEdit.vue';
-import { EresUpdate } from '@/dataInterface/common.enum';
+import { EresUpdate, footerFnType } from '@/dataInterface/common.enum';
 import { filesBasesStore } from "@/store/filesBases.store";
 import { baseStore } from "@/store/base.store"
 import { createServer, closeServer } from '@/webServer/index.webServer';
@@ -83,7 +83,7 @@ const props = defineProps({
     }
 });
 // eslint-disable-next-line no-undef
-const emits = defineEmits(['currentChange']);
+const emits = defineEmits(['currentChange', 'footerFn']);
 const store = {
     baseStore: baseStore(),
     filesBasesStore: filesBasesStore(),
@@ -114,6 +114,10 @@ const changeFilesBases = async (filesBases_id: string) => {
         if (indexUpdateResourcesDataInject) indexUpdateResourcesDataInject([EresUpdate.updateData, EresUpdate.updataDetailsViewByUpdateDataFirstRecord]);
     });
 
+}
+
+const fnExec = (fnType: footerFnType) => {
+    emits('footerFn', fnType);
 }
 
 const openSystem = () => {

@@ -27,7 +27,7 @@
             </div>
             <div class="footer">
                 <IndexFooterView ref="IndexFooterViewRef" :dataCount="resDataCount" :dataLimit="resWhereObj.limit"
-                    @currentChange="currentChange">
+                    @currentChange="currentChange" @footerFn="footerFn">
                 </IndexFooterView>
             </div>
         </div>
@@ -40,16 +40,18 @@ import IndexDataListTableModeView from './IndexDataListTableModeView.vue';
 import IndexDetailsView from "./IndexDetailsView.vue";
 import IndexDetailsPopupView from './IndexDetailsPopupView.vue';
 import IndexFooterView from './IndexFooterView.vue';
-import { EresDetatilsType } from "@/dataInterface/common.enum"
+import { EresDetatilsType, footerFnType } from "@/dataInterface/common.enum"
 import { IresWhereObj, IresourcesBase } from "@/dataInterface/resources.interface";
 import { resourcesServerData } from "@/serverData/resources.serverData"
 import { filesBasesStore } from '@/store/filesBases.store';
 import { filesBasesSettingStore } from '@/store/filesBasesSetting.store';
+import { baseStore } from "@/store/base.store"
 
 import { ref, reactive, onMounted, watch, computed } from 'vue';
 import { IresUpdateDetailsView } from '@/dataInterface/common.interface';
 
 const store = {
+    baseStore: baseStore(),
     filesBasesStore: filesBasesStore(),
     filesBasesSettingStore: filesBasesSettingStore(),
 }
@@ -163,6 +165,20 @@ const currentChange = async (currentPage: number) => {
     resWhereObj.page = currentPage;
     intiDatalist();
     return await updateData();
+}
+
+const footerFn = (fnType: footerFnType) => {
+    switch (fnType) {
+        case footerFnType.selectAllRes:
+            store.baseStore.clearBatchEditData()
+            for (const res of resDataList.value) {
+                store.baseStore.addBatchEditData(res)
+            }
+            break;
+        case footerFnType.clearSelectAllRes:
+            store.baseStore.clearBatchEditData()
+            break;
+    }
 }
 
 const clickDataHandle = (type: EresDetatilsType, dataInfo: IresourcesBase) => {
