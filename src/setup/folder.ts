@@ -7,6 +7,7 @@ const folderPath: IfolderPath = {
     db: config.dbFolderPath,
     performerFace: config.performerFacePath,
     resCoverPoster: config.resCoverPosterPath,
+    plugin: config.pluginPath,
 }
 
 function folderInit() {

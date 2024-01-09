@@ -513,6 +513,15 @@ export default {
             version: '版本',
         }
     },
+    pluginAdmin: {
+        title: '插件管理',
+        table: {
+            title: '插件名称',
+        },
+        btn: {
+            openPluginFolder: '打开插件文件夹',
+        }
+    },
     plugin: {
         cup: {
             name: '演员Cup插件',

@@ -22,6 +22,7 @@ const performerFacePath = path.join(basePath, '/db/performerFace/');
 const resCoverPosterPath = path.join(basePath, '/db/resCoverPoster/');
 
 const webPagePath = path.join(basePath, '/static/webPage/');
+const pluginPath = path.join(basePath, '/plugin/');
 
 const config = {
     basePath,
@@ -32,6 +33,7 @@ const config = {
     performerFacePath,
     resCoverPosterPath,
     webPagePath,
+    pluginPath,
     isFullscreen: { width: 1280, height: 700 },
 }
 

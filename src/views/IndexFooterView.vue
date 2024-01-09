@@ -32,6 +32,11 @@
                     <Edit />
                 </el-icon>
             </div>
+            <div class="sItem btnI" @click="openPlugIn">
+                <el-icon :size="24">
+                    <SetUp />
+                </el-icon>
+            </div>
             <div class="sItem btnI" @click="openSystem">
                 <el-icon :size="24">
                     <Setting />
@@ -43,11 +48,13 @@
     <filesDatabasesAdminDialog ref="filesDatabasesAdminDialogRef"></filesDatabasesAdminDialog>
     <m3u8BuilderDialog ref="m3u8BuilderDialogRef"></m3u8BuilderDialog>
     <batchEdit ref="batchEditRef"></batchEdit>
+    <plugInadminDialog ref="plugInadminDialogRef"></plugInadminDialog>
 </template>
 <script setup lang="ts">
 import { softWareConfigData } from '@/setup/softwareConfig';
 import { ElMessage } from 'element-plus'
 import filesDatabasesAdminDialog from '@/components/filesDatabasesAdmin/filesDatabasesAdminDialog.vue';
+import plugInadminDialog from '@/components/plugIn/plugInAdminDialog.vue';
 import systemDialog from '@/components/system/systemDialog.vue';
 import m3u8BuilderDialog from '@/components/m3u8Builder/m3u8BuilderDialog.vue';
 import batchEdit from '@/components/pageCom/batchEdit.vue';
@@ -88,6 +95,7 @@ const filesDatabasesAdminDialogRef = ref<InstanceType<typeof filesDatabasesAdmin
 const m3u8BuilderDialogRef = ref<InstanceType<typeof m3u8BuilderDialog>>();
 const systemDialogRef = ref<InstanceType<typeof systemDialog>>();
 const batchEditRef = ref<InstanceType<typeof batchEdit>>();
+const plugInadminDialogRef = ref<InstanceType<typeof m3u8BuilderDialog>>();
 const currentFilesBases = ref(store.filesBasesStore.currentFilesBases.id);
 
 watch(() => props.dataLimit, (newValue) => pageSize.value = newValue);
@@ -111,6 +119,11 @@ const changeFilesBases = async (filesBases_id: string) => {
 const openSystem = () => {
     systemDialogRef.value?.open();
 }
+
+const openPlugIn = () => {
+    plugInadminDialogRef.value?.open();
+}
+
 const openDatabasesAdmin = () => {
     filesDatabasesAdminDialogRef.value?.open();
 }
