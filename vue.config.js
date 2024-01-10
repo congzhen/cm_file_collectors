@@ -26,6 +26,11 @@ module.exports = defineConfig({
             to: "./../static/",
             filter: ["**/*"],
           },
+          {
+            from: path.resolve(__dirname, "plugin"),
+            to: "./../plugin/",
+            filter: ["**/*"],
+          },
         ],
       },
     },
