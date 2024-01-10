@@ -148,6 +148,31 @@
                                 :selectField="['name']" :showSelectField="['name']">
                             </comMultipleSearchSelect>
                         </div>
+                        <div class="select-full">
+                            <h5>{{ $t('settings.displaySettings.showTag.bgRgba') }}</h5>
+                            <span class="tag-k"
+                                v-for="(trgb, key) in store.filesBasesSettingStore.config.coverDisplayTagRgbas" :key="key">
+                                <el-color-picker v-model="store.filesBasesSettingStore.config.coverDisplayTagRgbas[key]"
+                                    show-alpha :predefineColors="predefineColors" @change="updateTagRgbas(key, $event)" />
+                            </span>
+                            <el-button-group size="small">
+                                <el-button icon="Plus" @click="modifyCoverDisplayTagRgbas(true)"></el-button>
+                                <el-button icon="Minus" @click="modifyCoverDisplayTagRgbas(false)"></el-button>
+                            </el-button-group>
+                        </div>
+                        <div class="select-full">
+                            <h5>{{ $t('settings.displaySettings.showTag.fontColor') }}</h5>
+                            <span class="tag-k"
+                                v-for="tcolor, key in store.filesBasesSettingStore.config.coverDisplayTagColors" :key="key">
+                                <el-color-picker v-model="store.filesBasesSettingStore.config.coverDisplayTagColors[key]"
+                                    @change="updateTagColors(key, $event)" />
+                            </span>
+                            <el-button-group size="small">
+                                <el-button icon="Plus" @click="modifyCoverDisplayTagColors(true)"></el-button>
+                                <el-button icon="Minus" @click="modifyCoverDisplayTagColors(false)"></el-button>
+                            </el-button-group>
+                        </div>
+                        <!--
                         <div style="display: flex;">
                             <div style="width: 160px;">
                                 <h5>{{ $t('settings.displaySettings.showTag.bgRgba') }}</h5>
@@ -159,6 +184,7 @@
                                 <el-color-picker v-model="store.filesBasesSettingStore.config.coverDisplayTagColor" />
                             </div>
                         </div>
+                        -->
                     </div>
 
                     <div class="settingMainItem">
@@ -682,6 +708,30 @@ const customAvatarDelete = () => {
     store.filesBasesSettingStore.config.performer_photo = '';
 }
 
+
+const modifyCoverDisplayTagRgbas = (v: boolean) => {
+    if (v) {
+        store.filesBasesSettingStore.config.coverDisplayTagRgbas.push('rgba(244, 54, 16, 0.75)');
+    } else if (!v && store.filesBasesSettingStore.config.coverDisplayTagRgbas.length > 1) {
+        store.filesBasesSettingStore.config.coverDisplayTagRgbas.pop();
+    }
+}
+
+const modifyCoverDisplayTagColors = (v: boolean) => {
+    if (v) {
+        store.filesBasesSettingStore.config.coverDisplayTagColors.push('#F3F3F3');
+    } else if (!v && store.filesBasesSettingStore.config.coverDisplayTagColors.length > 1) {
+        store.filesBasesSettingStore.config.coverDisplayTagColors.pop();
+    }
+}
+
+const updateTagRgbas = (index: number, v: string) => {
+    store.filesBasesSettingStore.config.coverDisplayTagRgbas[index] = v;
+}
+const updateTagColors = (index: number, v: string) => {
+    store.filesBasesSettingStore.config.coverDisplayTagColors[index] = v;
+}
+
 const openSettings = async () => {
     await getYouLikeNowWord();
 }
@@ -732,6 +782,10 @@ defineExpose({ openSettings, saveSettings });
 
 .settingMainItem .select-full {
     width: 80%;
+}
+
+.settingMainItem .tag-k {
+    padding-right: 10px;
 }
 
 .settingMainItem .select-full .customAvatarK {

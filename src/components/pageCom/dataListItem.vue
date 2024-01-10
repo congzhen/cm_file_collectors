@@ -5,8 +5,12 @@
                 :style="{ backgroundColor: store.filesBasesSettingStore.config.definitionRgba, color: store.filesBasesSettingStore.config.definitionFontColor }">
                 {{ $t('definition.' + props.dataInfo.definition) }}
             </div>
-            <div class="tag" v-for="tagInfo, key in showTag" :key="key"
-                :style="{ backgroundColor: store.filesBasesSettingStore.config.coverDisplayTagRgba, color: store.filesBasesSettingStore.config.coverDisplayTagColor }">
+            <div class="tag" v-for="tagInfo, key in showTag" :key="key" :style="{
+                backgroundColor: getTagRgba(tagInfo),
+                color: getTagColor(tagInfo),
+                border: '1px solid ' + getTagRgba(tagInfo),
+                borderRadius: '5px',
+            }">
                 {{ tagInfo.name }}</div>
         </div>
 
@@ -143,6 +147,16 @@ const getTag = () => {
     } else {
         showTag.value = [];
     }
+}
+
+const getTagRgba = (tagInfo: Itag) => {
+    const index = store.filesBasesSettingStore.config.coverDisplayTag.indexOf(tagInfo.id);
+    return store.filesBasesSettingStore.config.coverDisplayTagRgbas[index % store.filesBasesSettingStore.config.coverDisplayTagRgbas.length];
+}
+
+const getTagColor = (tagInfo: Itag) => {
+    const index = store.filesBasesSettingStore.config.coverDisplayTag.indexOf(tagInfo.id);
+    return store.filesBasesSettingStore.config.coverDisplayTagColors[index % store.filesBasesSettingStore.config.coverDisplayTagColors.length];
 }
 
 onMounted(() => {

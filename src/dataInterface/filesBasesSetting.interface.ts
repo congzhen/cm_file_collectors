@@ -61,8 +61,8 @@ interface IfilesBasesConfig {
     definitionRgba: string;
     definitionFontColor: string;
     coverDisplayTag: Array<string>;
-    coverDisplayTagRgba: string;
-    coverDisplayTagColor: string;
+    coverDisplayTagRgbas: Array<string>;
+    coverDisplayTagColors: Array<string>;
     randomPosterStatus: boolean;
     randomPosterPath: string;
     randomPosterAutoSize: boolean;
