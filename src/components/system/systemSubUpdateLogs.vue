@@ -6,6 +6,18 @@
         <div class="updataLogsBody">
             <el-timeline>
                 <el-scrollbar height="500px">
+                    <el-timeline-item timestamp="2024/01/11" placement="top">
+                        <h4>{{ $t('system.updateLogs.version') }}：v 2.1.0</h4>
+                        <div class="rawContent">
+                            <h5>新特性</h5>
+                            <p class="logContent">插件功能（测试阶段）</p>
+                            <p class="logContent">封面标签显示背景与颜色改为多组自定义</p>
+                            <p class="logContent">更换软件图标（感谢网友Donver提供）</p>
+                            <p class="logContent">演员搜索时，不在区分字母的大小写</p>
+                            <p class="logContent">添加标题排序</p>
+                            <p class="logContent">批量添加标签以及删除功能</p>
+                        </div>
+                    </el-timeline-item>
                     <el-timeline-item timestamp="2023/12/10" placement="top">
                         <h4>{{ $t('system.updateLogs.version') }}：v 2.0.9</h4>
                         <div class="rawContent">

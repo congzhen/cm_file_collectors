@@ -10,7 +10,7 @@ module.exports = defineConfig({
         productName: "CMCollectors",
         appId: "com.example.CMCollectors",
         win: {
-          icon: "static/icon/icon.ico", //"icons/icon.ico",
+          icon: "static/icon/icon256.png", //"icons/icon.ico",
           target: "zip",
         },
         linux: {
