@@ -4,7 +4,6 @@ import { Response } from 'express'
 import setupConfig from '@/setup/config';
 import { existsFile } from '@/assets/file';
 import { spawn, exec } from 'child_process';
-import { cache } from 'sharp';
 
 const ffmpegPath = path.join(setupConfig.basePath, '/static/ffmpeg/ffmpeg.exe')
 const ffprobePath = path.join(setupConfig.basePath, '/static/ffmpeg/ffprobe.exe')
@@ -16,7 +15,7 @@ function pathSpaceConversion(src: string) {
 }
 function execPromise(arg: string): Promise<string> {
     return new Promise((r, j) => {
-        exec(arg, (err, stdout) => {
+        exec(arg, { maxBuffer: 1024 * 100000 }, (err, stdout) => {
             if (err) {
                 j(err)
             } else {
