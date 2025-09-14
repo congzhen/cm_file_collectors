@@ -1,4 +1,4 @@
-# 该版本不在更新，正在准备全新版本，全新版本将兼容此版本存储的数据
+# 该版本不在更新，新版本在 [Github](https://github.com/congzhen/cm_collectors_3)
 
 # 如果有问题，或需求，可以发邮件或者 TG 联系
 
