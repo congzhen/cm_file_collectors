@@ -1,5 +1,7 @@
 # 该版本不在更新，新版本在 [Github](https://github.com/congzhen/cm_collectors_3)
 
+## 新 Github -> https://github.com/congzhen/cm_collectors_3
+
 # 如果有问题，或需求，可以发邮件或者 TG 联系
 
 # E-mail: czpk673@gmail.com
